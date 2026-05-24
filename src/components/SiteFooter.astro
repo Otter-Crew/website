@@ -1,0 +1,78 @@
+---
+import { site } from '../site';
+import TextLink from './TextLink.astro';
+import Wordmark from './Wordmark.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <Wordmark soft />
+      <p class="site-footer__tag">Independent software studio. {site.author}.</p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Footer">
+      {site.nav.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a href="/rss.xml">RSS</a>
+    </nav>
+
+    <div class="site-footer__contact">
+      <TextLink href={`mailto:${site.email}`}>{site.email}</TextLink>
+    </div>
+  </div>
+
+  <div class="container site-footer__base">
+    <span>&copy; {year} {site.name}</span>
+    <span class="site-footer__note">Built with care.</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-3xl);
+    border-top: 1px solid var(--c-hair);
+    padding-block: var(--space-xl) var(--space-lg);
+  }
+  .site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg) var(--space-2xl);
+    align-items: start;
+    justify-content: space-between;
+  }
+  .site-footer__tag {
+    margin-top: var(--space-2xs);
+    font-size: var(--text-small);
+    color: var(--c-stone);
+    max-width: 28ch;
+  }
+  .site-footer__nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    font-size: var(--text-small);
+  }
+  .site-footer__nav a {
+    color: var(--c-stone);
+    width: fit-content;
+    padding-block: var(--space-3xs);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .site-footer__nav a:hover {
+    color: var(--c-accent);
+  }
+  .site-footer__base {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--c-hair);
+    font-size: var(--text-label);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-stone);
+  }
+</style>

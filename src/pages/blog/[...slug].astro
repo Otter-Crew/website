@@ -1,0 +1,90 @@
+---
+import { getCollection, render } from 'astro:content';
+import Prose from '../../components/Prose.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).filter((p) => !p.data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const date = post.data.pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+const iso = post.data.pubDate.toISOString().slice(0, 10);
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  ogType="article"
+  publishedTime={post.data.pubDate.toISOString()}
+  modifiedTime={post.data.updatedDate?.toISOString()}
+>
+  <article class="post">
+    <div class="container">
+      <a class="post__back" href="/blog">
+        <span aria-hidden="true">&larr;</span> Writing
+      </a>
+
+      <header class="post__header">
+        <h1 class="post__title">{post.data.title}</h1>
+        <p class="post__meta">
+          <time datetime={iso}>{date}</time>
+          {
+            post.data.tags.length > 0 && (
+              <span class="post__tags">{post.data.tags.join(' · ')}</span>
+            )
+          }
+        </p>
+      </header>
+
+      <Prose>
+        <Content />
+      </Prose>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+  .post__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: var(--text-small);
+    color: var(--c-stone);
+    padding-block: var(--space-2xs);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .post__back:hover {
+    color: var(--c-accent);
+  }
+  .post__header {
+    margin-block: var(--space-lg) var(--space-xl);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--c-hair);
+  }
+  .post__title {
+    font-size: var(--text-h1);
+    font-weight: 360;
+    line-height: 1.08;
+    letter-spacing: -0.018em;
+    max-width: 22ch;
+  }
+  .post__meta {
+    margin-top: var(--space-md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-md);
+    font-size: var(--text-small);
+    color: var(--c-stone);
+  }
+</style>

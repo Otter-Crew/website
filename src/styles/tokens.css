@@ -1,0 +1,74 @@
+/*
+  otter-crew design tokens.
+  Resolves DESIGN.md ("The Quiet Workshop"): warm-tinted neutrals, one burnt-amber
+  accent, editorial type, restrained motion. No pure #000 / #fff anywhere.
+*/
+:root {
+  /* ---- Color: warm, restrained. Burnt amber over cream + warm ink. ---- */
+  --c-bg: oklch(97.3% 0.011 80); /* warm cream, the dominant surface */
+  --c-surface: oklch(
+    95.2% 0.013 80
+  ); /* slightly deeper cream for quiet layering */
+  --c-ink: oklch(26% 0.014 62); /* warm near-black, primary text */
+  --c-ink-soft: oklch(40% 0.015 62); /* softened ink for secondary headings */
+  --c-stone: oklch(55% 0.016 64); /* muted warm gray: meta, captions */
+  --c-hair: oklch(89% 0.014 80); /* hairline dividers and borders */
+  --c-accent: oklch(58% 0.118 56); /* burnt amber / ochre, the lone accent */
+  --c-accent-deep: oklch(49% 0.112 52); /* accent on hover / press */
+
+  /* ---- Type families ---- */
+  --font-display:
+    'Fraunces Variable', Fraunces, Georgia, 'Times New Roman', serif;
+  --font-body:
+    'Public Sans Variable', 'Public Sans', system-ui, -apple-system, 'Segoe UI',
+    sans-serif;
+  --font-mono:
+    ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+
+  /* ---- Type scale (fluid; ~1.2 between text steps, wider between display steps) ---- */
+  --text-display: clamp(2.7rem, 1.6rem + 4.8vw, 4.75rem);
+  --text-h1: clamp(2.05rem, 1.5rem + 2.3vw, 3.1rem);
+  --text-h2: clamp(1.45rem, 1.25rem + 0.9vw, 1.95rem);
+  --text-h3: 1.25rem;
+  --text-lede: clamp(1.15rem, 1.05rem + 0.55vw, 1.4rem);
+  --text-body: 1.0625rem;
+  --text-small: 0.9rem;
+  --text-label: 0.75rem;
+
+  /* ---- Chrome type: wordmark + display numerals, off the prose scale ---- */
+  --text-wordmark: 1.3rem;
+  --text-wordmark-soft: 1.2rem; /* footer wordmark, a touch quieter */
+  --text-numeral: 1.1rem; /* project year and similar display numerals */
+
+  /* ---- Spacing ---- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+  --space-3xl: 9rem;
+
+  /* ---- Layout widths ---- */
+  --w-wide: 72rem;
+  --w-content: 50rem;
+  --w-prose: 38rem;
+  --measure: 65ch;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+
+  /* ---- Radius (restrained) ---- */
+  --radius-sm: 3px;
+  --radius-md: 7px;
+
+  /* ---- Motion: ease-out, no bounce ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 0.18s;
+  --dur: 0.28s;
+  --dur-slow: 0.5s;
+
+  /* ---- Elevation: flat by default; shadows only respond to state ---- */
+  --shadow-lift: 0 10px 30px -14px oklch(40% 0.04 60 / 0.28);
+}

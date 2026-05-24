@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import PageHeader from '../../components/PageHeader.astro';
+import ProjectItem from '../../components/ProjectItem.astro';
+import Section from '../../components/Section.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const projects = (await getCollection('projects'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year);
+---
+
+<BaseLayout
+  title="Work"
+  description="Projects and consulting engagements from otter-crew."
+>
+  <PageHeader
+    marker="Work"
+    title="Things built and rebuilt."
+    lede="A few of the projects and engagements that say the most about how I work. Each is a study in making a system legible again."
+  />
+
+  <Section top="md" bottom="xl">
+    <ul role="list">
+      {
+        projects.map((p) => (
+          <ProjectItem
+            title={p.data.title}
+            summary={p.data.summary}
+            year={p.data.year}
+            status={p.data.status}
+            role={p.data.role}
+            link={p.data.link}
+          />
+        ))
+      }
+    </ul>
+  </Section>
+</BaseLayout>

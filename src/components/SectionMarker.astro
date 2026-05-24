@@ -1,0 +1,39 @@
+---
+interface Props {
+  id?: string | undefined;
+  // When the marker labels a section (not a kicker above a page <h1>), render
+  // it as a real heading so it joins the document's heading outline. A `<p>`
+  // is right for an eyebrow above an <h1>; an <h2> for a top-level section.
+  as?: 'p' | 'h2' | 'h3';
+}
+const { id, as = 'p' } = Astro.props;
+const Tag = as;
+---
+
+<Tag class="section-marker" id={id}><slot /></Tag>
+
+<style>
+  /* Editorial section marker: a short rule + tracked label. The site's
+     one repeated label system, used deliberately as an "index" voice.
+     Appearance is pinned here (line-height included) so it reads identically
+     whether the tag is a <p> kicker or an <h2> section heading. */
+  .section-marker {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    font-weight: 600;
+    line-height: 1.6;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-stone);
+  }
+  .section-marker::before {
+    content: '';
+    width: 1.75rem;
+    height: 1px;
+    background: var(--c-stone);
+    flex: none;
+  }
+</style>

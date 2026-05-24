@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://otter-crew.com/sitemap-index.xml

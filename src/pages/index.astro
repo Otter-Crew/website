@@ -1,0 +1,182 @@
+---
+import { getCollection } from 'astro:content';
+import ArrowLink from '../components/ArrowLink.astro';
+import PostItem from '../components/PostItem.astro';
+import ProjectItem from '../components/ProjectItem.astro';
+import Section from '../components/Section.astro';
+import SectionMarker from '../components/SectionMarker.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../site';
+
+const featured = (await getCollection('projects'))
+  .filter((p) => !p.data.draft && p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year);
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout>
+  <Section top="2xl" bottom="xl">
+    <p class="hero__status">
+      <span class="hero__dot" aria-hidden="true"></span>
+      {site.availability}
+    </p>
+    <h1 class="hero__title">
+      We make complex systems <em>legible</em> again.
+    </h1>
+    <div class="hero__foot">
+      <p class="hero__lede">
+        otter-crew is an independent software studio. We consult for teams whose
+        software has grown faster than anyone can follow, and build a few
+        projects of our own.
+      </p>
+      <ArrowLink href="/consulting" size="lede">Start a conversation</ArrowLink>
+    </div>
+  </Section>
+
+  {
+    featured.length > 0 && (
+      <Section labelledby="work-marker" top="2xl" bottom="lg">
+        <div class="section__head">
+          <SectionMarker id="work-marker" as="h2">Selected work</SectionMarker>
+          <ArrowLink href="/projects" size="small" tone="muted">
+            All work
+          </ArrowLink>
+        </div>
+        <ul role="list">
+          {featured.map((p) => (
+            <ProjectItem
+              title={p.data.title}
+              summary={p.data.summary}
+              year={p.data.year}
+              status={p.data.status}
+              role={p.data.role}
+              link={p.data.link}
+              headingLevel={3}
+            />
+          ))}
+        </ul>
+      </Section>
+    )
+  }
+
+  {
+    posts.length > 0 && (
+      <Section labelledby="writing-marker" top="lg" bottom="2xl">
+        <div class="section__head">
+          <SectionMarker id="writing-marker" as="h2">Recent writing</SectionMarker>
+          <ArrowLink href="/blog" size="small" tone="muted">
+            All writing
+          </ArrowLink>
+        </div>
+        <ul role="list">
+          {posts.map((post) => (
+            <PostItem
+              title={post.data.title}
+              description={post.data.description}
+              slug={post.id}
+              pubDate={post.data.pubDate}
+              headingLevel={3}
+            />
+          ))}
+        </ul>
+      </Section>
+    )
+  }
+
+  <Section id="contact" labelledby="contact-marker" top="2xl" bottom="xl">
+    <SectionMarker id="contact-marker" as="h2">Contact</SectionMarker>
+    <p class="contact__lead">
+      Have a system that has grown hard to reason about? That is the work we do
+      best.
+    </p>
+    <p class="contact__line">Tell us what you are building.</p>
+    <p class="contact__email">
+      <ArrowLink href={`mailto:${site.email}`} size="lede">
+        {site.email}
+      </ArrowLink>
+    </p>
+  </Section>
+</BaseLayout>
+
+<style>
+  /* ---- Hero ---- */
+  .hero__status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-size: var(--text-small);
+    color: var(--c-stone);
+    margin-bottom: var(--space-lg);
+  }
+  .hero__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--c-accent);
+    flex: none;
+  }
+  .hero__title {
+    font-weight: 320;
+    font-size: var(--text-display);
+    line-height: 1.02;
+    letter-spacing: -0.022em;
+    max-width: 17ch;
+    text-wrap: balance;
+  }
+  .hero__title em {
+    font-style: italic;
+    font-weight: 340;
+  }
+  .hero__foot {
+    margin-top: var(--space-xl);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-md) var(--space-2xl);
+  }
+  .hero__lede {
+    max-width: 46ch;
+    font-size: var(--text-lede);
+    line-height: 1.5;
+    color: var(--c-ink-soft);
+  }
+
+  /* ---- Section heads ---- */
+  .section__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  /* ---- Contact ---- */
+  .contact__lead {
+    margin-top: var(--space-md);
+    font-family: var(--font-display);
+    font-weight: 340;
+    font-size: var(--text-h1);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    max-width: 20ch;
+  }
+  .contact__line {
+    margin-top: var(--space-lg);
+    font-size: var(--text-lede);
+    color: var(--c-ink-soft);
+  }
+  .contact__email {
+    margin-top: var(--space-2xs);
+    font-size: var(--text-lede);
+  }
+  /* The email address can be long; let the arrow link wrap on narrow
+     viewports instead of forcing horizontal overflow. */
+  .contact__email :global(.arrow-link) {
+    white-space: normal;
+  }
+</style>

@@ -1,0 +1,57 @@
+---
+interface Props {
+  href: string;
+  size?: 'small' | 'body' | 'lede';
+  tone?: 'accent' | 'muted';
+}
+const { href, size = 'body', tone = 'accent' } = Astro.props;
+---
+
+<a
+  class:list={[
+    'arrow-link',
+    {
+      'is-small': size === 'small',
+      'is-lede': size === 'lede',
+      'is-muted': tone === 'muted',
+    },
+  ]}
+  href={href}
+>
+  <slot /><span class="arrow" aria-hidden="true">&rarr;</span>
+</a>
+
+<style>
+  /* Inline directional link with a nudging arrow. */
+  .arrow-link {
+    color: var(--c-accent);
+    font-weight: 500;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4em;
+    white-space: nowrap;
+  }
+  .arrow {
+    transition: transform var(--dur) var(--ease-out);
+  }
+  .arrow-link:hover {
+    color: var(--c-accent-deep);
+  }
+  .arrow-link:hover .arrow {
+    transform: translateX(0.25em);
+  }
+  /* Muted: a quiet directional link that rests in ink and reveals the
+     accent only on hover, so the accent stays reserved for the one CTA. */
+  .arrow-link.is-muted {
+    color: var(--c-ink-soft);
+  }
+  .arrow-link.is-muted:hover {
+    color: var(--c-accent-deep);
+  }
+  .is-small {
+    font-size: var(--text-small);
+  }
+  .is-lede {
+    font-size: var(--text-lede);
+  }
+</style>

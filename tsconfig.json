@@ -1,0 +1,10 @@
+{
+  "extends": "astro/tsconfigs/strictest",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"],
+  "compilerOptions": {
+    // Beyond strictest: force bracket access for index-signature fields so
+    // it pairs with strictest's noUncheckedIndexedAccess.
+    "noPropertyAccessFromIndexSignature": true
+  }
+}

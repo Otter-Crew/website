@@ -1,0 +1,184 @@
+---
+interface Props {
+  title: string;
+  summary: string;
+  year: number;
+  status: 'active' | 'shipped' | 'archived' | 'client' | 'coming-soon';
+  role?: string | undefined;
+  link?: string | undefined;
+  // h2 when the row sits directly under a page <h1> (the /projects list); h3
+  // when it sits under a section heading (the homepage "Selected work" section).
+  headingLevel?: 2 | 3;
+}
+const {
+  title,
+  summary,
+  year,
+  status,
+  role,
+  link,
+  headingLevel = 2,
+} = Astro.props;
+const Title = headingLevel === 3 ? 'h3' : 'h2';
+const statusLabel: Record<Props['status'], string> = {
+  active: 'In progress',
+  shipped: 'Shipped',
+  archived: 'Archived',
+  client: 'Client work',
+  'coming-soon': 'Coming soon',
+};
+// A row with no destination is a placeholder; it renders inert. A row that
+// leaves the site (an http(s) link) shows where it goes, so the jump is no
+// surprise and the work reads as real.
+const destHost =
+  link && /^https?:\/\//.test(link)
+    ? new URL(link).hostname.replace(/^www\./, '')
+    : undefined;
+const isExternal = destHost !== undefined;
+const externalAttrs = isExternal
+  ? { target: '_blank', rel: 'noopener noreferrer' }
+  : {};
+---
+
+<li class:list={['project', { 'project--inert': !link }]}>
+  <div class="project__meta">
+    <span class="project__year">{year}</span>
+    <span class="project__status">{statusLabel[status]}</span>
+  </div>
+  <div class="project__body">
+    <Title class="project__title">
+      {
+        link ? (
+          <a
+            class:list={['project__link', { 'is-external': isExternal }]}
+            href={link}
+            {...externalAttrs}
+          >
+            <span>{title}</span>
+            {isExternal && (
+              <span class="visually-hidden"> (opens in a new tab)</span>
+            )}
+            <span class="arrow" aria-hidden="true">{isExternal ? '↗' : '→'}</span>
+          </a>
+        ) : (
+          title
+        )
+      }
+    </Title>
+    <p class="project__summary">{summary}</p>
+    {
+      (role || destHost) && (
+        <p class="project__foot">
+          {role && <span class="project__role">{role}</span>}
+          {destHost && <span class="project__dest">{destHost}</span>}
+        </p>
+      )
+    }
+  </div>
+</li>
+
+<style>
+  .project {
+    position: relative;
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: var(--space-md) var(--space-lg);
+    padding-block: var(--space-lg);
+    border-top: 1px solid var(--c-hair);
+  }
+  .project:last-child {
+    border-bottom: 1px solid var(--c-hair);
+  }
+  .project__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    padding-top: var(--space-3xs);
+  }
+  .project__year {
+    font-family: var(--font-display);
+    font-size: var(--text-numeral);
+    color: var(--c-ink-soft);
+  }
+  .project__status {
+    font-size: var(--text-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-stone);
+  }
+  .project__title {
+    font-size: var(--text-h2);
+    font-weight: 420;
+  }
+  /* A placeholder row carries no destination. Dimming its title to the soft
+     ink (live titles stay full-strength ink) makes the one real, clickable
+     project read as the actionable row, not a sibling of the empty stubs. */
+  .project--inert .project__title {
+    color: var(--c-ink-soft);
+  }
+  .project__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5em;
+    color: inherit;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  /* Stretch the title link across the whole row (mirrors PostItem). A project
+     with no destination yet renders the title as plain text and stays inert;
+     its "Coming soon" status in the meta column and its dimmed title are the
+     signal. */
+  .project__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .project__link .arrow {
+    color: var(--c-stone);
+    font-size: 0.8em;
+    transition:
+      transform var(--dur) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+  .project__link:hover {
+    color: var(--c-accent);
+  }
+  .project__link:hover .arrow {
+    color: var(--c-accent);
+    transform: translateX(0.3em);
+  }
+  /* An external destination nudges up-and-out on hover, echoing the ↗ glyph. */
+  .project__link.is-external:hover .arrow {
+    transform: translate(0.25em, -0.25em);
+  }
+  .project__summary {
+    margin-top: var(--space-2xs);
+    max-width: 52ch;
+    line-height: 1.6;
+    color: var(--c-ink-soft);
+  }
+  .project__foot {
+    margin-top: var(--space-sm);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-xs) var(--space-md);
+    font-size: var(--text-small);
+  }
+  .project__role,
+  .project__dest {
+    color: var(--c-stone);
+  }
+
+  @media (max-width: 38rem) {
+    .project {
+      grid-template-columns: 1fr;
+      gap: var(--space-xs);
+    }
+    .project__meta {
+      flex-direction: row;
+      align-items: baseline;
+      gap: var(--space-sm);
+      padding-top: 0;
+    }
+  }
+</style>

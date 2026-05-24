@@ -1,0 +1,222 @@
+---
+import ArrowLink from '../components/ArrowLink.astro';
+import Section from '../components/Section.astro';
+import SectionMarker from '../components/SectionMarker.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../site';
+
+const capabilities = [
+  {
+    title: 'AI in production',
+    body: 'Models are the easy part. We help you serve them at real scale and keep them there: latency, cost, drift, and the distance between a demo that impresses and a system that earns its keep.',
+  },
+  {
+    title: 'Developer velocity with ML',
+    body: 'Probabilistic software breaks the habits that served deterministic code. We help your engineers build, test, and reason about ML systems, so the team moves faster instead of flinching.',
+  },
+  {
+    title: 'Distributed systems',
+    body: 'The hard parts live under the model: state, consistency, and failure under load that does not let up. We design, scale, and operate the distributed systems that keep AI services fast and correct.',
+  },
+];
+
+const engagements = [
+  {
+    cadence: 'Day(s)',
+    title: 'Speaking',
+    body: 'Conference talks, workshops, and internal sessions on AI in production, the systems beneath it, and building probabilistic software well. Plain, specific, with the hard parts left in.',
+  },
+  {
+    cadence: 'Weeks',
+    title: 'Diagnostic',
+    body: 'A short, focused review. We dig into the system, find where it actually hurts, and hand back a plain plan you can act on, with us or without us.',
+  },
+  {
+    cadence: 'Months',
+    title: 'Embedded build',
+    body: 'We work inside your codebase alongside your team, building and hardening the parts that matter, and leave it in better shape than we found it.',
+  },
+  {
+    cadence: 'Ongoing',
+    title: 'Fractional advisory',
+    body: 'A standing line to senior help: architecture calls, reviews, and the occasional save, on a steady retainer rather than a crisis rate.',
+  },
+];
+---
+
+<BaseLayout
+  title="Consulting"
+  description="otter-crew consults on AI in production, developer velocity with ML, and the distributed systems underneath."
+>
+  <Section top="2xl" bottom="lg">
+    <SectionMarker>Consulting</SectionMarker>
+    <h1 class="lead-in__title">We make AI dependable in production.</h1>
+    <p class="lead-in__lede">
+      Most machine learning fails in production, not in the notebook. We help
+      teams get it running, keep it running, and make it pay for itself.
+    </p>
+    <p class="lead-in__status">
+      <span class="lead-in__dot" aria-hidden="true"></span>
+      {site.availability}
+    </p>
+  </Section>
+
+  <Section labelledby="do-marker" bottom="xl">
+    <SectionMarker id="do-marker" as="h2">What we do</SectionMarker>
+    <ul class="ledger" role="list">
+      {
+        capabilities.map((c, i) => (
+          <li class="row">
+            <div class="row__meta">
+              <span class="row__index">{String(i + 1).padStart(2, '0')}</span>
+            </div>
+            <div class="row__body">
+              <h3 class="row__title">{c.title}</h3>
+              <p class="row__summary">{c.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section labelledby="work-marker" bottom="xl">
+    <SectionMarker id="work-marker" as="h2">How we work</SectionMarker>
+    <ul class="ledger" role="list">
+      {
+        engagements.map((e) => (
+          <li class="row">
+            <div class="row__meta">
+              <span class="row__cadence">{e.cadence}</span>
+            </div>
+            <div class="row__body">
+              <h3 class="row__title">{e.title}</h3>
+              <p class="row__summary">{e.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section id="contact" labelledby="start-marker" top="2xl" bottom="xl">
+    <SectionMarker id="start-marker" as="h2">Start a conversation</SectionMarker>
+    <p class="start__lead">
+      Tell us what you are building, what is quietly falling over, or what you
+      want us to talk about.
+    </p>
+    <p class="start__line">
+      A short, specific email beats a long form. We read every one.
+    </p>
+    <p class="start__email">
+      <ArrowLink href={`mailto:${site.email}`} size="lede">
+        {site.email}
+      </ArrowLink>
+    </p>
+  </Section>
+</BaseLayout>
+
+<style>
+  /* ---- Lead-in header (page hero, marker treatment + availability) ---- */
+  .lead-in__title {
+    margin-top: var(--space-md);
+    font-size: var(--text-h1);
+    font-weight: 360;
+    line-height: 1.08;
+    letter-spacing: -0.018em;
+    max-width: 17ch;
+  }
+  .lead-in__lede {
+    margin-top: var(--space-sm);
+    max-width: 54ch;
+    font-size: var(--text-lede);
+    line-height: 1.5;
+    color: var(--c-ink-soft);
+  }
+  .lead-in__status {
+    margin-top: var(--space-lg);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    font-size: var(--text-small);
+    color: var(--c-stone);
+  }
+  .lead-in__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--c-accent);
+    flex: none;
+  }
+
+  /* ---- Ledger rows: the site's index-row signature (9rem 1fr, hairlines,
+     no cards). Shared by capabilities and engagements. ---- */
+  .row {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    gap: var(--space-md) var(--space-lg);
+    padding-block: var(--space-lg);
+    border-top: 1px solid var(--c-hair);
+  }
+  .row:last-child {
+    border-bottom: 1px solid var(--c-hair);
+  }
+  .row__meta {
+    padding-top: var(--space-3xs);
+  }
+  .row__index {
+    font-family: var(--font-display);
+    font-size: var(--text-numeral);
+    color: var(--c-stone);
+    font-variant-numeric: tabular-nums;
+  }
+  .row__cadence {
+    font-size: var(--text-label);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c-stone);
+  }
+  .row__title {
+    font-size: var(--text-h2);
+    font-weight: 420;
+  }
+  .row__summary {
+    margin-top: var(--space-2xs);
+    max-width: 52ch;
+    line-height: 1.6;
+    color: var(--c-ink-soft);
+  }
+  /* ---- Start a conversation (the contact close) ---- */
+  .start__lead {
+    margin-top: var(--space-md);
+    font-family: var(--font-display);
+    font-weight: 340;
+    font-size: var(--text-h1);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    max-width: 20ch;
+  }
+  .start__line {
+    margin-top: var(--space-lg);
+    font-size: var(--text-lede);
+    color: var(--c-ink-soft);
+  }
+  .start__email {
+    margin-top: var(--space-2xs);
+    font-size: var(--text-lede);
+  }
+  /* Let the long email address wrap rather than overflow on narrow screens. */
+  .start__email :global(.arrow-link) {
+    white-space: normal;
+  }
+
+  @media (max-width: 38rem) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: var(--space-xs);
+    }
+    .row__meta {
+      padding-top: 0;
+    }
+  }
+</style>

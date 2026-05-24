@@ -1,0 +1,73 @@
+[tools]
+node = "latest"
+# pnpm as the package manager, installed via mise so its version is pinned in
+# mise.lock. Node 25 dropped the bundled corepack, so there is no
+# `corepack enable` step — mise provisions pnpm directly.
+"npm:pnpm" = "latest"
+
+[settings]
+# Required for the task runner features used below.
+experimental = true
+
+[env]
+# node_modules/.bin first so bare `astro` / `biome` in the tasks below resolve
+# to the project's pinned devDependency versions.
+_.path = ['{{config_root}}/node_modules/.bin']
+
+# ----------------------------------------------------------------- workflow
+
+[tasks.pnpm-install]
+description = 'Install dependencies with pnpm'
+run = 'pnpm install'
+sources = ['package.json', 'pnpm-lock.yaml', 'mise.toml']
+outputs = ['node_modules/.pnpm/lock.yaml']
+
+[tasks.dev]
+description = 'Start the Astro dev server'
+depends = ['pnpm-install']
+run = 'astro dev'
+
+[tasks.build]
+description = 'Build the static site to dist/'
+depends = ['pnpm-install']
+run = 'astro build'
+
+[tasks.preview]
+description = 'Serve the built site from dist/ locally'
+depends = ['build']
+run = 'astro preview'
+
+# -------------------------------------------------------------------- check
+
+[tasks.check]
+description = 'Run every check (Biome + astro check)'
+# Explicit list rather than a wildcard so a future opt-in check does not
+# silently join the default gate.
+depends = ['check:biome', 'check:astro']
+# Final marker so callers (and agents) get an unambiguous success line.
+run = "echo 'mise check: ALL CHECKS PASSED'"
+
+[tasks."check:biome"]
+description = 'Lint + format-check with Biome (no writes)'
+depends = ['pnpm-install']
+run = 'biome check'
+
+[tasks."check:astro"]
+description = 'Type-check .astro and TypeScript with astro check'
+depends = ['pnpm-install']
+# --minimumFailingSeverity hint: exit non-zero on hints too (default is
+# 'error'), so deprecation hints like ts(6385) fail the gate instead of
+# scrolling past as benign noise.
+run = 'astro check --minimumFailingSeverity hint'
+
+# ---------------------------------------------------------------------- fix
+
+[tasks.fix]
+description = 'Apply every auto-fix (Biome format + safe lint fixes)'
+depends = ['fix:biome']
+run = "echo 'mise fix: done'"
+
+[tasks."fix:biome"]
+description = 'Format and apply safe Biome fixes (writes files)'
+depends = ['pnpm-install']
+run = 'biome check --write'

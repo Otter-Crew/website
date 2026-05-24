@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import PageHeader from '../../components/PageHeader.astro';
+import PostItem from '../../components/PostItem.astro';
+import Section from '../../components/Section.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout
+  title="Writing"
+  description="Writing on software, teams, companies, and AI, from otter-crew."
+>
+  <PageHeader
+    marker="Writing"
+    title="Notes on software, teams, and companies."
+    lede="Writing about building software, leading teams, running companies, and where AI actually changes the work. Shaped by building developer-efficiency tooling and machine learning for ads at Facebook, and a stretch in the CEO seat."
+  />
+
+  <Section top="md" bottom="xl">
+    <ul role="list">
+      {
+        posts.map((post) => (
+          <PostItem
+            title={post.data.title}
+            description={post.data.description}
+            slug={post.id}
+            pubDate={post.data.pubDate}
+          />
+        ))
+      }
+    </ul>
+  </Section>
+</BaseLayout>

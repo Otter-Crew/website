@@ -1,0 +1,37 @@
+---
+import { site } from '../site';
+
+interface Props {
+  soft?: boolean | undefined;
+}
+const { soft } = Astro.props;
+---
+
+<a class:list={['wordmark', { soft }]} href="/">{site.name}</a>
+
+<style>
+  .wordmark {
+    position: relative;
+    font-family: var(--font-display);
+    font-weight: 460;
+    font-size: var(--text-wordmark);
+    letter-spacing: -0.01em;
+    color: var(--c-ink);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  /* Invisible hit-area expansion for the home link; no visual change. */
+  .wordmark::before {
+    content: '';
+    position: absolute;
+    inset-block: -0.4rem;
+    inset-inline: -0.2rem;
+  }
+  /* Footer variant: a touch quieter, no tracking. */
+  .wordmark.soft {
+    font-size: var(--text-wordmark-soft);
+    letter-spacing: normal;
+  }
+  .wordmark:hover {
+    color: var(--c-accent);
+  }
+</style>

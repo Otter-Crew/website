@@ -1,0 +1,35 @@
+---
+import Section from './Section.astro';
+import SectionMarker from './SectionMarker.astro';
+
+interface Props {
+  title: string;
+  lede?: string;
+  marker?: string;
+}
+const { title, lede, marker } = Astro.props;
+---
+
+<Section top="2xl" bottom="lg">
+  {marker && <SectionMarker>{marker}</SectionMarker>}
+  <h1 class:list={['page-head__title', { 'has-marker': marker }]}>{title}</h1>
+  {lede && <p class="page-head__lede">{lede}</p>}
+</Section>
+
+<style>
+  .page-head__title {
+    font-size: var(--text-h1);
+    font-weight: 360;
+    letter-spacing: -0.018em;
+  }
+  .page-head__title.has-marker {
+    margin-top: var(--space-md);
+  }
+  .page-head__lede {
+    margin-top: var(--space-sm);
+    max-width: 50ch;
+    font-size: var(--text-lede);
+    line-height: 1.5;
+    color: var(--c-ink-soft);
+  }
+</style>

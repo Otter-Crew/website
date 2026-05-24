@@ -1,0 +1,32 @@
+---
+import Section from '../components/Section.astro';
+import SectionMarker from '../components/SectionMarker.astro';
+import TextLink from '../components/TextLink.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Not found" description="That page could not be found.">
+  <Section top="3xl" bottom="3xl">
+    <SectionMarker>404</SectionMarker>
+    <h1 class="notfound__title">This page wandered off.</h1>
+    <p class="notfound__line">
+      The page you were after is not here.
+      <TextLink href="/">Head back home</TextLink>.
+    </p>
+  </Section>
+</BaseLayout>
+
+<style>
+  .notfound__title {
+    margin-top: var(--space-md);
+    font-size: var(--text-h1);
+    font-weight: 340;
+    letter-spacing: -0.018em;
+    max-width: 16ch;
+  }
+  .notfound__line {
+    margin-top: var(--space-md);
+    font-size: var(--text-lede);
+    color: var(--c-ink-soft);
+  }
+</style>
