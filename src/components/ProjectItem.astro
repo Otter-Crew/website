@@ -1,7 +1,9 @@
 ---
 interface Props {
   title: string;
-  summary: string;
+  // The compact ledger row's one-line summary. Omitted in expanded mode, where
+  // the full body (a <Prose> slot) stands in for it.
+  summary?: string | undefined;
   year: number;
   status: 'active' | 'shipped' | 'archived' | 'client' | 'coming-soon';
   role?: string | undefined;
@@ -9,6 +11,11 @@ interface Props {
   // h2 when the row sits directly under a page <h1> (the /projects list); h3
   // when it sits under a section heading (the homepage "Selected work" section).
   headingLevel?: 2 | 3;
+  // When true, render the full project body (passed as a <Prose> slot) in place
+  // of the summary line, and do NOT stretch the title link across the row — the
+  // body carries selectable text and may hold its own links, so only the title
+  // is the anchor. Used by the /projects list.
+  expanded?: boolean;
 }
 const {
   title,
@@ -18,6 +25,7 @@ const {
   role,
   link,
   headingLevel = 2,
+  expanded = false,
 } = Astro.props;
 const Title = headingLevel === 3 ? 'h3' : 'h2';
 const statusLabel: Record<Props['status'], string> = {
@@ -40,7 +48,7 @@ const externalAttrs = isExternal
   : {};
 ---
 
-<li class:list={['project', { 'project--inert': !link }]}>
+<li class:list={['project', { 'project--inert': !link, 'project--expanded': expanded }]}>
   <div class="project__meta">
     <span class="project__year">{year}</span>
     <span class="project__status">{statusLabel[status]}</span>
@@ -65,7 +73,15 @@ const externalAttrs = isExternal
         )
       }
     </Title>
-    <p class="project__summary">{summary}</p>
+    {
+      expanded ? (
+        <div class="project__content">
+          <slot />
+        </div>
+      ) : (
+        summary && <p class="project__summary">{summary}</p>
+      )
+    }
     {
       (role || destHost) && (
         <p class="project__foot">
@@ -126,8 +142,9 @@ const externalAttrs = isExternal
   /* Stretch the title link across the whole row (mirrors PostItem). A project
      with no destination yet renders the title as plain text and stays inert;
      its "Coming soon" status in the meta column and its dimmed title are the
-     signal. */
-  .project__link::after {
+     signal. Expanded rows opt out: their body is selectable and may hold its
+     own links, so the title alone is the click target. */
+  .project:not(.project--expanded) .project__link::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -155,6 +172,11 @@ const externalAttrs = isExternal
     max-width: 52ch;
     line-height: 1.6;
     color: var(--c-ink-soft);
+  }
+  /* The full body sits a step below the title; Prose owns its own internal
+     rhythm and measure. */
+  .project__content {
+    margin-top: var(--space-sm);
   }
   .project__foot {
     margin-top: var(--space-sm);

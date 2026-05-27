@@ -1,13 +1,23 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import PageHeader from '../../components/PageHeader.astro';
 import ProjectItem from '../../components/ProjectItem.astro';
+import Prose from '../../components/Prose.astro';
 import Section from '../../components/Section.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const projects = (await getCollection('projects'))
   .filter((p) => !p.data.draft)
   .sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year);
+
+// Render each project's Markdown body so the list can show the full content
+// inline, not just the frontmatter summary.
+const entries = await Promise.all(
+  projects.map(async (p) => ({
+    data: p.data,
+    Content: (await render(p)).Content,
+  })),
+);
 ---
 
 <BaseLayout
@@ -23,15 +33,19 @@ const projects = (await getCollection('projects'))
   <Section top="md" bottom="xl">
     <ul role="list">
       {
-        projects.map((p) => (
+        entries.map(({ data, Content }) => (
           <ProjectItem
-            title={p.data.title}
-            summary={p.data.summary}
-            year={p.data.year}
-            status={p.data.status}
-            role={p.data.role}
-            link={p.data.link}
-          />
+            title={data.title}
+            year={data.year}
+            status={data.status}
+            role={data.role}
+            link={data.link}
+            expanded
+          >
+            <Prose>
+              <Content />
+            </Prose>
+          </ProjectItem>
         ))
       }
     </ul>

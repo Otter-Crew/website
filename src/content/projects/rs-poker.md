@@ -14,7 +14,7 @@ measure: hand evaluation at tens of millions of hands per second per core, Monte
 Carlo equity, ICM, starting-hand range parsing, and an arena for pitting agents
 against one another across Texas Hold'em and Omaha.
 
-Version 5 is the milestone. It ships a multi-threaded Counterfactual Regret
+Version 5 is releasing soon. It ships a multi-threaded Counterfactual Regret
 Minimization (CFR) solver, the first parallel CFR implementation available in
 open source, using PCFR+ regret matching and parallel tree exploration to learn
 game-theory-optimal strategies.

@@ -7,4 +7,4 @@ featured: false
 order: 4
 ---
 
-A local newsletter for Nashville. More to share soon.
+A local newsletter for Nashville, Tennessee. What the Duck is going on in Nashville? We tell you.
