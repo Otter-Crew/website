@@ -6,7 +6,7 @@ export const site = {
   url: 'https://ottercrew.group',
   description:
     'The independent software studio of Elliott Clark. Consulting for teams who need a system made legible again, a few projects of its own, and writing on software, teams, companies, and AI.',
-  email: 'elliott@ottercrew.group',
+  email: 'elliott.neil.clark@gmail.com',
   availability: 'Available for select work',
   nav: [
     { label: 'Work', href: '/projects' },
