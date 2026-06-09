@@ -1,7 +1,7 @@
 ---
 title: 'Welcome to Otter Crew'
 description: "Welcome, lets discuss what Otter Crew is, and what we're about."
-pubDate: 2026-04-02
+pubDate: 2026-05-08
 tags: ['writing', 'systems']
 ---
 
