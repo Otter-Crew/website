@@ -20,17 +20,17 @@ If you're a poker enthusiast then this release is for you. You get a TUI to
 browse your hand history in [Open Hand History](https://hh-specs.handhistory.org/) format. Or anonymize your logs before sending them off to others.
 
 ## Highlights
-- **`rsp` CLI** — a single unified poker toolkit binary (holdem, arena, omaha,
+- **`rsp` CLI** - a single unified poker toolkit binary (holdem, arena, omaha,
   ICM, OHH) with interactive TUIs, a global `--budget` flag, and a jemalloc
   allocator tuned for CFR's allocation profile.
-- **Async arena** — `Agent` and `Historian` are now `Send` with `async fn`
+- **Async arena** - `Agent` and `Historian` are now `Send` with `async fn`
   methods; the simulation round state machine awaits on a tokio runtime.
-- **Perfect-hash hand evaluator** — 2.2–2.4× faster `rank()`, `Rank` shrunk
+- **Perfect-hash hand evaluator** - 2.2-2.4x faster `rank()`, `Rank` shrunk
   from 8 bytes to 2.
-- **CFR overhaul** — single shared tree, compact action space, regret-based
+- **CFR overhaul** - single shared tree, compact action space, regret-based
   pruning, full board enumeration, PCFR+ regret matching, and a composable
   budget tree replacing the old tangle of depth/recursion/cancellation knobs.
-- **Pluggable opponent-hand estimation** — a new `HandDistributionEstimator`
+- **Pluggable opponent-hand estimation** - a new `HandDistributionEstimator`
   trait and per-wave world sampling, the base for ML-driven range inference.
 
 ## Getting `rsp`
@@ -67,7 +67,7 @@ The global `--budget` flag bounds how much work the solver does, so you can
 trade accuracy for time on any subcommand. Hand-history browsing and
 anonymization live under the same binary too.
 
-If you just want the library — the evaluator, arena, and CFR types — to build
+If you just want the library - the evaluator, arena, and CFR types - to build
 your own tools on top of, skip the feature flag and add it as a dependency:
 
 ```bash
