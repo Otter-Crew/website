@@ -1,11 +1,11 @@
 ---
-title: 'The Mind Reader, Part 5: little-sorry - The Regret Math, in Rust'
-description: 'A small crate for a big idea: regret matching, CFR+, and the discounted and predictive variants - the numeric core every solver shares'
+title: "The Mind Reader, Part 5: little-sorry - The Regret Math, in Rust"
+description: "A small crate for a big idea: regret matching, CFR+, and the discounted and predictive variants - the numeric core every solver shares"
 pubDate: 2026-07-27
-tags: ['poker', 'mind-reader', 'rust', 'GTO']
+tags: ["poker", "mind-reader", "rust", "GTO"]
 ---
 
-*Part 5 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker.*
+_Part 5 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## A crate named for feeling bad
 
@@ -34,7 +34,7 @@ tags: ['poker', 'mind-reader', 'rust', 'GTO']
 - Plain regret matching works. But at 1/sqrt(T), the last digit of precision costs a hundred times the first.
 - Twenty years of research is, roughly, one-line changes to how the totals are kept. The crate ships the whole family behind one trait.
 - **CFR+** clips cumulative regrets at zero. An action driven negative gets a clean slate when it turns useful. With linear averaging, it solved limit hold'em. The default.
-- **Linear CFR** weights iteration *t* by *t*. Early iterations, played when both players were terrible, fade.
+- **Linear CFR** weights iteration _t_ by _t_. Early iterations, played when both players were terrible, fade.
 - **DCFR** discounts with three exponents - alpha for positive regrets, beta for negative, gamma for the average. The crate ships the paper's `DCFR(alpha=1.5, beta=0, gamma=2)` and a pruning-safe alternative.
 - **PCFR+ and PDCFR+** feed the matcher a prediction of the next regret, so it anticipates instead of reacting. State of the art on many games.
 

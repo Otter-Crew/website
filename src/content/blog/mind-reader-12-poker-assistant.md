@@ -1,11 +1,11 @@
 ---
-title: 'The Mind Reader, Part 12: What Comes Next - poker-assistant'
-description: 'The series finale: the advanced versions of everything you just read - MCCFR blueprints, AIVAT, quantized regrets - live on in poker-assistant'
+title: "The Mind Reader, Part 12: What Comes Next"
+description: "The series finale: the advanced versions of everything you just read - MCCFR blueprints, AIVAT, quantized regrets - live on in poker-assistant"
 pubDate: 2026-08-05
-tags: ['poker', 'mind-reader', 'GTO', 'announcement']
+tags: ["poker", "mind-reader", "GTO", "announcement"]
 ---
 
-*Part 12 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker.*
+_Part 12 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## Where the story goes from here
 

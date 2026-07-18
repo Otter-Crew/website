@@ -1,89 +1,143 @@
 ---
-title: 'The Mind Reader, Part 0: Teaching a Computer to Read Your Mind at Poker'
-description: 'Kicking off a 14-part series on building a poker bot from scratch - fast cards, a full-rules arena, CFR, and a GPT that reads your hand'
+title: "The Mind Reader, Part 0: Teaching a Computer to Read Your Mind at Poker"
+description: "There is no open source engine for multiway no-limit hold'em. A 13-part series building one - fast cards, a full-rules arena, CFR, and a GPT that reads your hand"
 pubDate: 2026-07-20
-tags: ['poker', 'mind-reader', 'rust', 'machine learning']
+tags: ["poker", "mind-reader", "rust", "machine learning"]
 ---
 
-## The claim
+## Nobody has published this code
 
-- I built a model that can tell you what two cards you're holding from nothing but the way you bet. Sit down, play a hand, and it names your hole cards.
-- Estimating hidden hands is one of the hard open problems in computer poker.
-- This series covers the ten years and four projects it took to get here. All of it is open source.
+Online poker moves more money on skill than any game on the internet. The chips go to whoever plays better or bets better (assuming no collusion, but if you want to collude, please play in Atlanta's I-75 rush-hour traffic).
+
+Chess and Go went the other way. Stockfish, Leela, KataGo. All open, all stronger than any human. Poker went dark. Libratus and Pluribus came as papers with no code. The commercial solvers ship as binaries and charge by the month. Nobody has even published a starting point for the hard parts.
+
+So the charts go unchecked. A player buys a preflop range, or pulls one out of a Discord, and plays it for a year. He cannot see the abstraction behind it, the bet sizes that were allowed, or how far from equilibrium it stopped. Ask what it loses to a perfect counter, and nobody can tell him. Not the coach who sold it. Not the site that generated it. The chart is a number with no error bar, and the whole game is built on it.
+
+I wrote mine in the open. Ten years, three repos on GitHub.
+
+A card as an integer. An evaluator that ranks 50 million hands a second. A full-rules simulator. Regret matching. A game tree that survives Rust. A solver on a stopwatch.
+
+Then, the part I have not seen shipped anywhere. A transformer that watches you bet and names your two cards.
+
+## How much poker is running
+
+No network publishes counts. The trackers sample lobbies and guess. [DeucesCracked](https://www.deucescracked.com/poker/network-traffic puts fifteen networks at a peak of 91,500 players and an average of 45,450.
+
+Eight are standalone rooms with one pool and no skins to double-count. Those eight report tables.
+
+| Network           | Peak players | Avg players | Cash tables |
+| :---------------- | -----------: | ----------: | ----------: |
+| PokerStars        |       30,000 |      15,000 |       5,000 |
+| Winamax           |        7,000 |       3,500 |       1,400 |
+| partypoker / bwin |        5,000 |       2,500 |         900 |
+| WSOP.com          |        2,500 |       1,200 |         400 |
+| Unibet Poker      |        2,000 |       1,000 |         350 |
+| Global Poker      |        2,000 |       1,000 |         300 |
+| CoinPoker         |        1,500 |         700 |         250 |
+| Run It Once Poker |          800 |         350 |         120 |
+| **Total**         |   **50,800** |  **25,250** |   **8,720** |
+
+Half those tables are live on an average day, at seventy hands an hour each.
+
+- ~300,000 hands an hour
+- ~7 million a day
+- ~2.7 billion a year
+
+The card rooms add less than you would think. Nevada licenses 635 poker tables statewide ([Gaming Control Board, FY25](https://www.gaming.nv.gov/siteassets/content/about/info-sheet/2025-info-sheet.pdf)), and a live table deals 30 hands per hour, compared to 70 online.
 
 ## Who's telling this story
 
-- I'm [Elliott Clark](https://elliottclark.info). My day job is distributed systems and infrastructure.
-- Poker is the side project.
-- It started at Microsoft. Redmond is a beautiful town. Exciting, it is not.
-- So I played the Microsoft tournaments. Zero rake, sharp programmers, prize pools with World Series of Poker entries. Poker got exciting.
-- Then I read the Coding the Wheel "How I Built a Working Online Poker Bot" articles ([archive link](https://archive.is/vFTef)).
-- They screen-scraped clients and injected mouse clicks. Janky, but it convinced me poker is a programming problem.
-- Every few years a new tool - a faster language, a new algorithm, now transformers - makes the next step possible. I go back in.
-- This is the latest time. Not the last, I'm sure.
+I'm [Elliott Clark](https://elliottclark.info). My day job is storage and machine learning at scale. HBase, then seven years building the ad infrastructure at Facebook, then five years founding a company focused on Kubernetes and Postgres vector databases. Poker is the side project.
+
+It started at Microsoft. Redmond is a beautiful town. Exciting, it is not. So I played in the company tournaments. Zero rake, sharp programmers, World Series entries in the prize pool. Poker was exciting.
+
+Then I read the Coding the Wheel articles, "How I Built a Working Online Poker Bot" ([archive link](https://archive.is/vFTef)). Screen-scraped clients, injected mouse clicks. Janky. Programming poker became exciting.
+
+I have been back at it every few years since, whenever a new tool made the next step possible. A faster language. A new algorithm. Now, multi-head attention.
 
 ## What "solving" poker even means
 
-- Chess and Go fall to search. Both players see the whole board, so a strong engine just looks further ahead than you.
-- Poker hides the opponent's cards. The best move depends on information you don't have.
-- "Solved" means a Nash equilibrium - unexploitable, unable to lose in expectation no matter what the opponent does. Heads-up poker is effectively solved this way.
-- Beyond heads-up there is no single Nash solve. Equilibria still exist - three-player Kuhn poker has infinitely many.
-- They aren't interchangeable. Different equilibria split the EV differently. Compute your own and the pieces don't fit together.
-- So the job changes. Find one unexploitable strategy you can compute and store at poker scale.
-- The scorecard is exploitability - what a perfect best-responder wins against you, in milli-big-blinds per game. Drive it toward zero.
-- One caveat. Multiway equilibria don't carry the full two-player guarantee. Coordinated opponents can in theory shift EV against you.
-- In real Hold'em those spots barely exist. Low measured exploitability is the strongest target the multiway game offers.
+Chess and Go fall to search. Both players see the board, and the engine looks further ahead than you. Poker hides the cards. The best move depends on what you cannot see.
+
+Solved means unexploitable. It cannot lose in expectation, whatever you do. Cepheus took heads-up limit hold'em that far in 2015, under one milli-big-blind per game ([Bowling et al., Science](https://www.science.org/doi/10.1126/science.1259433)). A lifetime of play cannot tell it from perfect.
+
+Past heads-up, there is no single solution. Equilibria still exist. Three-player Kuhn poker, a four-card toy, has infinitely many. They do not fit together. Each splits the money its own way, so two players computing separately end up in different games.
+
+So the job changes. Find one strategy you can compute and store at a poker scale. The scorecard is exploitability, what a perfect counter wins against you in milli-big-blinds per game. Drive it toward zero.
 
 ## CFR, in one breath
 
-- The workhorse is Counterfactual Regret Minimization (CFR). Break the game into small decision points.
-- At each one, track how much you regret not taking each action. Play actions in proportion to accumulated regret.
-- Heads-up, this provably converges to equilibrium. Multiway, the proof is gone but the strategies are still superhuman. Pluribus beat pros six-handed this way.
-- Two problems remain, and they define the frontier:
-  - **Valuing a node fast.** There are too many poker situations to solve each to the end. You need a fast, accurate estimate of what a state is worth.
-  - **Knowing what they hold.** CFR reasons over the opponent's range - every hand they could have. Estimating that range from their actions is the critical input for live play.
-- This series attacks the second problem. Get the range right and you're not guessing. You're reading minds.
+The workhorse is Counterfactual Regret Minimization. Break the game into small decisions. At each one, track how much you regret the actions you skipped. Play them in proportion to that regret.
 
-## The four projects
+Heads-up, it probably converges. Multiway, the proof is gone, and the strategies win anyway. Pluribus beat elite professionals six-handed this way.
 
-- **rs-poker** ([github.com/elliottneilclark/rs-poker](https://github.com/elliottneilclark/rs-poker)) - a Rust library of poker fundamentals. Hand evaluation at 50M+ hands per second per core, Monte-Carlo equity, Omaha, ICM. Ten years of work. Covered in the Foundations arc.
-- **The arena** (inside rs-poker) - a full-rules No-Limit Hold'em simulation where bot agents play each other. It writes standard Open Hand History files, the format the neural net trains on. Covered in the Simulation arc.
-- **little-sorry** ([github.com/elliottneilclark/little-sorry](https://github.com/elliottneilclark/little-sorry)) - the regret math in Rust. Six CFR variants behind one trait, zero allocations in the hot path. Covered in the Regret arc.
-- **range-reader** ([github.com/Otter-Crew/range-reader](https://github.com/Otter-Crew/range-reader)) - the mind reader itself. A PyTorch transformer, GPT-style, with embeddings, loss, and vocabulary reshaped for poker. It learns P(hidden hand | betting history) over all 1,326 combos. Covered in the Reading Minds arc.
+Two problems remain. They are the frontier.
+
+### Valuing a node fast
+
+A chess engine stops the search and scores the position. Poker has no score to hand back. A state in an imperfect-information game has no well-defined value, because what a spot is worth depends on the strategies both players run everywhere else, including the branches you just cut ([Brown, Sandholm & Amos, 2018](https://arxiv.org/abs/1805.08195)).
+
+The branching makes it worse. No-limit lets you bet anything from the minimum to your stack. A hundred blinds deep, that is hundreds of legal sizes at one decision, on four streets, against every stack the table can hold. Nobody solves that. Solvers pick a handful of sizes and throw the rest away.
+
+Then a live opponent bets something outside the set, and you have to map it to a size you know. The heuristics everyone used for that proved highly exploitable, and the corrected mapping introduced a paradox. Adding bad actions to your abstraction can make you play better ([Ganzfried & Sandholm, 2013](https://www.cs.cmu.edu/~sandholm/reverse%20mapping.ijcai13.pdf)).
+
+The way out is to stop early and let a network say what the leaf is worth. DeepStack learned that value from self-play and re-solved every decision as it came ([Moravcik et al., 2017](https://arxiv.org/abs/1701.01724)). Brown and Sandholm's depth-limited version lets the opponent choose among several continuations at the cut and beats two top agents on four cores and 16 GB.
+
+### Knowing what they hold
+
+CFR reasons over the opponent's range, every hand they could hold, weighted. Get the range wrong, and every value below it is wrong with it.
+
+Alberta chased this twenty years ago by keeping a posterior over opponent strategies and playing a response to it ([Southey et al., 2005](https://arxiv.org/abs/1207.1411)). That is opponent modeling, and it leads to exploitation. This series does not go there.
+
+The range a solver needs is not a read on the person. It is the distribution equilibrium that the play itself implies, and a solver approximates it from its blueprint. That approximation frays as the hand runs on. Bet sizes land outside the abstraction. The same size means different things to different people. An overbet arrives where the blueprint has nothing to say. By the river, the prior is thin.
+
+This series takes the second problem. Learn the posterior from the betting record, hand it to the same unexploitable solver, and the play does not change. Only the input gets truer faster.
+
+## The code
+
+**rs-poker** ([repo](https://github.com/elliottneilclark/rs-poker)). Poker fundamentals in Rust. Hand evaluation at 50M hands per second per core, Monte Carlo equity, Omaha, ICM. Ten years of work. It also holds the arena, a full-rules no-limit table where bots play each other and every hand is written out as Open Hand History. That file is what the net trains on. The Foundations and Simulation arcs.
+
+**little-sorry** ([repo](https://github.com/elliottneilclark/little-sorry)). The regret math. Six CFR variants behind one trait, no allocations in the hot path. The Regret arc.
+
+**range-reader** ([repo](https://github.com/Otter-Crew/range-reader)). The mind reader. A GPT-style transformer in PyTorch with embeddings, loss, and vocabulary rebuilt for poker. It learns P(hand | betting) over all 1,326 combos. The Reading Minds arc.
+
+None of this beats Pluribus. Pluribus had a lab and a cluster. What is here is every piece of the machine, running on hardware you own, with the tests that prove it.
+
+What is missing are better games. The training hands were dealt by rough agents, and a model only learns to read the players it was shown. I will show you those gaps rather than hide it.
 
 ## The Map
 
-<!-- Plain text until published; swap each title for a link as it ships. -->
+Come back here. Each part is tagged **[Rust]**, **[Math]**, or **[ML]**.
 
-Each part is tagged by what it's mostly about: **[Rust]**, **[Math]**, **[ML]**.
+<!-- Plain text until published; swap each title for a link as it ships. -->
 
 **Arc 1 - Foundations**
 
-1. **[Rust]** The Mind Reader, Part 1: A Deck of Cards Is a u64
-2. **[Rust]** The Mind Reader, Part 2: Ranking Hands at Ludicrous Speed
+1. **[Rust]** Part 1: A Deck of Cards Is a u64
+2. **[Rust]** Part 2: Ranking Hands at Ludicrous Speed
 
 **Arc 2 - Simulation**
 
-3. **[Rust]** The Mind Reader, Part 3: The Arena - Full-Rules Poker and the Agents That Play It
+3. **[Rust]** Part 3: The Arena - Full-Rules Poker and the Agents That Play It
 
 **Arc 3 - Regret**
 
-4. **[Math]** The Mind Reader, Part 4: Regret Is All You Need
-5. **[Rust][Math]** The Mind Reader, Part 5: little-sorry - The Regret Math, in Rust
-6. **[Rust]** The Mind Reader, Part 6: Trees in Rust Without Tears
-7. **[Rust][Math]** The Mind Reader, Part 7: An Agent That Solves While It Plays
+4. **[Math]** Part 4: Regret Is All You Need
+5. **[Rust][Math]** Part 5: little-sorry - The Regret Math, in Rust
+6. **[Rust]** Part 6: Trees in Rust Without Tears
+7. **[Rust][Math]** Part 7: An Agent That Solves While It Plays
 
 **Arc 4 - Reading minds**
 
-8. **[ML]** The Mind Reader, Part 8: The Solver's Blind Spot
-9. **[ML]** The Mind Reader, Part 9: Hole Cards as a Translation Problem
-10. **[ML]** The Mind Reader, Part 10: Embeddings That Mirror Poker
-11. **[ML]** The Mind Reader, Part 11: Did It Learn to Read Minds?
+8. **[ML]** Part 8: The Solver's Blind Spot
+9. **[ML]** Part 9: Hole Cards as a Translation Problem
+10. **[ML]** Part 10: Embeddings That Mirror Poker
+11. **[ML]** Part 11: Did It Learn to Read Minds?
 
 **Finale**
 
-12. **[ML]** The Mind Reader, Part 12: What Comes Next - poker-assistant
+12. **[ML]** Part 12: What Comes Next
 
 ## Next time
 
-- Part 1 starts with a small decision. A playing card is just a number. That choice sets the speed ceiling for every simulation, solver, and training run that follows.
+Part 1 starts small. A playing card is a number. That choice sets the speed ceiling for every simulation, solver, and training run after it.

@@ -1,11 +1,11 @@
 ---
-title: 'The Mind Reader, Part 7: An Agent That Solves While It Plays'
-description: 'CFRAgent - budget-driven exploration, regret-based pruning, and board enumeration, wired into the arena'
+title: "The Mind Reader, Part 7: An Agent That Solves While It Plays"
+description: "CFRAgent - budget-driven exploration, regret-based pruning, and board enumeration, wired into the arena"
 pubDate: 2026-07-29
-tags: ['poker', 'mind-reader', 'rust', 'GTO']
+tags: ["poker", "mind-reader", "rust", "GTO"]
 ---
 
-*Part 7 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker.*
+_Part 7 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## Assembly time
 
@@ -63,7 +63,7 @@ tags: ['poker', 'mind-reader', 'rust', 'GTO']
 
 - Postflop, the tree is kinder. The cards are down. Even multi-way, rarely more than two or three players see the flop.
 - Preflop, every hand, every position, every stack is still live. The root is where the branching explodes. You cannot solve it on the clock.
-- So we don't. Every serious bot precomputes preflop offline - a *blueprint* - and solves the rest live. We take the same shape at hobby scale.
+- So we don't. Every serious bot precomputes preflop offline - a _blueprint_ - and solves the rest live. We take the same shape at hobby scale.
 - rs-poker ships a rough preflop config. Ranges and frequencies per position and action, nothing finer.
 - The agent looks up its spot and acts. Only when the hand leaves the book does it fall through to the live solver.
 - Rough is the point. The preflop play has to be sane, not perfect. We iterate from there.
@@ -81,6 +81,7 @@ GTO-Experiment                 +38119.4              612557
 Pekarstas-6max-RFI             -25504.5              614384
 RandomPotControl               -72153.6              380683
 ```
+
 - One weakness remains. The range guess is crude - Arc 4.
 
 ## Next time

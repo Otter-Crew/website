@@ -1,11 +1,11 @@
 ---
-title: 'The Mind Reader, Part 2: Ranking Hands at Ludicrous Speed'
-description: 'The perfect-hash hand evaluator - how rs-poker ranks poker hands 2.4x faster and shrank Rank from 8 bytes to 2'
+title: "The Mind Reader, Part 2: Ranking Hands at Ludicrous Speed"
+description: "The perfect-hash hand evaluator - how rs-poker ranks poker hands 2.4x faster and shrank Rank from 8 bytes to 2"
 pubDate: 2026-07-22
-tags: ['poker', 'mind-reader', 'rust', 'performance']
+tags: ["poker", "mind-reader", "rust", "performance"]
 ---
 
-*Part 2 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker.*
+_Part 2 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## Simulations explode; the leaves are all the same
 
@@ -26,7 +26,7 @@ tags: ['poker', 'mind-reader', 'rust', 'performance']
 - The first version started from zero on every call. Slice the hand into four 13-bit suit masks. Scan for a flush.
 - Derive pairs, trips, quads from set algebra. Walk the ladder from quads down to high card.
 - It was clever all the same. The straight check is branch-free. `v & v<<1 & v<<2 & v<<3 & v<<4` leaves a bit only where five ranks run. The wheel is checked separately.
-- Kickers are "clear low bits until *n* remain." No sort, no allocation, no table.
+- Kickers are "clear low bits until _n_ remain." No sort, no allocation, no table.
 - It ran in tens of nanoseconds. For years that was plenty. It still lives in the codebase as the oracle.
 - The new evaluator is checked against it - all 2.6M five-card hands, and hundreds of thousands of random 7-card hands.
 

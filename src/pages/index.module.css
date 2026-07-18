@@ -1,0 +1,71 @@
+/* ---- Hero ---- */
+.hero__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--text-small);
+  color: var(--c-stone);
+  margin-bottom: var(--space-lg);
+}
+.hero__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--c-accent);
+  flex: none;
+}
+.hero__title {
+  font-weight: 320;
+  font-size: var(--text-display);
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+  max-width: 17ch;
+  text-wrap: balance;
+}
+.hero__title em {
+  font-style: italic;
+  font-weight: 340;
+}
+.hero__foot {
+  margin-top: var(--space-xl);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-md) var(--space-2xl);
+}
+.hero__lede {
+  max-width: 46ch;
+  font-size: var(--text-lede);
+  line-height: 1.5;
+  color: var(--c-ink-soft);
+}
+
+/* ---- Section heads ---- */
+.section__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+/* ---- Contact ---- */
+.contact__lead {
+  margin-top: var(--space-md);
+  font-family: var(--font-display);
+  font-weight: 340;
+  font-size: var(--text-h1);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  max-width: 20ch;
+}
+.contact__line {
+  margin-top: var(--space-lg);
+  font-size: var(--text-lede);
+  color: var(--c-ink-soft);
+}
+.contact__email {
+  margin-top: var(--space-2xs);
+  font-size: var(--text-lede);
+}

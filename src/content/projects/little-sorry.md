@@ -1,10 +1,10 @@
 ---
-title: 'little-sorry'
-summary: 'A Rust library of state-of-the-art regret-minimization algorithms for solving imperfect-information games. Six CFR variants behind one trait, now powering the rs-poker solver.'
+title: "little-sorry"
+summary: "A Rust library of state-of-the-art regret-minimization algorithms for solving imperfect-information games. Six CFR variants behind one trait, now powering the rs-poker solver."
 year: 2026
-status: 'active'
-role: 'Author and maintainer'
-link: 'https://github.com/elliottneilclark/little-sorry'
+status: "active"
+role: "Author and maintainer"
+link: "https://github.com/elliottneilclark/little-sorry"
 featured: true
 order: 2
 ---

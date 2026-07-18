@@ -1,13 +1,13 @@
 ---
-title: 'RS-Poker V5: The one with self learning Agents'
-description: 'rs-poker v5.0.0 releases with async RL arena, a state-of-the-art CFR agent, and an `rsp` CLI'
+title: "RS-Poker V5: The one with self learning Agents"
+description: "rs-poker v5.0.0 releases with async RL arena, a state-of-the-art CFR agent, and an `rsp` CLI"
 pubDate: 2026-05-09
-tags: ['rust', 'reinforcement learning', 'GTO', 'poker']
+tags: ["rust", "reinforcement learning", "GTO", "poker"]
 ---
 
-v5.0.0 is a huge breaking release. We destroy all backwards compat this one time, in the hopes it was worth it. 
+v5.0.0 is a huge breaking release. We destroy all backwards compat this one time, in the hopes it was worth it.
 
-In breaking so many things we get a highly tuned RL arena for poker and a [counterfactual regret minimization](https://modelai.gettysburg.edu/2013/cfr/cfr.pdf) agent that's configuratble and budget driven exploration is the most complete and state of the art in the  open source world. No need to pay for closed source GTO calculators. This is
+In breaking so many things we get a highly tuned RL arena for poker and a [counterfactual regret minimization](https://modelai.gettysburg.edu/2013/cfr/cfr.pdf) agent that's configuratble and budget driven exploration is the most complete and state of the art in the open source world. No need to pay for closed source GTO calculators. This is
 all open source now.
 
 If you want to research poker this release gives you the fastest tools
@@ -20,6 +20,7 @@ If you're a poker enthusiast then this release is for you. You get a TUI to
 browse your hand history in [Open Hand History](https://hh-specs.handhistory.org/) format. Or anonymize your logs before sending them off to others.
 
 ## Highlights
+
 - **`rsp` CLI** - a single unified poker toolkit binary (holdem, arena, omaha,
   ICM, OHH) with interactive TUIs, a global `--budget` flag, and a jemalloc
   allocator tuned for CFR's allocation profile.

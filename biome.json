@@ -19,7 +19,8 @@
     "rules": {
       "recommended": true,
       "complexity": {
-        "noImportantStyles": "off"
+        "noImportantStyles": "off",
+        "useLiteralKeys": "off"
       }
     }
   },

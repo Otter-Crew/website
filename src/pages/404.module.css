@@ -1,0 +1,12 @@
+.notfound__title {
+  margin-top: var(--space-md);
+  font-size: var(--text-h1);
+  font-weight: 340;
+  letter-spacing: -0.018em;
+  max-width: 16ch;
+}
+.notfound__line {
+  margin-top: var(--space-md);
+  font-size: var(--text-lede);
+  color: var(--c-ink-soft);
+}

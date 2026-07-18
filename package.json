@@ -19,6 +19,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@biomejs/biome": "^2.4.15",
+    "prettier": "^3.9.5",
     "typescript": "^6.0.3"
   }
 }

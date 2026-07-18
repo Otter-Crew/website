@@ -1,11 +1,11 @@
 ---
-title: 'The Mind Reader, Part 8: The Solver''s Blind Spot'
-description: 'Machine learning starts with a dataset. Ours is a deliberately rough v0.1 - millions of arena hands, a shove-happy cast of agents, and every hole card labeled.'
+title: "The Mind Reader, Part 8: The Solver's Blind Spot"
+description: "Machine learning starts with a dataset. Ours is a deliberately rough v0.1 - millions of arena hands, a shove-happy cast of agents, and every hole card labeled."
 pubDate: 2026-07-30
-tags: ['poker', 'mind-reader', 'machine learning', 'dataset']
+tags: ["poker", "mind-reader", "machine learning", "dataset"]
 ---
 
-*Part 8 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker.*
+_Part 8 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## Machine learning starts with a dataset
 
@@ -38,7 +38,7 @@ tags: ['poker', 'mind-reader', 'machine learning', 'dataset']
 
 - The play over-shoves. One hand in six goes all-in. More than half never leave preflop. The agents trusted a read they had not earned.
 - These agents carried the crude estimator from Part 7. Sure of a range they had no right to, they committed.
-- The pre-neural-net state of the art fixes this. Libratus and Pluribus reason over a precomputed *blueprint*.
+- The pre-neural-net state of the art fixes this. Libratus and Pluribus reason over a precomputed _blueprint_.
 - The blueprint is an MCCFR strategy that gives every hand a probability. At any node you hold a real range, not a point guess.
 - No neural nets. Just abstraction and self-play. v0.1 has none of it.
 - So the data leans loose and shove-happy. A known bias, written down, not hidden.

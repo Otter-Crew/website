@@ -1,11 +1,11 @@
 ---
-title: 'The Mind Reader, Part 6: Trees in Rust Without Tears'
-description: 'CFR needs a huge self-referential, multi-threaded game tree - the memory-arena design behind CFRState'
+title: "The Mind Reader, Part 6: Trees in Rust Without Tears"
+description: "CFR needs a huge self-referential, multi-threaded game tree - the memory-arena design behind CFRState"
 pubDate: 2026-07-28
-tags: ['poker', 'mind-reader', 'rust', 'performance']
+tags: ["poker", "mind-reader", "rust", "performance"]
 ---
 
-*Part 6 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker.*
+_Part 6 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## Rust's famous weakness meets poker's biggest data structure
 
@@ -31,7 +31,7 @@ tags: ['poker', 'mind-reader', 'rust', 'performance']
 
 - `NodeData` has four variants. `Root`, `Chance` with one child per card, `Player` with its regret matcher, and `Terminal` with the utility.
 - The parent is `Option<NonZeroU32>`, stored as index + 1. Four bytes where `Option<usize>` is sixteen.
-- Children are `[AtomicU32; 52]`. Zero means no child. *n* means node *n* - 1. Reading a child is one atomic load.
+- Children are `[AtomicU32; 52]`. Zero means no child. _n_ means node _n_ - 1. Reading a child is one atomic load.
 - Node data sits behind its own `RwLock`. Locks are per-node, never per-tree. A test holds the node under 264 bytes.
 
 ## An arena that never moves a node

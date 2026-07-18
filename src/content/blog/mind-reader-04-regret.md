@@ -1,11 +1,11 @@
 ---
-title: 'The Mind Reader, Part 4: Regret Is All You Need'
-description: 'Counterfactual regret minimization from zero - how tracking what you wish you''d done converges to unexploitable poker'
+title: "The Mind Reader, Part 4: Regret Is All You Need"
+description: "Counterfactual regret minimization from zero - how tracking what you wish you'd done converges to unexploitable poker"
 pubDate: 2026-07-24
-tags: ['poker', 'mind-reader', 'GTO', 'game theory']
+tags: ["poker", "mind-reader", "GTO", "game theory"]
 ---
 
-*Part 4 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker.*
+_Part 4 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## The number that plays perfect poker
 
@@ -27,20 +27,20 @@ tags: ['poker', 'mind-reader', 'GTO', 'game theory']
 
 - Round 1: we throw Rock, they throw Paper. We lose. Score each alternative against their Paper:
 
-| action | would have scored | regret this round | cumulative regret |
-|---|---|---|---|
-| Rock (played) | -1 | 0 | 0 |
-| Paper | 0 | +1 | 1 |
-| Scissors | +1 | +2 | 2 |
+| action        | would have scored | regret this round | cumulative regret |
+| ------------- | ----------------- | ----------------- | ----------------- |
+| Rock (played) | -1                | 0                 | 0                 |
+| Paper         | 0                 | +1                | 1                 |
+| Scissors      | +1                | +2                | 2                 |
 
 - Next round we throw Paper 1/3, Scissors 2/3, Rock never. We lost to Paper; the algorithm says throw what beats it.
 - Round 2: we sample Scissors, they throw Rock. We lose again. Score against Rock and add to the totals:
 
-| action | would have scored | regret this round | cumulative regret |
-|---|---|---|---|
-| Rock | 0 | +1 | 0 + 1 = 1 |
-| Paper | +1 | +2 | 1 + 2 = 3 |
-| Scissors (played) | -1 | 0 | 2 + 0 = 2 |
+| action            | would have scored | regret this round | cumulative regret |
+| ----------------- | ----------------- | ----------------- | ----------------- |
+| Rock              | 0                 | +1                | 0 + 1 = 1         |
+| Paper             | +1                | +2                | 1 + 2 = 3         |
+| Scissors (played) | -1                | 0                 | 2 + 0 = 2         |
 
 - The new mix is Rock 1/6, Paper 3/6, Scissors 2/6. Every action is back in play, weighted by the whole history. The algorithm never commits. It leans.
 - One more experiment. Play regret matching against an opponent who only throws Rock.
@@ -70,7 +70,7 @@ tags: ['poker', 'mind-reader', 'GTO', 'game theory']
 - Both belong to the online-learning family. Gradient descent is itself a no-regret algorithm.
 - The discounting and predictive CFR variants in Part 5 play the role momentum and optimism play in optimizers.
 - Two core differences make poker hard.
-  - Regrets are not gradients that can be applied deeply. 
+  - Regrets are not gradients that can be applied deeply.
   - The loss surface keeps moving, because the opponent updates too.
 
 ## Next time

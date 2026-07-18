@@ -1,11 +1,11 @@
 ---
-title: 'The Mind Reader, Part 1: A Deck of Cards Is a u64'
-description: 'Ten years of representing cards, hands, and decks in Rust - from Vec<Card> to bitsets, and why representation sets your speed ceiling'
+title: "The Mind Reader, Part 1: A Deck of Cards Is a u64"
+description: "Ten years of representing cards, hands, and decks in Rust - from Vec<Card> to bitsets, and why representation sets your speed ceiling"
 pubDate: 2026-07-21
-tags: ['poker', 'mind-reader', 'rust', 'performance']
+tags: ["poker", "mind-reader", "rust", "performance"]
 ---
 
-*Part 1 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker.*
+_Part 1 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## Every hold'em game is the same question
 
@@ -60,7 +60,7 @@ CardBitSet contains, 52 probes of 7 cards
 
 ## A deck of cards is a u64
 
-- `CardBitSet` is a 64-bit integer. Bit *n* set means card *n* is present. Fifty-two cards, twelve bits to spare.
+- `CardBitSet` is a 64-bit integer. Bit _n_ set means card _n_ is present. Fifty-two cards, twelve bits to spare.
 - Insert is `OR`. Remove is `AND NOT`. Membership is shift-and-mask. "How many hearts?" is a mask and `popcount`.
 - Union and intersection of whole hands are one instruction each.
 - The full deck is `(1 << 52) - 1`. Dealing clears bits. What's left is the complement.

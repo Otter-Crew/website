@@ -1,11 +1,11 @@
 ---
-title: 'The Mind Reader, Part 3: The Arena - Full-Rules Poker and the Agents That Play It'
-description: 'Inside rs-poker''s arena - the game state machine, side pots, invariant-checked fuzzing, the async Agent trait, and the tournament that crowned a bot'
+title: "The Mind Reader, Part 3: The Arena - Full-Rules Poker and the Agents That Play It"
+description: "Inside rs-poker's arena - the game state machine, side pots, invariant-checked fuzzing, the async Agent trait, and the tournament that crowned a bot"
 pubDate: 2026-07-23
-tags: ['poker', 'mind-reader', 'rust', 'simulation']
+tags: ["poker", "mind-reader", "rust", "simulation"]
 ---
 
-*Part 3 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker.*
+_Part 3 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## The full game, or nothing
 

@@ -1,11 +1,11 @@
 ---
-title: 'The Mind Reader, Part 9: Hole Cards as a Translation Problem'
-description: 'Mask the hidden cards, translate the public betting record into a belief over 1326 combos - and re-read the range at every street'
+title: "The Mind Reader, Part 9: Hole Cards as a Translation Problem"
+description: "Mask the hidden cards, translate the public betting record into a belief over 1326 combos - and re-read the range at every street"
 pubDate: 2026-07-31
-tags: ['poker', 'mind-reader', 'machine learning', 'transformers']
+tags: ["poker", "mind-reader", "machine learning", "transformers"]
 ---
 
-*Part 9 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker.*
+_Part 9 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 All the code here lives in [`range-reader`](https://github.com/Otter-Crew/range-reader), a PyTorch project. Links point at the file that does the work.
 
@@ -30,7 +30,7 @@ All the code here lives in [`range-reader`](https://github.com/Otter-Crew/range-
 - The hand becomes a token stream ([`encoder.py`](https://github.com/Otter-Crew/range-reader/blob/master/range_reader/encoder.py)). One `sit` per seat, carrying its stack. The button. The blinds.
 - Then a hole token per seat. Then streets, board cards, and every action.
 - The seat you read gets `<predict_hole>`, a real token standing in the villain's place.
-- The seat you read *from* shows its true cards. Every other hidden seat gets `<hide_hole>`.
+- The seat you read _from_ shows its true cards. Every other hidden seat gets `<hide_hole>`.
 - Now the stream shows what a watcher at the table sees. Hidden information in the game is a masked token in the sequence.
 - Actions ride on their seat ([`tokens.py`](https://github.com/Otter-Crew/range-reader/blob/master/range_reader/tokens.py)). `raise@seat3` and `raise@seat7` are different tokens - 208 of them, 13 actions across 16 seats.
 - So the model never works out whose turn it is. The seat is in the token.
@@ -40,7 +40,7 @@ All the code here lives in [`range-reader`](https://github.com/Otter-Crew/range-
 - A showdown reveals more than one hand. `augment_hand` in [`encoder.py`](https://github.com/Otter-Crew/range-reader/blob/master/range_reader/encoder.py) turns each ordered pair of shown seats into its own read.
 - Seat 2 reading seat 5 is one sample. Seat 5 reading seat 2 is another. One hand yields a dozen.
 - A seat that open-folds is skipped as a villain. An open fold shows only a wide fold range, nothing to learn.
-- It still serves as a *perspective*. Its two cards strike dead combos from the seat you do read.
+- It still serves as a _perspective_. Its two cards strike dead combos from the seat you do read.
 - Then suits multiply it. Relabel the four suits and the poker does not change - an exact symmetry. There are 24 relabelings.
 - Training draws one at random per sample, the betting and the target moving together.
 - So one hand fans into many streams. Different seats read, different suits worn. Every stream is a real, legal hand.

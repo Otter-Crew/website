@@ -1,11 +1,11 @@
 ---
-title: 'The Mind Reader, Part 10: Embeddings That Mirror Poker'
-description: 'No flat vocab table - factored additive embeddings built from poker primitives, and bet sizes fed as floats instead of bucketed tokens'
+title: "The Mind Reader, Part 10: Embeddings That Mirror Poker"
+description: "No flat vocab table - factored additive embeddings built from poker primitives, and bet sizes fed as floats instead of bucketed tokens"
 pubDate: 2026-08-03
-tags: ['poker', 'mind-reader', 'machine learning', 'transformers']
+tags: ["poker", "mind-reader", "machine learning", "transformers"]
 ---
 
-*Part 10 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker.*
+_Part 10 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## Embeddings are underrated
 
