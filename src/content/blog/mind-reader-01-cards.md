@@ -2,7 +2,7 @@
 title: "The Mind Reader, Part 1: A Deck of Cards Is a u64"
 description: "Ten years of representing cards, hands, and decks in Rust - from Vec<Card> to bitsets, and why representation sets your speed ceiling"
 pubDate: 2026-07-21
-tags: ["poker", "mind-reader", "rust", "performance"]
+tags: ["poker", "rust", "performance"]
 ---
 
 _Part 1 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._

@@ -2,7 +2,7 @@
 title: "The Mind Reader, Part 0: Teaching a Computer to Read Your Mind at Poker"
 description: "There is no open source engine for multiway no-limit hold'em. A 13-part series building one - fast cards, a full-rules arena, CFR, and a GPT that reads your hand"
 pubDate: 2026-07-20
-tags: ["poker", "mind-reader", "rust", "machine learning"]
+tags: ["poker", "rust", "machine learning"]
 ---
 
 ## Nobody has published this code
@@ -15,7 +15,7 @@ So the charts go unchecked. A player buys a preflop range, or pulls one out of a
 
 I wrote mine in the open. Ten years, three repos on GitHub.
 
-A card as an integer. An evaluator that ranks 50 million hands a second. A full-rules simulator. Regret matching. A game tree that survives Rust. A solver on a stopwatch.
+A card as an integer. An evaluator that ranks 50 million hands a second. A full-rules simulator. Regret matching. A game tree that survives Rust. A solver on a stopwatch."mind-reader",
 
 Then, the part I have not seen shipped anywhere. A transformer that watches you bet and names your two cards.
 

@@ -1,8 +1,8 @@
 ---
 title: "The Mind Reader, Part 2: Ranking Hands at Ludicrous Speed"
-description: "The perfect-hash hand evaluator - how rs-poker ranks poker hands 2.4x faster and shrank Rank from 8 bytes to 2"
+description: "The perfect-hash hand evaluator - how rs-poker ranks poker hands in less than a nanosecond"
 pubDate: 2026-07-22
-tags: ["poker", "mind-reader", "rust", "performance"]
+tags: ["poker", "algorithim", "performance"]
 ---
 
 _Part 2 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
@@ -25,25 +25,22 @@ C(52,5) = 2,598,960. Five-card deals collapse to 7,462 values. Suits matter only
 
 The count comes apart by category.
 
-```text
-  category          count   how it is counted (13 ranks)
-  ---------------   -----   ---------------------------------------
-  Straight flush       10   one per high card, wheel up to ace
-  Four of a kind      156   13 quad ranks * 12 kickers
-  Full house          156   13 trips ranks * 12 pair ranks
-  Flush             1,277   C(13,5) patterns - 10 straights
-  Straight             10   the same 10 high cards
-  Three of a kind     858   13 trips ranks * C(12,2) kickers
-  Two pair            858   C(13,2) pairs * 11 kickers
-  One pair          2,860   13 pair ranks * C(12,3) kickers
-  High card         1,277   the same 1,277 patterns, off-suit
-  ---------------   -----
-  TOTAL             7,462
-```
+| Category        |     Count | How it is counted (13 ranks)       |
+| :-------------- | --------: | :--------------------------------- |
+| Straight flush  |        10 | one per high card, wheel up to ace |
+| Four of a kind  |       156 | 13 quad ranks × 12 kickers         |
+| Full house      |       156 | 13 trips ranks × 12 pair ranks     |
+| Flush           |     1,277 | C(13,5) patterns − 10 straights    |
+| Straight        |        10 | the same 10 high cards             |
+| Three of a kind |       858 | 13 trips ranks × C(12,2) kickers   |
+| Two pair        |       858 | C(13,2) pairs × 11 kickers         |
+| One pair        |     2,860 | 13 pair ranks × C(12,3) kickers    |
+| High card       |     1,277 | the same 1,277 patterns, off-suit  |
+| **Total**       | **7,462** |                                    |
 
 Flush and high card share the same 1,277 patterns, and the two straights share their 10. The difference between each pair is whether the five cards are of one suit. That is the whole suit rule.
 
-It fits in thirteen bits. rs-poker spends sixteen and packs `(category << 12) | subrank`: hand class in the high nibble, one through nine, tiebreak in the twelve bits below. The class sits on top, so integer comparison is a poker comparison. `Rank` wraps that `u16` and holds nothing else.
+It fits in thirteen bits. [rs-poker](https://github.com/elliottneilclark/rs-poker) spends sixteen and packs `(category << 12) | subrank`: hand class in the high nibble, one through nine, tiebreak in the twelve bits below. The class sits on top, so integer comparison is a poker comparison. `Rank` wraps that `u16` and holds nothing else.
 
 ## Count, then branch
 
@@ -115,7 +112,7 @@ Almost none of this is ours. The whole scheme — additive multipliers, biased s
 
 Its contribution was size. The fast evaluators of the day answered a hand with one enormous table; OMPEval got the same answers out of 200 kB by hashing the key instead of indexing it. The thirteen multipliers are older still: zekyll took them from Kenneth Shackleton's SKPokerEval, a seven-card evaluator, which traces back to Suffecool's five-card work. Hand-picked constants, handed down twice.
 
-The port changed one thing. OMPEval indexes a card as `4*rank + suit`, and rs-poker keeps Part 1's `suit*13 + value` instead, so each suit stays a contiguous thirteen-bit block and the deck arithmetic from Part 1 keeps working.
+The port changed one thing. OMPEval indexes a card as `4*rank + suit`, and [rs-poker](https://docs.rs/rs_poker/latest/rs_poker/) keeps Part 1's `suit*13 + value` instead, so each suit stays a contiguous thirteen-bit block and the deck arithmetic from Part 1 keeps working.
 
 ## build.rs is the compiler
 
@@ -125,7 +122,7 @@ The script enumerates every reachable histogram, every rank from zero to four, a
 
 Classification hands back an ordering number full of gaps, so the script densifies. Inside each category, sort the distinct payloads and hand out subranks 1, 2, 3. Two histograms that make the same best five cards share a payload, so they share a subrank.
 
-Then it packs the keys, which are the 64 MiB problem from the last section. The tool is first-fit row displacement, the same trick compilers use to pack parser tables, and it takes about a paragraph to explain.
+Then it packs the keys, which are the 64 MiB problem from the last section. The tool is first-fit row displacement, the same trick compilers use to pack parser tables, and it takes a few paragraphs to explain.
 
 Split every key in two. The low twelve bits are its column, the high bits its row. That lays the keys out on a grid: row `key >> 12`, column `key & 0xFFF`. The grid is enormous and almost entirely empty, because seven thousand keys are spread over eight thousand rows of four thousand columns each.
 
@@ -184,11 +181,9 @@ Rank best 5 of 7 cards    11.02 ns   4.65 ns
 
 Call it 2.4x.
 
-Folded from scratch, a seven-card hand costs about 2.8 nanoseconds. One that has already been tallied ranks in under a nanosecond, which is where the copy-and-extend path pays: two players and a flop, every one of the 990 runouts, both hands ranked at each, finish in under two microseconds. That is 0.9 nanoseconds per rank.
+Folded from scratch, a seven-card hand costs about 2.8 nanoseconds. One that has already been tallied ranks in under a nanosecond, which is where the copy-and-extend path pays: two players and a flop, every one of the 990 runouts, both hands ranked at each, finish in under two microseconds; that is 0.9 nanoseconds per rank.
 
-None of it is free. The tables cost about 305 KiB of read-only data in the binary: 256 for `LOOKUP`, 32 for `ROW_OFFSETS`, 16 for the flush table, one for the card keys. That is more than most L2 caches will hold. The flush table and the hot rows stay resident, while the rest sit there as a cache miss waiting for a hand nobody deals.
-
-`Rank` shrank from eight bytes to two, and its alignment from four to two. Rank arrays, showdown tallies, and CFR node payloads all got four times smaller.
+The tables cost about 305 KiB of read-only data in the binary: 256 for `LOOKUP`, 32 for `ROW_OFFSETS`, 16 for the flush table, one for the card keys. That is more than most L2 caches will hold. The flush table and the hot rows stay resident, while the rest sit there as a cache miss waiting for a hand nobody deals.
 
 ## Next time
 
