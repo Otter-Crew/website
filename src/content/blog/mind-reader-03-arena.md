@@ -302,5 +302,3 @@ A tuned heuristic has patterns. Fixed thresholds, predictable sizings. Patterns 
 Breaking that takes a different idea. Not a strategy — a way to learn a strategy nobody can exploit.
 
 That is the equilibrium territory from Part 0, and at the bottom of it is one number. Regret.
-
-Next time is theory.
