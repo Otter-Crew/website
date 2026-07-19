@@ -21,29 +21,33 @@ Then, the part I have not seen shipped anywhere. A transformer that watches you 
 
 ## How much poker is running
 
-No network publishes counts. The trackers sample lobbies and guess. [DeucesCracked](https://www.deucescracked.com/poker/network-traffic puts fifteen networks at a peak of 91,500 players and an average of 45,450.
+No network publishes counts. Trackers scrape the lobbies and disagree, sometimes by half. Read the spread as the error bar.
 
-Eight are standalone rooms with one pool and no skins to double-count. Those eight report tables.
+SharkScope counted about 32,000 filled cash seats worldwide on an average day in July 2026 ([VIP-Grinders](https://www.vip-grinders.com/research/online-poker-traffic-report/)). Rakerace saw the same band, 22,000 to 32,000, across 2024 and 2025 ([Rakerace](https://rakerace.com/news/poker-articles/2025/08/27/global-online-poker-traffic-2022-2025-peaks-declines-and-the-road-ahead)). GGPoker tops both at roughly 9,000, a third of the whole game.
 
-| Network           | Peak players | Avg players | Cash tables |
-| :---------------- | -----------: | ----------: | ----------: |
-| PokerStars        |       30,000 |      15,000 |       5,000 |
-| Winamax           |        7,000 |       3,500 |       1,400 |
-| partypoker / bwin |        5,000 |       2,500 |         900 |
-| WSOP.com          |        2,500 |       1,200 |         400 |
-| Unibet Poker      |        2,000 |       1,000 |         350 |
-| Global Poker      |        2,000 |       1,000 |         300 |
-| CoinPoker         |        1,500 |         700 |         250 |
-| Run It Once Poker |          800 |         350 |         120 |
-| **Total**         |   **50,800** |  **25,250** |   **8,720** |
+| Network       | Pool           |  Cash seats |
+| :------------ | :------------- | ----------: |
+| GGPoker       | International  |       9,726 |
+| CoinPoker     | Crypto         |       2,032 |
+| PokerStars    | International  |       1,926 |
+| iPoker        | International  |       1,074 |
+| Winamax       | France & Spain |       1,014 |
+| The long tail | 40+ networks   |     ~16,000 |
+| **Total**     |                | **~32,000** |
 
-Half those tables are live on an average day, at seventy hands an hour each.
+Those are SharkScope's counts. [PokerScout](https://www.pokerscout.com/) agrees on GGPoker and puts CoinPoker at 214, not 2,032, and Winamax at 27, not 1,014. Nobody counts an anonymous crypto room the same way twice, so CoinPoker sits second in the world or seventh, take your pick. That is the error bar.
 
-- ~300,000 hands an hour
-- ~7 million a day
-- ~2.7 billion a year
+Seats are not hands. Four to six players a table, sixty to a hundred hands an hour each ([Upswing](https://upswingpoker.com/hands-per-hour-live-poker-vs-online/)). Multiply the corners:
 
-The card rooms add less than you would think. Nevada licenses 635 poker tables statewide ([Gaming Control Board, FY25](https://www.gaming.nv.gov/siteassets/content/about/info-sheet/2025-info-sheet.pdf)), and a live table deals 30 hands per hour, compared to 70 online.
+| Estimate | Hands / hour | Hands / day | Hands / year |
+| :------- | -----------: | ----------: | -----------: |
+| Low      |     ~200,000 |         ~5M |        ~1.8B |
+| Middle   |     ~400,000 |        ~10M |        ~3.5B |
+| High     |     ~800,000 |        ~19M |          ~7B |
+
+Low is the thin field at the full-ring pace, high the fat one all six-max. Billions a year, whichever tracker you trust.
+
+The card rooms add less. The US has 5,618 live tables across 589 rooms ([World Casino Directory](https://www.worldcasinodirectory.com/united-states/poker-rooms)), and 2,100 run on a busy Saturday ([Poker Pilgrims](https://www.pokerpilgrims.com/the-state-of-cash-poker-in-the-us-in-2025/)); Nevada alone licenses 635 ([Gaming Control Board, FY25](https://www.gaming.nv.gov/siteassets/content/about/info-sheet/2025-info-sheet.pdf)). A dealer pushes 20 to 35 hands an hour ([Upswing](https://upswingpoker.com/hands-per-hour-live-poker-vs-online/)), half the online rate. Forty to ninety thousand live hands an hour, nationwide. Real, and a fraction.
 
 ## Who's telling this story
 
