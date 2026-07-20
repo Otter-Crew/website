@@ -150,14 +150,6 @@ match self.arena.get(parent_idx).try_set_child(child_idx, idx) {
 
 Two threads reach the same unexplored action together, both push a node, and both try to claim the slot. One wins, and the loser takes the winner's index and walks into it, leaving its own node in the arena with nothing pointing at it, 264 orphaned bytes. That is cheaper than the lock that would have prevented it, and rare, since threads on different branches never contend for a slot.
 
-## Drop is a few thousand frees
-
-A boxed tree gives every node its own allocation, so dropping it is millions of calls to `free` at the end of every hand.
-
-The arena still walks its nodes, because `Player` holds a boxed regret matcher and those have to be dropped, but the walk is a flat loop over a range of indices with no recursion and no pointer chasing, and the memory goes back in slabs - a few thousand frees instead of ten million.
-
-That is what makes the loop in Part 7 affordable. Solve, act, drop the tree, next hand.
-
 ## The handle
 
 ```rust
