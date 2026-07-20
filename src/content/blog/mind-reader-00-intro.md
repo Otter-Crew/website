@@ -13,7 +13,7 @@ Chess and Go went the other way, with Stockfish, Leela, and KataGo all open and 
 
 So the charts go unchecked. A player buys a preflop range, or pulls one out of a Discord, and plays it for a year. He cannot see the abstraction behind it, the bet sizes that were allowed, or how far from equilibrium it stopped. Ask what it loses to a perfect counter, and neither the coach who sold it nor the site that generated it can say. The chart is a number with no error bar, and the whole game is built on it.
 
-I wrote mine in the open. Ten years, three repos on GitHub.
+I wrote mine in the open — ten years, three repos on GitHub.
 
 A card as an integer. An evaluator that ranks 50 million hands a second. A full-rules simulator. Regret matching. A game tree that survives Rust. A solver on a stopwatch.
 
@@ -46,7 +46,7 @@ What the players push at each other is bigger, and no one can tell you by how mu
 
 I'm [Elliott Clark](https://elliottclark.info). My day job is storage and machine learning at scale. Apache HBase, then seven years building the ad infrastructure at Facebook, then five years founding a company focused on Kubernetes and Postgres vector databases. Poker is the side project.
 
-It started at Microsoft. Redmond is a beautiful town and not an exciting one, so I played in the company tournaments. Zero rake, sharp programmers, World Series entries in the prize pool. Poker was exciting.
+It started at Microsoft. Redmond is a beautiful town and not an exciting one, so I played in the company tournaments: zero rake, sharp programmers, World Series entries in the prize pool. Poker was exciting.
 
 Then I read the Coding the Wheel articles, "How I Built a Working Online Poker Bot" ([archive link](https://archive.is/vFTef)), all screen-scraped clients and injected mouse clicks and janky as hell. Programming poker became exciting.
 
@@ -86,7 +86,7 @@ CFR reasons over the opponent's range, every hand they could hold, weighted. Get
 
 Alberta chased this twenty years ago by keeping a posterior over opponent strategies and playing a response to it ([Southey et al., 2005](https://arxiv.org/abs/1207.1411)). That is opponent modeling, and it leads to exploitation. This series does not go there.
 
-The range a solver needs is the distribution equilibrium that the play itself implies, and a solver approximates it from its blueprint. That approximation frays as the hand runs on. Bet sizes land outside the abstraction. The same size means different things to different people. An overbet arrives where the blueprint has nothing to say. By the river, the prior is thin.
+The range a solver needs is the distribution equilibrium that the play itself implies, and a solver approximates it from its blueprint. That approximation frays as the hand runs on: bet sizes land outside the abstraction, the same size means different things to different people, and an overbet arrives where the blueprint has nothing to say. By the river, the prior is thin.
 
 This series takes the second problem. Learn the posterior from the betting record, hand it to the same unexploitable solver, and the play does not change. The input just gets truer faster.
 

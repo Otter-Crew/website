@@ -1,3 +1,4 @@
+import { unified } from '@astrojs/markdown-remark';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 
@@ -58,9 +59,14 @@ export default defineConfig({
   vite: {
     css: { modules: { localsConvention: 'camelCaseOnly' } },
   },
+  // Astro 7 defaults to the native "Sätteri" processor. Opt back into the
+  // remark/rehype pipeline (from @astrojs/markdown-remark) so the plugins above
+  // run; shikiConfig stays a top-level markdown option.
   markdown: {
-    remarkPlugins: [remarkReadingTime],
-    rehypePlugins: [rehypeWrapTables],
+    processor: unified({
+      remarkPlugins: [remarkReadingTime],
+      rehypePlugins: [rehypeWrapTables],
+    }),
     shikiConfig: {
       theme: 'github-light',
       wrap: true,

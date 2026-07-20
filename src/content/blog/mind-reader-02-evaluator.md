@@ -169,7 +169,7 @@ seven_card_accum_rank/three_of_a_kind  time: [538 ps   539 ps   541 ps]
 seven_card_accum_rank/straight         time: [548 ps   553 ps   558 ps]
 ```
 
-Most archetypes land under a nanosecond. The high card is the outlier at three.
+Most archetypes land under a nanosecond; the high card is the outlier at three.
 
 Counting against table, same machine, same benches, `target-cpu=native`:
 
