@@ -1,8 +1,8 @@
 ---
 title: "The Mind Reader, Part 4: Regret Is All You Need"
 description: "Counterfactual regret minimization from zero - how tracking what you wish you'd done converges to unexploitable poker"
-pubDate: 2026-07-24
-tags: ["poker", "mind-reader", "GTO", "game theory"]
+pubDate: 2026-07-28
+tags: ["poker", "GTO", "game theory"]
 ---
 
 _Part 4 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._

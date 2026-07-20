@@ -1,7 +1,7 @@
 ---
 title: "The Mind Reader, Part 11: Did It Learn to Read Minds?"
 description: "Measuring the model - mean reciprocal rank, the random floor, the read sharpening street by street, and why the data sets the ceiling"
-pubDate: 2026-08-04
+pubDate: 2026-08-10
 tags: ["poker", "mind-reader", "machine learning", "evaluation"]
 ---
 

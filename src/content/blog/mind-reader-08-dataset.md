@@ -1,7 +1,7 @@
 ---
 title: "The Mind Reader, Part 8: The Solver's Blind Spot"
 description: "Machine learning starts with a dataset. Ours is a deliberately rough v0.1 - millions of arena hands, a shove-happy cast of agents, and every hole card labeled."
-pubDate: 2026-07-30
+pubDate: 2026-08-04
 tags: ["poker", "mind-reader", "machine learning", "dataset"]
 ---
 

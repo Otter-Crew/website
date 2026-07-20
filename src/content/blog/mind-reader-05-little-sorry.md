@@ -1,8 +1,8 @@
 ---
 title: "The Mind Reader, Part 5: little-sorry - The Regret Math, in Rust"
 description: "A small crate for a big idea: regret matching, CFR+, and the discounted and predictive variants - the numeric core every solver shares"
-pubDate: 2026-07-27
-tags: ["poker", "mind-reader", "rust", "GTO"]
+pubDate: 2026-07-29
+tags: ["poker", "rust", "GTO"]
 ---
 
 _Part 5 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._

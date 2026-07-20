@@ -1,7 +1,7 @@
 ---
 title: "The Mind Reader, Part 3: The Arena - Full-Rules Poker and the Agents That Play It"
 description: "Inside rs-poker's arena - the game state machine, the Agent trait, historians, side pots, invariant-checked fuzzing, and the tournament that crowned a bot"
-pubDate: 2026-07-23
+pubDate: 2026-07-27
 tags: ["poker", "rust", "simulation"]
 ---
 

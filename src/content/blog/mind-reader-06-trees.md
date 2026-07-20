@@ -1,8 +1,8 @@
 ---
 title: "The Mind Reader, Part 6: Trees in Rust Without Tears"
 description: "CFR needs a huge self-referential, multi-threaded game tree - the memory-arena design behind CFRState"
-pubDate: 2026-07-28
-tags: ["poker", "mind-reader", "rust", "performance"]
+pubDate: 2026-07-30
+tags: ["poker", "rust", "performance"]
 ---
 
 _Part 6 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._

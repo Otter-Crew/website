@@ -1,7 +1,7 @@
 ---
 title: "The Mind Reader, Part 10: Embeddings That Mirror Poker"
 description: "No flat vocab table - factored additive embeddings built from poker primitives, and bet sizes fed as floats instead of bucketed tokens"
-pubDate: 2026-08-03
+pubDate: 2026-08-06
 tags: ["poker", "mind-reader", "machine learning", "transformers"]
 ---
 

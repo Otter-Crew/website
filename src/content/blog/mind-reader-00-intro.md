@@ -1,7 +1,7 @@
 ---
 title: "The Mind Reader, Part 0: Teaching a Computer to Read Your Mind at Poker"
 description: "There is no open source engine for multiway no-limit hold'em. A 13-part series building one - fast cards, a full-rules arena, CFR, and a GPT that reads your hand"
-pubDate: 2026-07-20
+pubDate: 2026-07-21
 tags: ["poker", "rust", "machine learning"]
 ---
 
@@ -9,7 +9,7 @@ tags: ["poker", "rust", "machine learning"]
 
 Online poker moves more money on skill than any game on the internet. The chips go to whoever plays better or bets better (assuming no collusion, but if you want to collude, please play in Atlanta's I-75 rush-hour traffic).
 
-Chess and Go went the other way, with Stockfish, Leela, and KataGo all open and all stronger than any human. Poker went dark. Libratus and Pluribus came as papers with no code. The commercial solvers ship as binaries and charge by the month, and the hard parts have never had a public starting point at all.
+Chess and Go went code available, with Stockfish, Leela, and KataGo all open and all stronger than any human. Poker went dark. Libratus and Pluribus came as papers with no code. The commercial solvers ship as binaries and charge by the month, and the hard parts have never had a public starting point at all.
 
 So the charts go unchecked. A player buys a preflop range, or pulls one out of a Discord, and plays it for a year. He cannot see the abstraction behind it - which bet sizes were allowed - or how far from equilibrium it stopped. Ask what it loses to a perfect counter, and neither the coach who sold it nor the site that generated it can say. The chart is a number with no error bar, and the whole game is built on it.
 

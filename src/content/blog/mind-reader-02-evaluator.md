@@ -1,7 +1,7 @@
 ---
 title: "The Mind Reader, Part 2: Ranking Hands at Ludicrous Speed"
 description: "The perfect-hash hand evaluator - how rs-poker ranks poker hands in less than a nanosecond"
-pubDate: 2026-07-22
+pubDate: 2026-07-23
 tags: ["poker", "algorithm", "performance"]
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: "The Mind Reader, Part 12: What Comes Next"
 description: "The series finale: the advanced versions of everything you just read - MCCFR blueprints, AIVAT, quantized regrets - live on in poker-assistant"
-pubDate: 2026-08-05
+pubDate: 2026-08-11
 tags: ["poker", "mind-reader", "GTO", "announcement"]
 ---
 
