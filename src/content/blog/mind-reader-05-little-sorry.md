@@ -11,7 +11,7 @@ _Part 5 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching 
 
 Part 4 ended with a table you could keep on paper. Poker needs millions of them, one per information set, updated billions of times on a millisecond deadline, and that takes code.
 
-Regret in one word is sorry, and little because the crate holds one idea and one dependency, `rand`. [Room here for the real naming story.]
+Regret in one word is sorry, and little because the crate holds one idea and one dependency, `rand`.
 
 The first commit landed in October 2019, and two days later came one titled "Regret Matching in Rust." That commit made the bet the crate still runs on: the regret math separates from the game. Nothing in [little-sorry](https://github.com/elliottneilclark/little-sorry) knows what a card is. It turns streams of rewards into strategies, and it would do the same for an auction or a firewall.
 
@@ -34,11 +34,11 @@ pub trait RegretMinimizer: Clone {
 
 Actions are called experts, the online-learning name for the same thing: a panel of advisors, each with a track record, followed in proportion to how right they have been.
 
-`update_regret` does the work. The caller scores every action, and the crate runs Part 4's whole loop from there: instantaneous regrets, cumulative totals under the variant's discounting, a strategy from the positive ones, and a running average.
+`update_regret` does the work. The caller scores every action, and the crate runs Part 4's whole loop from there: instantaneous regrets, cumulative totals under the variant's discounting of old iterations, a strategy from the positive ones, and a running average.
 
 Two methods read it back, and Part 4 described both before they had names. `current_strategy()` is the mix that chases the opponent, and you sample your next action from it. `best_weight()` normalizes the running average, and the average is the answer you keep.
 
-`average_regret()` says when to stop. It is the largest positive cumulative regret divided by the weight accumulated so far, and it walks toward zero as the node settles. CFR+ resets its accumulators when every action goes negative, so a fresh matcher and a just-reset matcher both report zero, and the check has to be gated on a minimum iteration count or it will call the first update convergence.
+`average_regret()` says when to stop. It is the largest positive cumulative regret divided by the weight accumulated so far, and it walks toward zero as the node settles. CFR+ resets its accumulators when every action goes negative, so a fresh matcher and a just-reset matcher both report zero, and the check has to be gated on a minimum iteration count or it will mistake the first update for convergence.
 
 Every buffer is allocated in `new`, so `update_regret` writes slices in place and never touches the heap.
 
@@ -60,7 +60,7 @@ The runner is generic over the algorithm, which matters because there are six of
 
 ## Six variants, one dial each
 
-Regret matching converges at 1/sqrt(T), so four times the work buys half the error and the last digit of precision costs a hundred times the first. Twenty years of research is, roughly, small changes to how the totals are kept.
+Regret matching converges at 1/sqrt(T), so the last digit of precision costs a hundred times the first. Twenty years of research is, roughly, small changes to how the totals are kept.
 
 **CFR+** ([Tammelin, 2014](https://arxiv.org/abs/1407.5042)) floors cumulative regret at zero, so an action driven deep negative gets a clean slate the moment it turns useful again instead of climbing out of a hole it dug ten thousand iterations ago. It is the algorithm under Cepheus, and the default here.
 
@@ -87,13 +87,13 @@ One tick advances every row. The discount factors depend on the tick and nothing
 
 The memory goes down too. The current strategy is never stored, and gets re-derived from the regret lane on demand, which drops a whole per-row array. Re-deriving it from unchanged regret gives back the exact numbers a stored-strategy matcher would carry, so a batch of one matches its scalar counterpart bit for bit. The scratch buffers are sized to one row, allocated once per call, and reused down the batch.
 
-Every update runs through `&self` on interior-mutable cells, so one routine drives two backends. `Local` is an ordinary `Cell`, deterministic, and `!Sync`, which makes threaded misuse a compile error. `Atomic` is a relaxed `AtomicU32`, `Sync`, and takes updates from every worker at once.
+Every update runs through `&self` on interior-mutable cells - mutating through a shared reference instead of `&mut` - so one routine drives two backends. `Local` is an ordinary `Cell`, deterministic, and `!Sync`, which makes threaded misuse a compile error. `Atomic` is a relaxed `AtomicU32`, `Sync`, and takes updates from every worker at once.
 
 The atomic path races on purpose. An update is a load, an add, and a store, so two threads on one cell can lose one. No theorem covers that. The argument is Hogwild ([Recht et al., 2011](https://arxiv.org/abs/1106.5730)), where lock-free gradient updates converge in expectation under sparse contention, and CFR already swallows the noise Monte Carlo sampling injects. A lost update is a small bounded perturbation, and threads working different branches rarely touch the same row anyway. Run `Local` when reproducibility matters.
 
 ## Buying RAM with precision
 
-At blueprint scale the accumulators are the whole memory bill, so the crate lets you pay part of it in precision.
+At blueprint scale - a strategy solved offline for the whole game - the accumulators are the whole memory bill, so the crate lets you pay part of it in precision.
 
 A third type parameter picks the lane layout. Keep regret in scaled `i16` and the strategy average in `u16` and the footprint halves. The saving is smaller than it sounds at poker's narrow nodes, because the `u16` lane carries a per-row weight of its own, and across three actions that one extra word eats most of the gain. Shared-weight layouts drop it to a single cell for the batch, at the price of a stricter contract: every row has to advance on every tick. The `i16` layouts are marked experimental, since exploitability equivalence with the f32 baseline has not been proven.
 

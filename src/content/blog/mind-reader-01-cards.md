@@ -41,7 +41,7 @@ pub struct Card {
 
 That is what anyone writes first, and it is fine. A Rust enum is an integer with names on it, so it costs nothing at runtime, and the compiler checks the matches for you.
 
-`Value` counts up from two, so the discriminant is the ordering, and `Ord` comes from the derive.
+`Value` counts up from two, so the discriminant - the integer behind each variant - is the ordering, and `Ord` comes from the derive.
 
 `Suit` derives `Ord` too, and that ordering means nothing, because poker does not rank suits. It is there so a hand can be sorted for display.
 
@@ -63,9 +63,9 @@ One card was easy.
 
 ## A hand is a set
 
-Now that we have cards, we need somewhere to keep them, for the players and for the board.
+Now that we have cards, we need somewhere to keep them, for the players and for the board, the cards everyone shares.
 
-Hands grow street by street, and a vector grows, so the first design made a hand a `Vec<Card>`.
+Hands grow street by street - one betting round at a time - and a vector grows, so the first design made a hand a `Vec<Card>`.
 
 But every question the engine asks is a set question: is this card taken, what overlaps the board, what is left to come. Order matters to the deal, and the hand has already forgotten it.
 
@@ -223,7 +223,7 @@ Take the cards nobody has seen and walk every subset of size N. Two at a time gi
 
 The counts are not small. Your two cards and a flop leave forty-seven unseen, which is 1,081 hands one opponent could hold. Deal a second player in, and 990 turn-and-river pairs remain.
 
-Equity numbers, out counts, and the solver's leaf scores all come from that walk. The solver runs it every time it stops recursing and plays the hand to showdown.
+Equity numbers (a hand's odds of winning), out counts, and the solver's leaf scores all come from that walk. The solver runs it every time it stops recursing and plays the hand to showdown.
 
 The naive way is to copy the unseen cards into a list and iterate over the indices with nested loops. That allocates, and the loop nest has to be rewritten every time N changes.
 

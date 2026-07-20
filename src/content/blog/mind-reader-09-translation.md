@@ -11,7 +11,7 @@ All the code here lives in [`range-reader`](https://github.com/Otter-Crew/range-
 
 ## How to predict in poker
 
-- Sit at a table and you never become sure of one opponent hand. You hold a hunch over many.
+- Sit at a table and you never pin an opponent to one hand. You hold a hunch over many.
 - He could have aces. He could have the flush draw. Each with a weight.
 - So the answer is a distribution. A belief over 1,326 hands, each with a probability. A range.
 - The input is a sequence. Seats, blinds, bets, board cards, in order. The output is a belief.
@@ -47,15 +47,16 @@ All the code here lives in [`range-reader`](https://github.com/Otter-Crew/range-
 
 ## Translating to a belief over 1,326 combos
 
-- The read is a distribution over all C(52,2) = 1,326 combos. That output space is not the 1,596-token input vocabulary the model reads.
+- The read is a distribution over all C(52,2) = 1,326 combos. That output space is not the 1,596-token input vocabulary - the fixed set of tokens the model reads.
 - The stream speaks one language. The answer speaks another.
 - We mask to keep the model honest. Any combo using a visible card - the board, the perspective's cards - is impossible.
-- A per-position mask sends those to -inf before the softmax. The hard rule is enforced, not hoped for.
+- A per-position mask sends those to -inf before the softmax - the step that turns scores into probabilities. The hard rule is enforced.
 - Grade the belief by where it puts the truth. That metric is `val/mrr`, below.
 
 ## The model underneath
 
 - It is a GPT decoder in [`model.py`](https://github.com/Otter-Crew/range-reader/blob/master/range_reader/model.py). Ten layers, `d=640`, ten heads. About 50M parameters, small enough for one GPU.
+- Attention is the mechanism: each token weighs every earlier token and pulls in what it needs, and multi-head runs several such weightings at once.
 - The blocks are current small-decoder practice. Pre-norm. RMSNorm with no learnable scale. QK-norm attention. A ReLU^2 MLP.
 - Dropout 0.15, so 50M params don't memorize 600k hands.
 - No positional encoding. NoPE. A causal decoder recovers order from its own mask.

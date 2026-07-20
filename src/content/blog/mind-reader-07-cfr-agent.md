@@ -17,7 +17,7 @@ _Part 7 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching 
 
 - Chess engines solved real-time search decades ago. We took what worked.
 - Time controls. An engine gets a clock, not an iteration count. Our budgets are the same contract.
-- The opening book. Engines look the first ten moves up instead of searching them. Our preflop charts are the book - more on that below.
+- The opening book. Engines look up the first ten moves instead of searching them. Our preflop charts are the book - more on that below.
 - The easy move. When the strategy stops moving, stop solving. Our early exit fires after three stable iterations.
 - Not everything transferred. We ported Stockfish's reverse futility pruning, tested it, and it measured negative. Gone.
 - The lesson from chess is the discipline. Every idea plays a match before it ships.
@@ -29,7 +29,7 @@ _Part 7 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching 
 - One regret update per wave. It repeats until the budget says stop.
 - Trying an action means playing it out. Clone the game state. Force a copy of the agent to that action, and seat CFR sub-agents in the other chairs.
 - Run the simulation into the shared tree. The tree grows where the play goes.
-- The final act is a sample, not an argmax. The average says raise 70%, call 30%. The agent rolls at those odds.
+- The final act is a sample, not an argmax - not the single highest-frequency action. The average says raise 70%, call 30%. The agent rolls at those odds.
 - Frequencies are what make you unreadable.
 - The tree lives through the hand. The historian moves each player forward as real cards fall. The turn decision keeps what the flop learned.
 
@@ -39,7 +39,7 @@ _Part 7 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching 
 - The range guess comes from a trait, `HandDistributionEstimator`. Once per decision it hands back a range for every hidden seat.
 - Each wave re-deals the opponents from those ranges. The board and the agent's own cards stay fixed.
 - Two estimators ship. `KnownHandsEstimator` peeks at the true hands. An oracle, for tests and benchmarks. `UniformRandomEstimator` assumes any two cards. It knows nothing.
-- One cheats. One knows nothing. A real read belongs in the gap between them. That is Arc 4.
+- One cheats. One knows nothing. A real read belongs in the gap between them. That is Act 4.
 
 ## Budgets: solving what you can afford
 
@@ -55,9 +55,9 @@ _Part 7 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching 
 - Every fourth wave reprobes them all, in case one came back.
 - A second filter skips actions whose probability falls below a shrinking threshold.
 - Deep in the tree, recursion stops and a fast-forward takes over. Assume everyone checks it down, then score the showdown.
-- No cards to come is one evaluation. One card is all ~46. Two is all ~1,035 pairs.
+- No cards to come is one evaluation. One card is all ~46. Two is all ~1,035 runouts.
 - Three to come? Sample a few flops and enumerate each runout. Part 2's accumulator makes this nearly free.
-- Enumeration beats sampling for a reason. Sampled boards put noise in the reward. Noise slows convergence.
+- Enumeration beats sampling. Sampled boards put noise in the reward. Noise slows convergence.
 
 ## The one street we don't solve
 
@@ -82,9 +82,9 @@ Pekarstas-6max-RFI             -25504.5              614384
 RandomPotControl               -72153.6              380683
 ```
 
-- One weakness remains. The range guess is crude - Arc 4.
+- One weakness remains. The range guess is crude - Act 4.
 
 ## Next time
 
 - The solver plays a full hand now. But it deals the opponents cards at random. It doesn't know what you could be holding.
-- Part 8 opens Arc 4. Generate the data and learn the read.
+- Part 8 opens Act 4. Generate the data and learn the read.

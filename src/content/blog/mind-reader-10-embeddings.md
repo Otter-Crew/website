@@ -10,10 +10,10 @@ _Part 10 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching
 ## Embeddings are underrated
 
 - I was tech lead for ads at Facebook. I learned to love embeddings.
-- Structure is the whole game. You could tell the model a feature's shape and importance.
+- You could tell the model a feature's shape and importance.
 - A GPT throws that away. One embedding table, one row per token, as wide as the vocabulary. Want more capacity? Make the rows wider.
 - Width is the only knob. Nothing tells the table that a token is a number, a position, a known kind of thing. Every row learns from scratch.
-- This works great if you have the independent dataset and GPU years to spare. With fewer resources things become more interesting.
+- This works great if you have the independent dataset and GPU years to spare. With fewer resources, structure has to earn its keep.
 
 ## Language models can't count
 
@@ -54,7 +54,7 @@ _Part 10 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching
 
 - Every other fact is a category you look up. A bet size is different. It's a number, and the number matters - 12 big blinds tells a different story than 40.
 - The easy hack buckets sizes into a few tokens, a "small bet" and a "pot bet". That throws away the exact amount, the signal a read lives on.
-- You can't paste the raw number onto the vector either. A network reads a lone number poorly and can't bend its response around it.
+- You can't paste the raw number onto the vector either. A network reads a lone number poorly.
 - So we spread the number into many. Take the bet in big blinds and take its log.
 - Then read sines and cosines at several frequencies - eight numbers that move smoothly as the bet grows.
 - This is the trick transformers use to encode position, pointed at money. Close amounts get close features, so the model feels magnitude. The code calls it `phi`.

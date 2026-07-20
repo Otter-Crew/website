@@ -23,7 +23,7 @@ _Part 11 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching
 
 ## The scorecard
 
-- One 35-minute run, one GPU. Best checkpoint by `val/mrr`, scored on held-out hands.
+- One 35-minute run, one GPU. Best checkpoint by `val/mrr`, scored on held-out hands - ones it never trained on.
 - Split by how far the villain got before folding:
 
 ```text
@@ -66,13 +66,13 @@ random floor      663.5   0.0059
 - The model learns to read those players well. It can't learn a read the data never shows.
 - Proving the architecture was the goal. It holds. The score climbs only when the data does.
 - State-of-the-art reads need state-of-the-art games. That takes a real MCCFR engine, solving preflop and postflop.
-- Building that engine is the next job. The reader is ready for the games it will deal.
+- Building that engine is the next job. The reader is ready for the games that engine will deal.
 
 ## Closing the loop
 
 - The learned range feeds back into the solver.
-- It replaces the CFR agent's uniform-random guess (Part 7) with a real prior over hands.
-- That is the whole arc. Bits, a simulator, regret, and a model that reads.
+- It replaces the CFR agent's uniform-random guess (Part 7) with a real prior over hands - a learned starting distribution.
+- That is the whole story. Bits, a simulator, regret, and a model that reads.
 
 ## Next time
 

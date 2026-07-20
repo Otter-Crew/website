@@ -9,7 +9,7 @@ _Part 3 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching 
 
 ## The full game, or nothing
 
-Most poker software starts simply, with heads-up play, fixed bet sizes, and no antes, and we do it ourselves in the regret arc.
+Most poker software starts simply - two-player heads-up, fixed bet sizes, no antes - and so do we, in the regret act.
 
 But an agent raised on cut-down rules only learns the cut-down game, and it never meets a side pot.
 
@@ -40,7 +40,7 @@ A `Hand` is data, and so is `GameState`. `HoldemSimulation` moves it, one transi
 | `Showdown`    | hands compared, pots paid |
 | `Complete`    | nothing left              |
 
-Twelve rounds, and four of them take bets.
+Twelve rounds, and four of them take bets. The four betting rounds - preflop, flop, turn, river - are the streets.
 
 Dealing gets its own round, because cards arriving and people acting are different events.
 
@@ -97,7 +97,7 @@ pub trait Agent: Send {
 }
 ```
 
-`act` is async, so deciding can await an HTTP call, a batch of inference, or sub-simulations spawned in the runtime, and Arc 4 needs all three. `Send` lets the simulation itself be spawned.
+`act` is async, so deciding can await an HTTP call, a batch of inference, or sub-simulations spawned in the runtime, and Act 4 needs all three. `Send` lets the simulation itself be spawned.
 
 `id` is the simulation's id, so a stateful agent can tell one hand from another. `name` goes in the ledger. `historian` has a section to itself below.
 
@@ -267,7 +267,7 @@ Point it at a directory. `-p` sets the seats, `-n` the game states each seating 
 
 Seat matters in poker, so it runs every ordered arrangement. Eight configs into three chairs is 336 of them. At `-n 5000` that is 1.68 million hands, which is the point.
 
-Results come back as a ledger: profit per game in big blinds, and under it VPIP, PFR, 3-bet, and profit by position.
+Results come back as a ledger: profit per game in big blinds, and under it VPIP, PFR, 3-bet - how loose each plays, how often it raises, how often it re-raises - and profit by position.
 
 Poker variance is brutal. A bad agent wins for a thousand hands. Volume is what buys a trustworthy ranking.
 

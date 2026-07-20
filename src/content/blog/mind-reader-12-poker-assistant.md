@@ -11,7 +11,7 @@ _Part 12 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching
 
 - Thirteen posts of open source built a bot that plays, solves, and reads.
 - Part 11 named the next job. The reads only get better when the games do.
-- Great games take a real solver. MCCFR, preflop and postflop.
+- Great games take a real solver. Monte Carlo CFR (MCCFR), preflop and postflop.
 - That engine got built. It became a product.
 
 ## Introducing poker-assistant
@@ -21,13 +21,13 @@ _Part 12 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching
 - A full multiway MCCFR engine. It solves the whole game.
 - Preflop blueprints for 2-6 players. Postflop re-solves on demand.
 - rsp is compiled into the app. Solves run on your machine, in-process, no server.
-- What you get: per-action EV and EV-loss, equity, blockers, hand-history analysis, a trainer.
+- What you get: per-action EV and EV-loss, equity, blockers (cards that rule out his hands), hand-history analysis, a trainer.
 
 ## A taste of what's inside
 
 - Each of these could be its own post. Here they get a sentence.
 - Full multiway MCCFR blueprints, down to 3.5 mbb/g exploitability. The real version of Part 7's rough preflop.
-- Belief-conditioned resolves. The solver guesses opponent ranges before it solves.
+- Belief-conditioned re-solves. The solver guesses opponent ranges before it solves.
 - AIVAT variance reduction (Burch et al., AAAI 2018). Trustworthy solves from far fewer hands.
 - `u16` regret quantization. Part 5's math and Part 6's tree at a quarter the memory.
 - Node-locking for maximally exploitative re-solves.

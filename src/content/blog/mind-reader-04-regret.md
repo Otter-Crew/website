@@ -98,7 +98,7 @@ Against another learner, the current mix never settles. We over-throw Paper, the
 
 The guarantee sits on the **average** strategy, the running average of every mix played, and regret matching drives its average regret to zero. Total regret grows like the square root of the number of rounds, so per-round regret falls like 1/sqrt(T), and four times the work buys half the error.
 
-In a two-player zero-sum game, if both players hold average regret under epsilon, the two average strategies form a 2-epsilon Nash equilibrium, and nobody can take more than that from you whatever they do.
+In a two-player zero-sum game (one player's win is the other's loss), if both players hold average regret under epsilon, the two average strategies form a 2-epsilon Nash equilibrium, and nobody can take more than that from you whatever they do.
 
 For rock-paper-scissors, the average grinds down to a third, a third, a third. The mixed output is the point, because frequencies are what make you unreadable, and a solver's answer to a poker spot comes back in the same shape: raise 70%, call 30%, for the same reason.
 
@@ -108,7 +108,7 @@ Rock-paper-scissors is one decision with three actions, while poker is thousands
 
 Start with what a poker decision is: you know your two cards, the board, and the betting so far, and you do not know theirs. Every deal consistent with what you can see is a separate world, and you have to act the same way in all of them, because you cannot tell them apart. That bundle is an _information set_, and it is the unit that gets a ledger, with one row per legal action and one running total per row.
 
-CFR ([Zinkevich et al., 2007](https://papers.nips.cc/paper/3306-regret-minimization-in-games-with-incomplete-information)) runs a regret matcher at every information set in the game.
+CFR ([Zinkevich et al., 2007](https://papers.nips.cc/paper/3306-regret-minimization-in-games-with-incomplete-information)) runs a regret matcher at every information set in the game. (CFR is counterfactual regret minimization.)
 
 One wrinkle makes it work: spots do not come up equally often, so the rewards feeding each ledger are scaled by the chance of arriving there. That scale counts what the deck and the opponents contribute and leaves out your own choices along the way, and the omission is the _counterfactual_ that keeps a local ledger honest when you change your play upstream of it.
 
@@ -124,7 +124,7 @@ Backprop takes one global number, the loss, walks a graph backward, and hands ea
 
 The families overlap. Online gradient descent is itself a no-regret algorithm, and the discounting and predictive CFR variants in Part 5 play the part that momentum and optimism play in an optimizer.
 
-Two differences make poker the harder job. Regret is not a gradient, so nothing chains through it, and every ledger is updated on its own from values handed back up the tree. The surface also moves, because your opponent is running the same algorithm against you, so what you are climbing changes while you climb it.
+Two differences make poker the harder job. Regret is not a gradient, so nothing chains through it, and every ledger is updated on its own from values handed back up the tree. The loss surface itself moves: your opponent is running the same algorithm against you, so what you are climbing changes while you climb it.
 
 ## Next time
 

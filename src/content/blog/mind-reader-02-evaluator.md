@@ -2,14 +2,14 @@
 title: "The Mind Reader, Part 2: Ranking Hands at Ludicrous Speed"
 description: "The perfect-hash hand evaluator - how rs-poker ranks poker hands in less than a nanosecond"
 pubDate: 2026-07-22
-tags: ["poker", "algorithim", "performance"]
+tags: ["poker", "algorithm", "performance"]
 ---
 
 _Part 2 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## Simulations explode; the leaves are all the same
 
-Every simulation is a recursive what-if. Forty-seven turn cards, forty-six rivers under each, and 1,081 hands the villain could hold. Millions of branches go by before one interesting question gets asked.
+Every simulation is a recursive what-if. Forty-seven turn cards, forty-six rivers under each, and 1,081 hands the villain - the opponent - could hold. Millions of branches go by before one interesting question gets asked.
 
 All of them bottom out in the same computation: take the best five cards out of seven and compare them.
 
@@ -19,7 +19,7 @@ The evaluator is the most-called function in the system. Fast-forwarding a hand 
 
 One number, bigger wins. The caller wants `a > b` in one instruction.
 
-Tie-breaking runs deep. Kings and nines against kings and nines come down to the fifth card. One pair carries three kickers. High card carries four. The sixth and seventh cards must not matter.
+Tie-breaking runs deep. Kings and nines against kings and nines come down to the fifth card. One pair carries three kickers - the unpaired side cards that break the tie. High card carries four. The sixth and seventh cards must not matter.
 
 C(52,5) = 2,598,960. Five-card deals collapse to 7,462 values. Suits matter only when five of them make a flush, and order never matters. Kevin Suffecool counted them out two decades ago and published the table. Every fast evaluator since then is built on his number.
 
@@ -40,7 +40,7 @@ The count comes apart by category.
 
 Flush and high card share the same 1,277 patterns, and the two straights share their 10. The difference between each pair is whether the five cards are of one suit, and that is everywhere suits matter.
 
-It fits in thirteen bits. [rs-poker](https://github.com/elliottneilclark/rs-poker) spends sixteen and packs `(category << 12) | subrank`: hand class in the high nibble, one through nine, tiebreak in the twelve bits below. The class sits on top, so integer comparison is a poker comparison. `Rank` wraps that `u16` and holds nothing else.
+It fits in thirteen bits. [rs-poker](https://github.com/elliottneilclark/rs-poker) spends sixteen and packs `(category << 12) | subrank`: hand class in the high nibble (its top four bits), one through nine, tiebreak in the twelve bits below. The class sits on top, so integer comparison is a poker comparison. `Rank` wraps that `u16` and holds nothing else.
 
 ## Count, then branch
 
@@ -52,7 +52,7 @@ Tuned hard, that lands at eleven nanoseconds for a seven-card hand, and it stops
 
 At a six-player showdown, all six hands share five board cards. Five sevenths of every evaluation is the same work, redone six times.
 
-Enumeration is worse. Equity on a flop is 990 turn-and-river runouts, and each one refolds five constant cards to vary two.
+Enumeration is worse. Equity - a hand's odds of winning - on a flop is 990 turn-and-river runouts, and each one refolds five constant cards to vary two.
 
 So tally the shared cards once, then copy that tally and add the cards that differ. That kills the first cost and leaves the second. The tally is five arrays, so a copy is five arrays, and the ladder still runs to the bottom on all 990 runouts.
 
@@ -181,7 +181,7 @@ Rank best 5 of 7 cards    11.02 ns   4.65 ns
 
 Call it 2.4x.
 
-Folded from scratch, a seven-card hand costs about 2.8 nanoseconds. One that has already been tallied ranks in under a nanosecond, which is where the copy-and-extend path pays: two players and a flop, every one of the 990 runouts, both hands ranked at each, finish in under two microseconds; that is 0.9 nanoseconds per rank.
+Built from scratch, a seven-card hand costs about 2.8 nanoseconds. One that has already been tallied ranks in under a nanosecond, which is where the copy-and-extend path pays: two players and a flop, every one of the 990 runouts, both hands ranked at each, finish in under two microseconds; that is 0.9 nanoseconds per rank.
 
 The tables cost about 305 KiB of read-only data in the binary: 256 for `LOOKUP`, 32 for `ROW_OFFSETS`, 16 for the flush table, one for the card keys. That is more than most L2 caches will hold. The flush table and the hot rows stay resident, while the rest sit there as a cache miss waiting for a hand nobody deals.
 
