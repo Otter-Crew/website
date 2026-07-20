@@ -28,13 +28,13 @@ The count comes apart by category.
 | Category        |     Count | How it is counted (13 ranks)       |
 | :-------------- | --------: | :--------------------------------- |
 | Straight flush  |        10 | one per high card, wheel up to ace |
-| Four of a kind  |       156 | 13 quad ranks × 12 kickers         |
-| Full house      |       156 | 13 trips ranks × 12 pair ranks     |
-| Flush           |     1,277 | C(13,5) patterns − 10 straights    |
+| Four of a kind  |       156 | 13 quad ranks x 12 kickers         |
+| Full house      |       156 | 13 trips ranks x 12 pair ranks     |
+| Flush           |     1,277 | C(13,5) patterns - 10 straights    |
 | Straight        |        10 | the same 10 high cards             |
-| Three of a kind |       858 | 13 trips ranks × C(12,2) kickers   |
-| Two pair        |       858 | C(13,2) pairs × 11 kickers         |
-| One pair        |     2,860 | 13 pair ranks × C(12,3) kickers    |
+| Three of a kind |       858 | 13 trips ranks x C(12,2) kickers   |
+| Two pair        |       858 | C(13,2) pairs x 11 kickers         |
+| One pair        |     2,860 | 13 pair ranks x C(12,3) kickers    |
 | High card       |     1,277 | the same 1,277 patterns, off-suit  |
 | **Total**       | **7,462** |                                    |
 
@@ -75,7 +75,7 @@ key = key.wrapping_add(CARDS_KEY[i]);
 mask |= CARDS_MASK[i];
 ```
 
-That is all of the dealings. The rest is making each field pay off.
+That is all of the dealing. The rest is making each field pay off.
 
 Take the fingerprint first. Each rank owns a magic 32-bit multiplier, and the fingerprint is the wrapping sum of the multiplier times the count. You cannot read the counts back out, and you do not need to. The same histogram always yields the same number, and no two histograms yield the same number. The build proves this by enumerating all reachable histograms and verifying that the keys are distinct.
 
@@ -108,7 +108,7 @@ The lookup lands on the score on the first try, with no probe and nothing to res
 
 Both halves came cheap. `SevenCardAccum` is the `(key, mask)` pair and nothing else, sixteen bytes against fifty-six for a tally of arrays, asserted at compile time so the number in the docs cannot drift. Adding a card costs an add and an OR, and ranking one costs a test and a load. Tally the board once, then for each player or each runout, copy it, add two cards, and rank.
 
-Almost none of this is ours. The whole scheme — additive multipliers, biased suit counters, a perfect hash over the fingerprint — comes from OMPEval, a C++ hand evaluator and equity calculator for hold'em published in 2016 by a developer who goes by zekyll.
+Almost none of this is ours. The whole scheme - additive multipliers, biased suit counters, a perfect hash over the fingerprint - comes from OMPEval, a C++ hand evaluator and equity calculator for hold'em published in 2016 by a developer who goes by zekyll.
 
 Its contribution was size. The fast evaluators of the day answered a hand with one enormous table; OMPEval got the same answers out of 200 kB by hashing the key instead of indexing it. The thirteen multipliers are older still: zekyll took them from Kenneth Shackleton's SKPokerEval, a seven-card evaluator, which traces back to Suffecool's five-card work. Hand-picked constants, handed down twice.
 
@@ -145,7 +145,7 @@ slot   0   1   2   3   4   5   6   7
 key    0   8   2  18  11   5   -   -
 ```
 
-Looking up key 11 is now arithmetic. Its row is `11 >> 3 = 1`; that row's displacement is 1, and slot `11 + 1 = 4` holds the score for key 11. No comparison, no search, no second guess.
+Looking up key 11 is now arithmetic. Its row is `11 >> 3 = 1`; that row's displacement is 1, and slot `11 + 1 = 4` holds the score for key 11. No comparison and no search.
 
 The real table uses the same two lines with bigger numbers: 8,192 rows, 4,096 columns, and 131,072 slots holding every one of the seven thousand answers. That is the 64 MiB down to 256 KiB.
 
@@ -155,7 +155,7 @@ Three asserts run before anything is emitted. The fingerprints have to be distin
 
 The counting evaluator has one job left. Being slow and plainly right is what makes it the oracle. It sits in `rank.rs` under `mod oracle`, compiled only for tests, never shipped, with the ladder rewritten to return a packed `u32` so the two rankers compare as plain integers.
 
-The readable one becomes the test for the one nobody can read. All 2,598,960 five-card hands go through both, and the categories have to agree. The map from one score to the other has to be strictly monotonic, so the order holds across every last one. Then 200,000 random seven-card hands.
+It is the test for the table evaluator. All 2,598,960 five-card hands go through both, and the categories have to agree. The map from one score to the other has to be strictly monotonic, so the order holds across every last one. Then 200,000 random seven-card hands.
 
 ## The numbers
 

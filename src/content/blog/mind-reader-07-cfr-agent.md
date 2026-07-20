@@ -17,7 +17,7 @@ _Part 7 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching 
 
 - Chess engines solved real-time search decades ago. We took what worked.
 - Time controls. An engine gets a clock, not an iteration count. Our budgets are the same contract.
-- The opening book. Engines don't search the first ten moves. They look them up. Our preflop charts are the book - more on that below.
+- The opening book. Engines look the first ten moves up instead of searching them. Our preflop charts are the book - more on that below.
 - The easy move. When the strategy stops moving, stop solving. Our early exit fires after three stable iterations.
 - Not everything transferred. We ported Stockfish's reverse futility pruning, tested it, and it measured negative. Gone.
 - The lesson from chess is the discipline. Every idea plays a match before it ships.

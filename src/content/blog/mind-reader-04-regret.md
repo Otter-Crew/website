@@ -42,7 +42,7 @@ _Part 4 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching 
 | Paper             | +1                | +2                | 1 + 2 = 3         |
 | Scissors (played) | -1                | 0                 | 2 + 0 = 2         |
 
-- The new mix is Rock 1/6, Paper 3/6, Scissors 2/6. Every action is back in play, weighted by the whole history. The algorithm never commits. It leans.
+- The new mix is Rock 1/6, Paper 3/6, Scissors 2/6. Every action is back in play, weighted by the whole history. The algorithm leans toward what it regrets most without ever committing to it.
 - One more experiment. Play regret matching against an opponent who only throws Rock.
 - Paper's regret grows without bound. The mix slides toward pure Paper. Exploiting the weak and defending yourself run on the same machinery.
 

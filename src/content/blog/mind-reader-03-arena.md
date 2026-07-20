@@ -11,7 +11,7 @@ _Part 3 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching 
 
 Most poker software starts simply. Heads-up, fixed bet sizes, no antes. We do it ourselves in the regret arc.
 
-But an agent raised on simplified rules learns a simplified game. It never meets a side pot.
+But an agent raised on cut-down rules only learns the cut-down game. It never meets a side pot.
 
 The arena speaks the whole language. Two to sixteen seats. Any legal bet size. Antes, all-ins, and the settlement math when three unequal stacks all go in.
 
@@ -23,9 +23,7 @@ This post is the tour. What is here, how the data moves, and how to put your own
 
 Every number your agent reads comes from here, and so does the moment it gets asked.
 
-A hand is data. Two cards. `GameState` is data too.
-
-`HoldemSimulation` moves it, one transition at a time.
+A `Hand` is data, and so is `GameState`. `HoldemSimulation` moves it, one transition at a time.
 
 | Round         | What happens              |
 | :------------ | :------------------------ |
@@ -54,7 +52,7 @@ Owing action is one of those bits. Put money in, and your bit clears. Raise, and
 
 The minimum raise only grows. It holds the largest raise made this round, so a small all-in cannot shrink what the next player has to put in.
 
-Raises the cap to three per round by default. Past the cap, a raise becomes a call. Pass `None` to lift it.
+Raises are capped at three per round by default. Past the cap, a raise becomes a call. Pass `None` to lift it.
 
 Every transition is a plain function of the state. Any point in a hand is inspectable and testable.
 
@@ -80,7 +78,7 @@ fn clean_hands(&self, game_state: &GameState) -> Vec<Hand> {
 }
 ```
 
-Every seat but its own becomes the board and nothing else. Then it deals those seats a thousand random hands, ranks every showdown with Part 2's evaluator, and counts how often it wins. That is Monte Carlo equity against opponents it knows nothing about. The read is weak. It is honest.
+Every seat but its own becomes the board and nothing else. Then it deals those seats a thousand random hands, ranks every showdown with Part 2's evaluator, and counts how often it wins. That is Monte Carlo equity against opponents it knows nothing about, which makes for a weak read but an honest one.
 
 The rest is what you would ask a dealer. Whose turn, the bet to match, what you already put in, the minimum raise, your stack, the pot, the board, the button.
 
@@ -174,7 +172,7 @@ Bet more than your stack, and it silently becomes an all-in. Bet 100,000,000 wit
 
 Fold when nothing is owed, and it becomes a check. You cannot give up a free card by accident.
 
-Bet an illegal amount — under the call, under the minimum raise, negative, `NaN` — and you fold. The bet is validated before anything moves, so a bad one changes nothing before it is refused.
+Bet an illegal amount - under the call, under the minimum raise, negative, `NaN` - and you fold. The bet is validated before anything moves, so a bad one changes nothing before it is refused.
 
 Raise past the cap, and it becomes a call.
 
@@ -198,7 +196,7 @@ pub trait Historian: Send {
 
 One method, every event, in order. The simulation finishes mutating the state before it records. Replays depend on that.
 
-The events are at hand.
+Here are the events.
 
 | Event              | What it carries                            |
 | :----------------- | :----------------------------------------- |
@@ -235,7 +233,7 @@ Finding all the edge cases of a poker simulation is an arduous task. The state s
 
 Chips are conserved. Bets sum to the pot. Winnings sum to the pot. That holds through an all-in, an all-in for less, and a hand that splits into three side pots. No card is dealt twice. The board never passes five. A folded player who was never all-in wins nothing.
 
-The assertions are public. `assert_valid_game_state` is not buried in a test module — turn on `arena-test-util` and anything that runs a hand can call it.
+The assertions are public. `assert_valid_game_state` is not buried in a test module - turn on `arena-test-util` and anything that runs a hand can call it.
 
 The games nobody would write come from the fuzzer. `cargo-fuzz` hands `Arbitrary` a pile of random bytes, and `Arbitrary` turns them into stacks, blinds, and a list of `AgentAction`. A replay agent plays the list back one action at a time. The invariants are armed.
 
@@ -255,9 +253,9 @@ Agents are JSON.
 }
 ```
 
-`ConfigAgentBuilder` takes a file, a directory, or an inline string. Trying a variation is a text edit, not a recompile.
+`ConfigAgentBuilder` takes a file, a directory, or an inline string. Trying a variation is a text edit.
 
-A directory of configs is a field. `examples/configs` ships eight — the four corners, two flavors of random, a preflop chart, and a CFR agent with its whole budget written out. Those last two are Part 7's subject, and their configs run long.
+A directory of configs is a field. `examples/configs` ships eight - the four corners, two flavors of random, a preflop chart, and a CFR agent with its whole budget written out. Those last two are Part 7's subject, and their configs run long.
 
 ## Crowning a champion
 
@@ -271,9 +269,9 @@ Seat matters in poker, so it runs every ordered arrangement. Eight configs into 
 
 Results come back as a ledger. Profit per game in big blinds, and under it VPIP, PFR, 3-bet, profit by position.
 
-Poker variance is brutal. A bad agent wins for a thousand hands. Volume buys the ranking, and nothing else does.
+Poker variance is brutal. A bad agent wins for a thousand hands. Volume is what buys a trustworthy ranking.
 
-Against the simple roster, the pot-control agent wins. It value-bets strong hands, keeps pots small with weak ones, and grinds the rest down. Nothing beats it until the CFR agent sits down in Part 7 — and then it finishes last.
+Against the simple roster, the pot-control agent wins. It value-bets strong hands, keeps pots small with weak ones, and grinds the rest down. Nothing beats it until the CFR agent sits down in Part 7 - and then it finishes last.
 
 ## Writing the hands down
 
@@ -285,7 +283,7 @@ Same field, different job. Every hand goes out as Open Hand History, the standar
 
 Real hand histories only show cards at showdown. That is the whole problem with them.
 
-The arena is the dealer. It writes every hole card on every hand — folded, won, mucked. The label is free, and it is on all of them.
+The arena is the dealer. It writes every hole card on every hand - folded, won, mucked. The label is free, and it is on all of them.
 
 Millions of recorded hands from a mixed field, every one labeled. That is the shape of a training set.
 
@@ -299,6 +297,6 @@ Beat everything in the field, and the field is bots we wrote.
 
 A tuned heuristic has patterns. Fixed thresholds, predictable sizings. Patterns get countered. Tuning harder moves them around.
 
-Breaking that takes a different idea. Not a strategy — a way to learn a strategy nobody can exploit.
+Breaking that takes a way to learn a strategy nobody can exploit.
 
 That is the equilibrium territory from Part 0, and at the bottom of it is one number. Regret.

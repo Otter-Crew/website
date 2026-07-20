@@ -11,47 +11,40 @@ Online poker moves more money on skill than any game on the internet. The chips 
 
 Chess and Go went the other way. Stockfish, Leela, KataGo. All open, all stronger than any human. Poker went dark. Libratus and Pluribus came as papers with no code. The commercial solvers ship as binaries and charge by the month. Nobody has even published a starting point for the hard parts.
 
-So the charts go unchecked. A player buys a preflop range, or pulls one out of a Discord, and plays it for a year. He cannot see the abstraction behind it, the bet sizes that were allowed, or how far from equilibrium it stopped. Ask what it loses to a perfect counter, and nobody can tell him. Not the coach who sold it. Not the site that generated it. The chart is a number with no error bar, and the whole game is built on it.
+So the charts go unchecked. A player buys a preflop range, or pulls one out of a Discord, and plays it for a year. He cannot see the abstraction behind it, the bet sizes that were allowed, or how far from equilibrium it stopped. Ask what it loses to a perfect counter, and neither the coach who sold it nor the site that generated it can say. The chart is a number with no error bar, and the whole game is built on it.
 
 I wrote mine in the open. Ten years, three repos on GitHub.
 
-A card as an integer. An evaluator that ranks 50 million hands a second. A full-rules simulator. Regret matching. A game tree that survives Rust. A solver on a stopwatch."mind-reader",
+A card as an integer. An evaluator that ranks 50 million hands a second. A full-rules simulator. Regret matching. A game tree that survives Rust. A solver on a stopwatch.
 
 Then, the part I have not seen shipped anywhere. A transformer that watches you bet and names your two cards.
 
 ## How much poker is running
 
-No network publishes counts. Trackers scrape the lobbies and disagree, sometimes by half. Read the spread as the error bar.
+Nobody publishes a total. Six parties publish a piece, in six different units, and none of the units convert.
 
-SharkScope counted about 32,000 filled cash seats worldwide on an average day in July 2026 ([VIP-Grinders](https://www.vip-grinders.com/research/online-poker-traffic-report/)). Rakerace saw the same band, 22,000 to 32,000, across 2024 and 2025 ([Rakerace](https://rakerace.com/news/poker-articles/2025/08/27/global-online-poker-traffic-2022-2025-peaks-declines-and-the-road-ahead)). GGPoker tops both at roughly 9,000, a third of the whole game.
+| Published                 | Figure             | Who says so           |
+| :------------------------ | :----------------- | :-------------------- |
+| GGPoker hands, 2025       | 5.08B              | GGPoker               |
+| PokerStars hands, 2013-19 | ~17B / year        | PokerStars, then mute |
+| Filled cash seats, world  | ~32,000            | trackers, disputed    |
+| Europe online rake, 2024  | EUR 1.5B           | H2 Gambling Capital   |
+| Nevada card rooms, FY25   | $222M              | Gaming Control Board  |
+| WSOP 2025                 | $47M kept on $527M | WSOP                  |
 
-| Network       | Pool           |  Cash seats |
-| :------------ | :------------- | ----------: |
-| GGPoker       | International  |       9,726 |
-| CoinPoker     | Crypto         |       2,032 |
-| PokerStars    | International  |       1,926 |
-| iPoker        | International  |       1,074 |
-| Winamax       | France & Spain |       1,014 |
-| The long tail | 40+ networks   |     ~16,000 |
-| **Total**     |                | **~32,000** |
+Start with the only site that likes being counted. GGPoker dealt 5.08 billion hands in 2025, up from 4.87 billion ([Rakerace](https://rakerace.com/es/noticias/salas-de-poker/2026/01/08/ggpoker-in-2025-five-billion-hands-dealt-as-tournament-play-drives-record-year)). Fourteen million a day. A hundred sixty-one a second.
 
-Those are SharkScope's counts. [PokerScout](https://www.pokerscout.com/) agrees on GGPoker and puts CoinPoker at 214, not 2,032, and Winamax at 27, not 1,014. Nobody counts an anonymous crypto room the same way twice, so CoinPoker sits second in the world or seventh, take your pick. That is the error bar.
+PokerStars once counted too. Its hundred billionth hand fell in June 2013 and its two hundred billionth in May 2019 ([PR Newswire](https://www.prnewswire.com/news-releases/pokerstars-deals-its-200-billionth-hand-300848091.html)), which is seventeen billion a year. Then it stopped saying. Flutter bought it and files poker inside a line called iGaming, beside slots and bingo and lottery ([SEC](https://www.sec.gov/Archives/edgar/data/1635327/000163532726000005/flut-20251231.htm)). Poker appears in that filing eighty-nine times and never once with a number beside it.
 
-Seats are not hands. Four to six players a table, sixty to a hundred hands an hour each ([Upswing](https://upswingpoker.com/hands-per-hour-live-poker-vs-online/)). Multiply the corners:
+The trackers see 32,000 filled cash seats worldwide and give GGPoker nine thousand of them ([VIP-Grinders](https://www.vip-grinders.com/research/online-poker-traffic-report/)). They also disagree with each other by a factor of ten on the crypto rooms, so call GG a fifth of the game, or a third. Run that share backward against its hand count and the world deals fifteen to twenty-five billion hands a year. The old PokerStars rate lands in the same decade.
 
-| Estimate | Hands / hour | Hands / day | Hands / year |
-| :------- | -----------: | ----------: | -----------: |
-| Low      |     ~200,000 |         ~5M |        ~1.8B |
-| Middle   |     ~400,000 |        ~10M |        ~3.5B |
-| High     |     ~800,000 |        ~19M |          ~7B |
+The money says less than you would hope. Europe's regulated rooms took EUR 1.5 billion in rake and fees in 2024, flat since 2020 ([EGBA](https://www.egba.eu/uploads/2025/03/250324-EGBA-European-Gaming-Market-Key-Figures-2025-Edition.pdf)). Nevada's card rooms grossed $222 million in the year to June 2025 ([Gaming Control Board](https://www.gaming.nv.gov/)). The World Series collected $527 million in buy-ins, returned $482 million, kept $47 million ([WSOP](https://www.wsop.com/)). Scale those against the rooms nobody regulates and the house keeps somewhere near five to nine billion dollars a year.
 
-Low is the thin field at the full-ring pace, high the fat one all six-max. Billions a year, whichever tracker you trust.
-
-The card rooms add less. The US has 5,618 live tables across 589 rooms ([World Casino Directory](https://www.worldcasinodirectory.com/united-states/poker-rooms)), and 2,100 run on a busy Saturday ([Poker Pilgrims](https://www.pokerpilgrims.com/the-state-of-cash-poker-in-the-us-in-2025/)); Nevada alone licenses 635 ([Gaming Control Board, FY25](https://www.gaming.nv.gov/siteassets/content/about/info-sheet/2025-info-sheet.pdf)). A dealer pushes 20 to 35 hands an hour ([Upswing](https://upswingpoker.com/hands-per-hour-live-poker-vs-online/)), half the online rate. Forty to ninety thousand live hands an hour, nationwide. Real, and a fraction.
+What the players push at each other is bigger, and no one can tell you by how much. A pot is never published. So the honest headline is the hand count: **fifteen to twenty-five billion hands a year, dealt for about seven billion dollars in rake.** The range is wide because it rests on the one company that volunteers a number.
 
 ## Who's telling this story
 
-I'm [Elliott Clark](https://elliottclark.info). My day job is storage and machine learning at scale. HBase, then seven years building the ad infrastructure at Facebook, then five years founding a company focused on Kubernetes and Postgres vector databases. Poker is the side project.
+I'm [Elliott Clark](https://elliottclark.info). My day job is storage and machine learning at scale. Apache HBase, then seven years building the ad infrastructure at Facebook, then five years founding a company focused on Kubernetes and Postgres vector databases. Poker is the side project.
 
 It started at Microsoft. Redmond is a beautiful town. Exciting, it is not. So I played in the company tournaments. Zero rake, sharp programmers, World Series entries in the prize pool. Poker was exciting.
 
@@ -93,9 +86,9 @@ CFR reasons over the opponent's range, every hand they could hold, weighted. Get
 
 Alberta chased this twenty years ago by keeping a posterior over opponent strategies and playing a response to it ([Southey et al., 2005](https://arxiv.org/abs/1207.1411)). That is opponent modeling, and it leads to exploitation. This series does not go there.
 
-The range a solver needs is not a read on the person. It is the distribution equilibrium that the play itself implies, and a solver approximates it from its blueprint. That approximation frays as the hand runs on. Bet sizes land outside the abstraction. The same size means different things to different people. An overbet arrives where the blueprint has nothing to say. By the river, the prior is thin.
+The range a solver needs is the distribution equilibrium that the play itself implies, and a solver approximates it from its blueprint. That approximation frays as the hand runs on. Bet sizes land outside the abstraction. The same size means different things to different people. An overbet arrives where the blueprint has nothing to say. By the river, the prior is thin.
 
-This series takes the second problem. Learn the posterior from the betting record, hand it to the same unexploitable solver, and the play does not change. Only the input gets truer faster.
+This series takes the second problem. Learn the posterior from the betting record, hand it to the same unexploitable solver, and the play does not change. The input just gets truer faster.
 
 ## The code
 
@@ -107,7 +100,7 @@ This series takes the second problem. Learn the posterior from the betting recor
 
 None of this beats Pluribus. Pluribus had a lab and a cluster. What is here is every piece of the machine, running on hardware you own, with the tests that prove it.
 
-What is missing are better games. The training hands were dealt by rough agents, and a model only learns to read the players it was shown. I will show you those gaps rather than hide it.
+What is missing are better games. The training hands were dealt by rough agents, and a model only learns to read the players it was shown. I will show you those gaps rather than hide them.
 
 ## The Map
 

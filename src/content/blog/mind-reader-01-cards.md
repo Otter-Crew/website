@@ -13,7 +13,7 @@ The end of this series is a model that watches you bet and names your two cards.
 
 Training takes hands by the million, each one labeled with what was really held. Nobody publishes that, so the hands get dealt here.
 
-Dealing with them means agents playing each other, and agents need an arena with the full rules. The agents worth learning from have to rank hands and solve while they play.
+Dealing them means agents playing each other, and agents need an arena with the full rules. The agents worth learning from have to rank hands and solve while they play.
 
 So the work runs backward from the goal: cards, evaluator, arena, agents, dataset, model.
 
@@ -43,7 +43,7 @@ pub struct Card {
 
 That is what anyone writes first, and it is fine. A Rust enum is an integer with names on it, so it costs nothing at runtime, and the compiler checks the matches for you.
 
-`Value` counts up from two, so the discriminant is the ordering, and `Ord` comes from the derivative.
+`Value` counts up from two, so the discriminant is the ordering, and `Ord` comes from the derive.
 
 `Suit` derives `Ord` too, and that ordering means nothing, because poker does not rank suits. It is there so a hand can be sorted for display.
 
@@ -59,17 +59,17 @@ impl From<Card> for u8 {
 }
 ```
 
-The number is the conversion, not the layout. `suit * 13 + value` maps the fifty-two onto `0..52` and puts each suit in thirteen slots in a row, which is why a suit is a mask later.
+The struct keeps its two named fields; the number is a conversion off them. `suit * 13 + value` maps the fifty-two onto `0..52` and puts each suit in thirteen slots in a row, which is why a suit is a mask later.
 
 One card was easy.
 
-## Why a hand isn't a vector of cards
+## A hand is a set
 
 Now that we have cards, we need somewhere to keep them, for the players and for the board.
 
 Hands grow street by street, and a vector grows, so the first design made a hand a `Vec<Card>`.
 
-But the engine asks set questions, not sequence questions: is this card taken, what overlaps the board, what is left to come. Order belongs to the deal, not the hand.
+But every question the engine asks is a set question: is this card taken, what overlaps the board, what is left to come. Order matters to the deal, and the hand has already forgotten it.
 
 A vector answers those badly, because `contains` is a scan, dedup is a sort, union allocates, and every clone is a malloc, while a solver clones all day.
 
@@ -84,7 +84,7 @@ CardBitSet contains 52 probes of 7 cards.
 
 That is 6.7 ns against 4.1, and the bitset wins by 1.6x on the vector's best day, scanning seven bytes that sit together and stay hot in cache. On union, dedup, and every clone, the vector allocates, and the bitset does not.
 
-So storage is a set, not a list.
+So storage is a set.
 
 ## A deck of cards is a u64
 
@@ -133,7 +133,7 @@ deck.remove(card);
 game_state.hands[idx].insert(card);
 ```
 
-Two instructions, and the deck never needs a discard pile, because what is left is what is left.
+Two instructions, and the deck never needs a discard pile; the bits still set are the cards still available.
 
 This raises the only hard question in the whole file. Where does the card come from?
 
@@ -157,7 +157,7 @@ That trades the problem rather than settling it. You now hold an index into the 
 
 The naive fix is another loop. Walk the word from the bottom, count set bits, stop at n. It is bounded at fifty-two, which beats unbounded, but it is still a loop with a data-dependent exit inside every deal.
 
-What we want is a lookup, not a walk. Hand something the deck and the number n, get back the position of the n-th card still in it, in constant time.
+What we want is a lookup. Hand something the deck and the number n, get back the position of the n-th card still in it, in constant time.
 
 x86 has had that in silicon since 2013, and hardly anyone uses it. The instruction is [`PDEP`](https://www.felixcloutier.com/x86/pdep) (parallel bit deposit), one of the BMI2 additions that shipped with Haswell. Chess engines generate sliding-piece moves with it, and graphics code builds Morton codes with it. Outside those two trades, it mostly sits idle.
 
@@ -225,7 +225,7 @@ Take the cards nobody has seen and walk every subset of size N. Two at a time gi
 
 The counts are not small. Your two cards and a flop leave forty-seven unseen, which is 1,081 hands one opponent could hold. Deal a second player in, and 990 turn-and-river pairs remain.
 
-Equity is that walk. So are ours. So is every leaf the solver scores when it stops recursing and plays the hand out.
+Equity numbers, out counts, and the solver's leaf scores all come from that walk. The solver runs it every time it stops recursing and plays the hand to showdown.
 
 The naive way is to copy the unseen cards into a list and iterate over the indices with nested loops. That allocates, and the loop nest has to be rewritten every time N changes.
 
@@ -263,7 +263,7 @@ next        0b10001    bit 4 and bit 0
 
 `combo - 1` borrows down through the trailing zeros, and the OR turns the lowest run and everything under it into one solid block. Adding one carries through that block, clearing it and setting the bit above; that bit is the one that moved up. The rest of the line counts how many bits were cleared, keeps the ones still owed a position, and drops them at the bottom.
 
-Now use it on a deck. Gosper counts over 0, 1, 2, and up, a dense range with no gaps, and the deck is full of gaps. So `combo` never names a card. It names slots: the first, the third, the fourth, or whatever is left.
+Now use it on a deck. Gosper counts over 0, 1, 2, and up, a dense range with no gaps, and the deck is full of gaps. So `combo` names slots rather than cards: the first, the third, the fourth, or whatever is left.
 
 `PDEP` turns slots into cards; the same instruction does the same job it did in the deal.
 
@@ -277,9 +277,9 @@ The entire iterator consists of three `u64` fields and a bool. No allocation, no
 
 Cards, hands, and decks are integers now, and they never allocate. The rest of the game state is not so lucky.
 
-## The list-shaped things: smallvec, not the heap
+## The list-shaped things: smallvec
 
-The board arrives flop, turn, river, and stacks and bets are per seat. But a list does not have to live on the heap.
+The board arrives flop, turn, river, and stacks and bets are per seat. Those are lists, and a list can live inline.
 
 ```rust
 pub type PlayerVec<T> = SmallVec<[T; MAX_PLAYERS]>; // 16
