@@ -9,11 +9,11 @@ _Part 3 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching 
 
 ## The full game, or nothing
 
-Most poker software starts simply. Heads-up, fixed bet sizes, no antes. We do it ourselves in the regret arc.
+Most poker software starts simply, with heads-up play, fixed bet sizes, and no antes, and we do it ourselves in the regret arc.
 
-But an agent raised on cut-down rules only learns the cut-down game. It never meets a side pot.
+But an agent raised on cut-down rules only learns the cut-down game, and it never meets a side pot.
 
-The arena speaks the whole language. Two to sixteen seats. Any legal bet size. Antes, all-ins, and the settlement math when three unequal stacks all go in.
+The arena speaks the whole language: two to sixteen seats, any legal bet size, antes, all-ins, and the settlement math when three unequal stacks all go in.
 
 It pits bots against each other and says which is better.
 
@@ -40,13 +40,13 @@ A `Hand` is data, and so is `GameState`. `HoldemSimulation` moves it, one transi
 | `Showdown`    | hands compared, pots paid |
 | `Complete`    | nothing left              |
 
-Twelve rounds. Four of them take bets.
+Twelve rounds, and four of them take bets.
 
-Dealing gets its own round. Cards arriving and people acting are different events.
+Dealing gets its own round, because cards arriving and people acting are different events.
 
 Seats are tracked in a `PlayerBitSet`, one bit per chair, sixteen bits wide. The deal rounds walk in the same order the betting rounds do, so dealing starts left of the button for free.
 
-A betting round tracks three things. Who still owes action? The bet to match. The minimum legal raise.
+A betting round tracks three things: who still owes action, the bet to match, and the minimum legal raise.
 
 Owing action is one of those bits. Put money in, and your bit clears. Raise, and every active bit turns back on. The round closes when no active player owes an action.
 
@@ -58,9 +58,9 @@ Every transition is a plain function of the state. Any point in a hand is inspec
 
 ## What the agent is handed
 
-An agent gets `&GameState`. All of it.
+An agent gets `&GameState`, all of it.
 
-That includes `hands`, and `hands` holds every player's cards. Folded ones too. The arena is the dealer, and the dealer sees everything.
+That includes `hands`, which holds every player's cards, the folded ones too. The arena is the dealer, and the dealer sees everything.
 
 So the arena cannot stop you from cheating. It hands you the truth and trusts you to look away.
 
@@ -97,7 +97,7 @@ pub trait Agent: Send {
 }
 ```
 
-`act` is async, so deciding can await. An HTTP call. A batch of inference. Sub-simulations spawned in the runtime. Arc 4 needs all three. `Send` lets the simulation itself be spawned.
+`act` is async, so deciding can await an HTTP call, a batch of inference, or sub-simulations spawned in the runtime, and Arc 4 needs all three. `Send` lets the simulation itself be spawned.
 
 `id` is the simulation's id, so a stateful agent can tell one hand from another. `name` goes in the ledger. `historian` has a section to itself below.
 
@@ -114,7 +114,7 @@ pub enum AgentAction {
 
 `Bet` is the total you want in for this round, not the amount you are adding. Bet the current bet, and you have called. This trips everyone once.
 
-Here is an agent. It min-raises from the button and calls everywhere else.
+Here is an agent that min-raises from the button and calls everywhere else.
 
 ```rust
 struct ButtonRaiser;
@@ -158,7 +158,7 @@ sim.run().await;
 
 One agent per stack. Same seed, same hand, every time.
 
-That is the whole gap between an idea and ten thousand hands played.
+That is the entire gap between an idea and ten thousand hands played.
 
 Four agents ship at the corners of the game. `FoldingAgent` folds. `CallingAgent` never folds and never raises. `AllInAgent` shoves. `RandomAgent` rolls dice against fold and call percentages that deepen as raises stack up.
 
@@ -210,7 +210,7 @@ Here are the events.
 | `FailedAction`     | what a seat tried, and what it got instead |
 | `Award`            | chips going out                            |
 
-`PlayedAction` carries the before and after of every number that moved. Pot, bet, minimum raise, that player's total, who is active, who is all-in. A historian never has to reconstruct anything.
+`PlayedAction` carries the before and after of every number that moved: pot, bet, minimum raise, that player's total, who is active, who is all-in. A historian never has to reconstruct anything.
 
 Six ship.
 
@@ -229,15 +229,15 @@ Now the third method on `Agent`. An agent that needs to see the whole hand, not 
 
 ## Conservation of chips
 
-Finding all the edge cases of a poker simulation is an arduous task. The state space is too big to hand-test. Instead the arena checks itself.
+Finding all the edge cases of a poker simulation is arduous, and the state space is too big to hand-test, so the arena checks itself.
 
-Chips are conserved. Bets sum to the pot. Winnings sum to the pot. That holds through an all-in, an all-in for less, and a hand that splits into three side pots. No card is dealt twice. The board never passes five. A folded player who was never all-in wins nothing.
+Chips are conserved: bets sum to the pot, and so do winnings. That holds through an all-in, an all-in for less, and a hand that splits into three side pots. No card is dealt twice. The board never passes five. A folded player who was never all-in wins nothing.
 
 The assertions are public. `assert_valid_game_state` is not buried in a test module - turn on `arena-test-util` and anything that runs a hand can call it.
 
-The games nobody would write come from the fuzzer. `cargo-fuzz` hands `Arbitrary` a pile of random bytes, and `Arbitrary` turns them into stacks, blinds, and a list of `AgentAction`. A replay agent plays the list back one action at a time. The invariants are armed.
+The rest comes from the fuzzer. `cargo-fuzz` hands `Arbitrary` a pile of random bytes, and `Arbitrary` turns them into stacks, blinds, and a list of `AgentAction`. A replay agent plays the list back one action at a time. The invariants are armed.
 
-Then it goes further. It builds the Open Hand History for the same hand and asserts the export agrees with the state it came from. A record that disagrees with the game is worse than no record.
+Then it goes further and builds the Open Hand History for the same hand, asserting the export agrees with the state it came from. A record that disagrees with the game is worse than no record.
 
 Three unequal stacks, an odd ante, and the short one shoves for less than a raise. Nobody writes that test. The fuzzer finds it. Past crashes become the corpus.
 
@@ -267,7 +267,7 @@ Point it at a directory. `-p` sets the seats, `-n` the game states each seating 
 
 Seat matters in poker, so it runs every ordered arrangement. Eight configs into three chairs is 336 of them. At `-n 5000` that is 1.68 million hands, which is the point.
 
-Results come back as a ledger. Profit per game in big blinds, and under it VPIP, PFR, 3-bet, profit by position.
+Results come back as a ledger: profit per game in big blinds, and under it VPIP, PFR, 3-bet, and profit by position.
 
 Poker variance is brutal. A bad agent wins for a thousand hands. Volume is what buys a trustworthy ranking.
 
@@ -281,9 +281,9 @@ rsp arena generate ./examples/configs -o hands.ohh -n 1000
 
 Same field, different job. Every hand goes out as Open Hand History, the standard JSON format, one hand per line. Pass `-n 0` and it runs until you stop it.
 
-Real hand histories only show cards at showdown. That is the whole problem with them.
+Real hand histories only show cards at showdown, which is the problem with them.
 
-The arena is the dealer. It writes every hole card on every hand - folded, won, mucked. The label is free, and it is on all of them.
+The arena deals the cards, so it writes every hole card on every hand - folded, won, mucked. The label is free, and it is on all of them.
 
 Millions of recorded hands from a mixed field, every one labeled. That is the shape of a training set.
 
@@ -295,7 +295,7 @@ Beat everything in the field, and the field is bots we wrote.
 
 ## Next Time
 
-A tuned heuristic has patterns. Fixed thresholds, predictable sizings. Patterns get countered. Tuning harder moves them around.
+A tuned heuristic has patterns, fixed thresholds and predictable sizings, and patterns get countered. Tuning harder only moves them around.
 
 Breaking that takes a way to learn a strategy nobody can exploit.
 

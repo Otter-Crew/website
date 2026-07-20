@@ -38,7 +38,7 @@ The count comes apart by category.
 | High card       |     1,277 | the same 1,277 patterns, off-suit  |
 | **Total**       | **7,462** |                                    |
 
-Flush and high card share the same 1,277 patterns, and the two straights share their 10. The difference between each pair is whether the five cards are of one suit. That is the whole suit rule.
+Flush and high card share the same 1,277 patterns, and the two straights share their 10. The difference between each pair is whether the five cards are of one suit, and that is everywhere suits matter.
 
 It fits in thirteen bits. [rs-poker](https://github.com/elliottneilclark/rs-poker) spends sixteen and packs `(category << 12) | subrank`: hand class in the high nibble, one through nine, tiebreak in the twelve bits below. The class sits on top, so integer comparison is a poker comparison. `Rank` wraps that `u16` and holds nothing else.
 
@@ -46,7 +46,7 @@ It fits in thirteen bits. [rs-poker](https://github.com/elliottneilclark/rs-poke
 
 Start from what the rules say. Count how many cards of each rank and how many of each suit. Five of a suit is a flush, four of a rank is quads, three and a two is a full house, and so on down. Take the first thing that matches, then fill in the kickers from what is left. Seven cards change nothing; count all seven, and the best five fall out of the same count.
 
-Tuned hard, that lands at eleven nanoseconds for a seven-card hand, and it stops there. Two costs are built into the shape. Each call rebuilds the state it already had, then walks the ladder to the bottom.
+Tuned hard, that lands at eleven nanoseconds for a seven-card hand, and it stops there. Two costs are built into the shape: each call rebuilds the state it already had, then walks the ladder to the bottom.
 
 ## The board barely changes
 
@@ -54,13 +54,13 @@ At a six-player showdown, all six hands share five board cards. Five sevenths of
 
 Enumeration is worse. Equity on a flop is 990 turn-and-river runouts, and each one refolds five constant cards to vary two.
 
-So tally the shared cards once, then copy that tally and add the cards that differ. That kills the first cost and leaves the second. The tally is five arrays, so a copy is five arrays, and the ladder still runs to the bottom on every one of those 990 runouts.
+So tally the shared cards once, then copy that tally and add the cards that differ. That kills the first cost and leaves the second. The tally is five arrays, so a copy is five arrays, and the ladder still runs to the bottom on all 990 runouts.
 
-Both have to get cheap. The tally has to be small enough to copy in one move, and the finish has to stop branching.
+Both have to get cheap: the tally small enough to copy in one move, and the finish free of branches.
 
 ## Rank is two array loads
 
-Both requirements point to one shape. A tally small enough to copy in a single move means the state has to be a couple of machine words. A finish without branches means those words have to work as an index, with the answer already sitting in a table.
+Those two requirements point to one shape. Copying in a single move means the state must be a couple of machine words, and finishing without a branch means those words have to work as an index, with the answer already sitting in a table.
 
 So decide what a card contributes before the program runs. Two tables, fifty-two entries each, were generated at build time. `CARDS_KEY` holds a card's contribution to the arithmetic, and `CARDS_MASK` holds the card's own bit. Dealing is reading two entries and folding them in, and neither fold cares what order the cards arrived in, so a hand is just the sum of its cards. A copy is two words.
 
@@ -77,7 +77,7 @@ mask |= CARDS_MASK[i];
 
 That is all of the dealing. The rest is making each field pay off.
 
-Take the fingerprint first. Each rank owns a magic 32-bit multiplier, and the fingerprint is the wrapping sum of the multiplier times the count. You cannot read the counts back out, and you do not need to. The same histogram always yields the same number, and no two histograms yield the same number. The build proves this by enumerating all reachable histograms and verifying that the keys are distinct.
+Take the fingerprint first. Each rank owns a magic 32-bit multiplier, and the fingerprint is the wrapping sum of the multiplier times the count. You cannot read the counts back out, and you do not need to. The same histogram always yields the same number, and no two histograms ever collide. The build proves this by enumerating all reachable histograms and verifying that the keys are distinct.
 
 Now the counters. Four 4-bit fields share the high sixteen bits, one per suit, and each starts pre-loaded with three.
 
@@ -112,7 +112,7 @@ Almost none of this is ours. The whole scheme - additive multipliers, biased sui
 
 Its contribution was size. The fast evaluators of the day answered a hand with one enormous table; OMPEval got the same answers out of 200 kB by hashing the key instead of indexing it. The thirteen multipliers are older still: zekyll took them from Kenneth Shackleton's SKPokerEval, a seven-card evaluator, which traces back to Suffecool's five-card work. Hand-picked constants, handed down twice.
 
-The port changed one thing. OMPEval indexes a card as `4*rank + suit`, and [rs-poker](https://docs.rs/rs_poker/latest/rs_poker/) keeps Part 1's `suit*13 + value` instead, so each suit stays a contiguous thirteen-bit block and the deck arithmetic from Part 1 keeps working.
+The port changed one thing: OMPEval indexes a card as `4*rank + suit`, and [rs-poker](https://docs.rs/rs_poker/latest/rs_poker/) keeps Part 1's `suit*13 + value` instead, so each suit stays a contiguous thirteen-bit block and the deck arithmetic from Part 1 keeps working.
 
 ## build.rs is the compiler
 
@@ -124,7 +124,7 @@ Classification hands back an ordering number full of gaps, so the script densifi
 
 Then it packs the keys, which are the 64 MiB problem from the last section. The tool is first-fit row displacement, the same trick compilers use to pack parser tables, and it takes a few paragraphs to explain.
 
-Split every key in two. The low twelve bits are its column, the high bits its row. That lays the keys out on a grid: row `key >> 12`, column `key & 0xFFF`. The grid is enormous and almost entirely empty, because seven thousand keys are spread over eight thousand rows of four thousand columns each.
+Split every key in two and it lands on a grid, row `key >> 12` and column `key & 0xFFF`. The grid is enormous and almost entirely empty, because seven thousand keys are spread over eight thousand rows of four thousand columns each.
 
 Now flatten the grid into one array by sliding each row sideways until its occupied cells drop into holes the other rows left behind. Each row gets one number, its displacement, and a key's slot is `key + displacement_of_its_row`. Every key in a row shares the same high bits, so adding that one number shifts the entire row without changing the spacing inside it. One number per row, not one per key, and there are only eight thousand rows.
 
@@ -153,9 +153,9 @@ Empty slots stay zero, and zero is not a legal score: category one is a high car
 
 Three asserts run before anything is emitted. The fingerprints have to be distinct, each key has to read its own score back, and the finished tables have to yield exactly 7,462 classes when counted both ways, histograms and flush patterns. A wrong constant fails to compile, so a broken table cannot ship.
 
-The counting evaluator has one job left. Being slow and plainly right is what makes it the oracle. It sits in `rank.rs` under `mod oracle`, compiled only for tests, never shipped, with the ladder rewritten to return a packed `u32` so the two rankers compare as plain integers.
+The counting evaluator has one job left, and being slow and plainly right is what qualifies it: it is the oracle. It sits in `rank.rs` under `mod oracle`, compiled only for tests, never shipped, with the ladder rewritten to return a packed `u32` so the two rankers compare as plain integers.
 
-It is the test for the table evaluator. All 2,598,960 five-card hands go through both, and the categories have to agree. The map from one score to the other has to be strictly monotonic, so the order holds across every last one. Then 200,000 random seven-card hands.
+It is the test for the table evaluator. All 2,598,960 five-card hands go through both, and the categories have to agree, while the map from one score to the other must be strictly monotonic, so the order holds across every last one. Then 200,000 random seven-card hands.
 
 ## The numbers
 

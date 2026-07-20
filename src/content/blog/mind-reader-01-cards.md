@@ -11,7 +11,7 @@ _Part 1 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching 
 
 The end of this series is a model that watches you bet and names your two cards.
 
-Training takes hands by the million, each one labeled with what was really held. Nobody publishes that, so the hands get dealt here.
+Training takes hands by the million, each one labeled with what was really held. No such dataset exists, so the hands get dealt here.
 
 Dealing them means agents playing each other, and agents need an arena with the full rules. The agents worth learning from have to rank hands and solve while they play.
 
@@ -28,8 +28,6 @@ So the core comes first, and the smallest thing in it is a card.
 ## The obvious card
 
 All of this is Rust, and the whole library is a trade between three things: CPU time, bytes in memory, and code that is pleasant to call. Most of what follows is picking one of the three over the other two.
-
-Start with the obvious card.
 
 ```rust
 pub enum Value { Two = 0, Three = 1, /* ... */ Ace = 12 }
@@ -92,7 +90,7 @@ Write down what the storage has to do. Say whether a card is in it. Add one. Rem
 
 It also has to be small. A six-handed game carries six hands and a deck, and the solver copies all of it every time it branches, so every byte is multiplied by the number of players and again by the number of copies.
 
-Fifty-two cards. A `u64` has sixty-four bits. Give every card a bit.
+Fifty-two cards, and a `u64` has sixty-four bits, so give every card a bit.
 
 That is `CardBitSet`. Bit _n_ set means card _n_ is in the set, and _n_ is the `suit * 13 + value` from a page ago. Twelve bits go unused, and nobody misses them.
 
@@ -108,7 +106,7 @@ The layout from the last section pays off here too. `suit * 13 + value` gives ea
 
 That is how many hearts are in the set, and five or more is a flush. Part 2's evaluator counts flushes another way, but it has the same layout underneath.
 
-Now the useful part. A player's hand is a set of cards, and the deck is a set of cards, and they are the same set of fifty-two slots with different ones filled. So they are the same type.
+Now the useful part. A player's hand and the deck are both sets of cards, the same fifty-two slots with different ones filled, so they are the same type.
 
 ```rust
 pub struct Hand(CardBitSet);
@@ -135,7 +133,7 @@ game_state.hands[idx].insert(card);
 
 Two instructions, and the deck never needs a discard pile; the bits still set are the cards still available.
 
-This raises the only hard question in the whole file. Where does the card come from?
+This raises the only hard question in the whole file: where does the card come from?
 
 ### Dealing a random card
 
@@ -165,7 +163,7 @@ Here is what it does. It keeps two cursors. One walks the mask and the destinati
 
 At each step, it looks at the mask. A 0 means the destination bit stays 0 and the source cursor does not move. A 1 means the destination bit takes whatever the source cursor points at, and then the source cursor advances by one.
 
-That is the whole instruction, and the software fallback in the file spells it out.
+That is all the instruction does, and the software fallback in the file spells it out.
 
 ```rust
 fn pdep_fallback(mut val: u64, mut mask: u64) -> u64 {
@@ -233,7 +231,7 @@ Say it in bits instead. A subset of N cards is a word with N bits set, so enumer
 
 That reduces the entire job to a single function. Give it a word with N bits set and get back the next larger word with N bits set. Call it until you run off the end and you have visited every subset once, in order, with no list and no recursion.
 
-The function is old. It is item 175 of HAKMEM, a 1972 memo out of the MIT AI Lab, and it is known as Gosper's hack after Bill Gosper, who wrote it down.
+The function is old: item 175 of HAKMEM, a 1972 memo out of the MIT AI Lab, known as Gosper's hack after Bill Gosper, who wrote it down.
 
 The rule by hand: find the lowest run of adjacent set bits, move the top bit of that run up one position, and pack the rest of the run down at the bottom of the word.
 
@@ -273,7 +271,7 @@ combo  0b0_1010    slots 1 and 3
 pdep   bits 5 and 12
 ```
 
-The entire iterator consists of three `u64` fields and a bool. No allocation, no index array, no recursion. Part 2 runs it over every runout and treats it as free.
+The entire iterator is three `u64` fields and a bool, with nothing allocated, no index array, and no recursion. Part 2 runs it over every runout and treats it as free.
 
 Cards, hands, and decks are integers now, and they never allocate. The rest of the game state is not so lucky.
 
@@ -290,7 +288,7 @@ Sixteen is the capacity of `PlayerBitSet`, a `u16`, and five is the size of a ho
 
 That makes a `GameState` one flat block of bytes, down through every `Hand` in it to the `CardBitSet` to the `u64`, with nothing pointing anywhere and a clone that is a memcpy.
 
-Part 7's solver copies one every time it branches, all the way down, against a deadline in milliseconds. A malloc in that loop spends the clock on allocation instead of on solving.
+Part 7's solver copies one at every branch, and a malloc in that loop spends the clock on allocation instead of on solving.
 
 One rule: the hot loop never touches the heap.
 
