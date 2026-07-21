@@ -1,12 +1,12 @@
 ---
-title: "The Mind Reader, Part 8: The Solver's Blind Spot"
+title: "The Range Reader, Part 8: The Arena Deals the Data"
 description: "Machine learning starts with a dataset. Ours is a deliberately rough v0.1 - over 600,000 arena hands, a shove-happy cast of agents, and every hole card labeled."
 pubDate: 2026-08-04
 draft: true
-tags: ["poker", "mind-reader", "machine learning", "dataset"]
+tags: ["poker", "range-reader", "machine learning", "dataset"]
 ---
 
-_Part 8 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
+_Part 8 of [The Range Reader](/blog/range-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## Machine learning starts with a dataset
 

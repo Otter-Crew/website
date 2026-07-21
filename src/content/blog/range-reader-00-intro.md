@@ -1,5 +1,5 @@
 ---
-title: "The Mind Reader, Part 0: Teaching a Computer to Read Your Mind at Poker"
+title: "The Range Reader, Part 0: Teaching a Computer to Read Your Mind at Poker"
 description: "There is no open source engine for multiway no-limit hold'em. A 13-part series building one - fast cards, a full-rules arena, CFR, and a GPT that reads your hand"
 pubDate: 2026-07-21
 tags: ["poker", "rust", "machine learning"]
@@ -126,7 +126,7 @@ Come back here. Each part is tagged **[Rust]**, **[Math]**, or **[ML]**.
 
 **Act 4 - Reading minds**
 
-8. **[ML]** Part 8: The Solver's Blind Spot
+8. **[ML]** Part 8: The Arena Deals the Data
 9. **[ML]** Part 9: Hole Cards as a Translation Problem
 10. **[ML]** Part 10: Embeddings That Mirror Poker
 11. **[ML]** Part 11: Did It Learn to Read Minds?

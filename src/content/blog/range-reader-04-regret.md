@@ -1,12 +1,12 @@
 ---
-title: "The Mind Reader, Part 4: Regret Is All You Need"
+title: "The Range Reader, Part 4: Regret Is All You Need"
 description: "Counterfactual regret minimization from zero - how tracking what you wish you'd done converges to unexploitable poker"
 pubDate: 2026-07-28
 draft: true
 tags: ["poker", "GTO", "game theory"]
 ---
 
-_Part 4 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
+_Part 4 of [The Range Reader](/blog/range-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## The number that plays perfect poker
 

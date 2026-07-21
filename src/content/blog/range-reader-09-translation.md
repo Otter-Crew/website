@@ -1,12 +1,12 @@
 ---
-title: "The Mind Reader, Part 9: Hole Cards as a Translation Problem"
+title: "The Range Reader, Part 9: Hole Cards as a Translation Problem"
 description: "Mask the hidden cards, translate the public betting record into a belief over 1326 combos - and re-read the range at every street"
 pubDate: 2026-08-05
 draft: true
-tags: ["poker", "mind-reader", "machine learning", "transformers"]
+tags: ["poker", "range-reader", "machine learning", "transformers"]
 ---
 
-_Part 9 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
+_Part 9 of [The Range Reader](/blog/range-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 All the code here lives in [`range-reader`](https://github.com/Otter-Crew/range-reader), a PyTorch project. Links point at the file that does the work.
 

@@ -1,12 +1,12 @@
 ---
-title: "The Mind Reader, Part 7: An Agent That Solves While It Plays"
+title: "The Range Reader, Part 7: An Agent That Solves While It Plays"
 description: "CFRAgent - budget-driven exploration, regret-based pruning, and board enumeration, wired into the arena"
 pubDate: 2026-08-03
 draft: true
 tags: ["poker", "rust", "GTO"]
 ---
 
-_Part 7 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
+_Part 7 of [The Range Reader](/blog/range-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## Assembly time
 

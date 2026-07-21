@@ -1,12 +1,12 @@
 ---
-title: "The Mind Reader, Part 3: The Arena - Full-Rules Poker and the Agents That Play It"
+title: "The Range Reader, Part 3: The Arena - Full-Rules Poker and the Agents That Play It"
 description: "Inside rs-poker's arena - the game state machine, the Agent trait, historians, side pots, invariant-checked fuzzing, and the tournament that crowned a bot"
 pubDate: 2026-07-27
 draft: true
 tags: ["poker", "rust", "simulation"]
 ---
 
-_Part 3 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
+_Part 3 of [The Range Reader](/blog/range-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## The full game, or nothing
 

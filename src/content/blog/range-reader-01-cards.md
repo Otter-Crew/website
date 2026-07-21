@@ -1,12 +1,12 @@
 ---
-title: "The Mind Reader, Part 1: A Deck of Cards Is a u64"
+title: "The Range Reader, Part 1: A Deck of Cards Is a u64"
 description: "Ten years of representing cards, hands, and decks in Rust - from Vec<Card> to bitsets, and why representation sets your speed ceiling"
 pubDate: 2026-07-22
 draft: true
 tags: ["poker", "rust", "performance"]
 ---
 
-_Part 1 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
+_Part 1 of [The Range Reader](/blog/range-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## The choice under everything
 

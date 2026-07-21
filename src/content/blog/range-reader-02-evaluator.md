@@ -1,12 +1,12 @@
 ---
-title: "The Mind Reader, Part 2: Ranking Hands at Ludicrous Speed"
+title: "The Range Reader, Part 2: Ranking Hands at Ludicrous Speed"
 description: "The perfect-hash hand evaluator - how rs-poker ranks poker hands in less than a nanosecond"
 pubDate: 2026-07-23
 draft: true
 tags: ["poker", "algorithm", "performance"]
 ---
 
-_Part 2 of [The Mind Reader](/blog/mind-reader-00-intro/), a series on teaching a computer to read your mind at poker._
+_Part 2 of [The Range Reader](/blog/range-reader-00-intro/), a series on teaching a computer to read your mind at poker._
 
 ## Simulations explode; the leaves are all the same
 
