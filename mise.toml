@@ -41,9 +41,9 @@ run = 'astro preview'
 
 [tasks.check]
 description = 'Run every check (Biome + astro check)'
-# Explicit list rather than a wildcard so a future opt-in check does not
-# silently join the default gate.
-depends = ['check:biome', 'check:astro']
+# Wildcard: every check:* subtask is part of the gate, so adding one wires it
+# in automatically.
+depends = ['check:*']
 # Final marker so callers (and agents) get an unambiguous success line.
 run = "echo 'mise check: ALL CHECKS PASSED'"
 
@@ -60,14 +60,28 @@ depends = ['pnpm-install']
 # scrolling past as benign noise.
 run = 'astro check --minimumFailingSeverity hint'
 
+[tasks."check:ascii"]
+description = 'Fail if any content file contains non-ASCII characters'
+run = "grep -rnP '[^\\x00-\\x7F]' src/content && exit 1 || echo 'check:ascii: content is ASCII-only'"
+
+[tasks."check:md"]
+description = 'Format-check content Markdown (frontmatter + body) with Prettier'
+depends = ['pnpm-install']
+run = "prettier --check 'src/content/**/*.md'"
+
 # ---------------------------------------------------------------------- fix
 
 [tasks.fix]
-description = 'Apply every auto-fix (Biome format + safe lint fixes)'
-depends = ['fix:biome']
+description = 'Apply every auto-fix (Biome + Prettier Markdown)'
+depends = ['fix:*']
 run = "echo 'mise fix: done'"
 
 [tasks."fix:biome"]
 description = 'Format and apply safe Biome fixes (writes files)'
 depends = ['pnpm-install']
 run = 'biome check --write'
+
+[tasks."fix:md"]
+description = 'Format content Markdown (frontmatter + body) with Prettier (writes files)'
+depends = ['pnpm-install']
+run = "prettier --write 'src/content/**/*.md'"

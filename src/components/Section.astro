@@ -1,4 +1,6 @@
 ---
+import styles from './Section.module.css';
+
 type Space = '3xs' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
 interface Props {
@@ -20,15 +22,10 @@ const {
 <section
   id={id}
   aria-labelledby={labelledby}
+  class={styles['section']}
   style={`--sec-top: var(--space-${top}); --sec-bottom: var(--space-${bottom});`}
 >
   <div class:list={['container', width !== 'wide' && `container--${width}`]}>
     <slot />
   </div>
 </section>
-
-<style>
-  section {
-    padding-block: var(--sec-top) var(--sec-bottom);
-  }
-</style>

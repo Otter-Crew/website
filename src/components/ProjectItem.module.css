@@ -1,0 +1,109 @@
+.project {
+  position: relative;
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  gap: var(--space-md) var(--space-lg);
+  padding-block: var(--space-lg);
+  border-top: 1px solid var(--c-hair);
+}
+.project:last-child {
+  border-bottom: 1px solid var(--c-hair);
+}
+.project__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+  padding-top: var(--space-3xs);
+}
+.project__year {
+  font-family: var(--font-display);
+  font-size: var(--text-numeral);
+  color: var(--c-ink-soft);
+}
+.project__status {
+  font-size: var(--text-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-stone);
+}
+.project__title {
+  font-size: var(--text-h2);
+  font-weight: 420;
+}
+/* A placeholder row carries no destination. Dimming its title to the soft
+   ink (live titles stay full-strength ink) makes the one real, clickable
+   project read as the actionable row, not a sibling of the empty stubs. */
+.project--inert .project__title {
+  color: var(--c-ink-soft);
+}
+.project__link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+  color: inherit;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+/* Stretch the title link across the whole row (mirrors PostItem). A project
+   with no destination yet renders the title as plain text and stays inert;
+   its "Coming soon" status in the meta column and its dimmed title are the
+   signal. Expanded rows opt out: their body is selectable and may hold its
+   own links, so the title alone is the click target. */
+.project:not(.project--expanded) .project__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.project__link .arrow {
+  color: var(--c-stone);
+  font-size: 0.8em;
+  transition:
+    transform var(--dur) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+.project__link:hover {
+  color: var(--c-accent);
+}
+.project__link:hover .arrow {
+  color: var(--c-accent);
+  transform: translateX(0.3em);
+}
+/* An external destination nudges up-and-out on hover, echoing the ↗ glyph. */
+.project__link.is-external:hover .arrow {
+  transform: translate(0.25em, -0.25em);
+}
+.project__summary {
+  margin-top: var(--space-2xs);
+  max-width: 52ch;
+  line-height: 1.6;
+  color: var(--c-ink-soft);
+}
+/* The full body sits a step below the title; Prose owns its own internal
+   rhythm and measure. */
+.project__content {
+  margin-top: var(--space-sm);
+}
+.project__foot {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-xs) var(--space-md);
+  font-size: var(--text-small);
+}
+.project__role,
+.project__dest {
+  color: var(--c-stone);
+}
+
+@media (max-width: 38rem) {
+  .project {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+  .project__meta {
+    flex-direction: row;
+    align-items: baseline;
+    gap: var(--space-sm);
+    padding-top: 0;
+  }
+}

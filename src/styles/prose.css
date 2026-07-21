@@ -1,0 +1,137 @@
+/* Long-form rendered Markdown. Global (not a CSS module) because CSS Modules
+   hash class names, but Markdown rendered by <Content /> has no class hooks to
+   hash against — these rules must reach bare <h2>/<p>/<table> elements under
+   `.prose`. Imported by Prose.astro. The layer order is re-declared so
+   `components` stays above `base` regardless of stylesheet bundle order. */
+@layer reset, base, components, utilities;
+
+@layer components {
+  .prose {
+    max-width: var(--measure);
+    color: var(--c-ink);
+  }
+  .prose > * + * {
+    margin-top: 1.45em;
+  }
+  .prose h2 {
+    font-size: var(--text-h2);
+    margin-top: 2.2em;
+    line-height: 1.15;
+  }
+  .prose h3 {
+    font-size: var(--text-h3);
+    font-weight: 480;
+    margin-top: 1.8em;
+  }
+  .prose p,
+  .prose li {
+    line-height: 1.75;
+  }
+  .prose a {
+    color: var(--c-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: color-mix(
+      in oklab,
+      var(--c-accent) 38%,
+      transparent
+    );
+    transition:
+      text-decoration-color var(--dur) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+  .prose a:hover {
+    color: var(--c-accent-deep);
+    text-decoration-color: currentColor;
+  }
+  .prose ul,
+  .prose ol {
+    padding-left: 1.3em;
+  }
+  .prose li + li {
+    margin-top: 0.45em;
+  }
+  /* Indented editorial pull-quote: no colored side-stripe (banned). */
+  .prose blockquote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 340;
+    font-size: var(--text-lede);
+    line-height: 1.42;
+    color: var(--c-ink-soft);
+    padding-inline-start: 1.4rem;
+    margin-block: 1.8em;
+  }
+  .prose blockquote p {
+    line-height: 1.42;
+  }
+  .prose code:not(pre code) {
+    background: var(--c-surface);
+    border: 1px solid var(--c-hair);
+    border-radius: var(--radius-sm);
+    padding: 0.1em 0.35em;
+  }
+  .prose pre {
+    background: var(--c-surface);
+    border: 1px solid var(--c-hair);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.15rem;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+  .prose pre.astro-code {
+    background: var(--c-surface) !important;
+  }
+  .prose img {
+    border-radius: var(--radius-md);
+  }
+  .prose hr {
+    margin-block: 2.5em;
+  }
+
+  /* Data tables — a hairline-ruled ledger, never a boxed grid. Digits are
+     tabular so columns line up; numeric columns are right-aligned from the
+     Markdown source (`--:`). The table fills its column; a too-wide table
+     scrolls inside `.table-wrap` (added by the rehypeWrapTables plugin)
+     rather than overflowing the page. */
+  .prose .table-wrap {
+    margin-block: 2.2em;
+    overflow-x: auto;
+  }
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-small);
+    font-variant-numeric: tabular-nums lining-nums;
+    line-height: 1.45;
+  }
+  .prose thead th {
+    font-weight: 600;
+    color: var(--c-stone);
+    /* No text-align here: let each column's Markdown `align` attribute set it
+       so headers track their numeric columns. */
+    padding: 0 1.4em 0.5em;
+    border-bottom: 1px solid var(--c-ink);
+  }
+  .prose tbody td {
+    padding: 0.5em 1.4em;
+    border-top: 1px solid var(--c-hair);
+  }
+  /* Flush the outer edges to the text margin (editorial, not boxed). */
+  .prose tr > :first-child {
+    padding-inline-start: 0;
+  }
+  .prose tr > :last-child {
+    padding-inline-end: 0;
+  }
+  /* First body row sits directly under the header rule — no double line. */
+  .prose tbody tr:first-child td {
+    border-top: 0;
+  }
+  /* A totals row — conventionally the last row, its cells bold — earns a
+     rule above. Scoped to :last-child so a mid-table bold cell doesn't. */
+  .prose tbody tr:last-child:has(strong) td {
+    border-top: 1px solid var(--c-ink-soft);
+  }
+}

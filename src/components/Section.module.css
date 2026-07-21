@@ -1,0 +1,6 @@
+/* The <section> reads its space scale from inline `--sec-top`/`--sec-bottom`
+   vars set on the element. (Was a bare `section {}` scoped selector; a class
+   keeps it local now that styles live in a module, not a scoped block.) */
+.section {
+  padding-block: var(--sec-top) var(--sec-bottom);
+}

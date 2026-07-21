@@ -1,0 +1,99 @@
+/* ---- Lead-in header (page hero, marker treatment + availability) ---- */
+.lead-in__title {
+  margin-top: var(--space-md);
+  font-size: var(--text-h1);
+  font-weight: 360;
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+  max-width: 17ch;
+}
+.lead-in__lede {
+  margin-top: var(--space-sm);
+  max-width: 54ch;
+  font-size: var(--text-lede);
+  line-height: 1.5;
+  color: var(--c-ink-soft);
+}
+.lead-in__status {
+  margin-top: var(--space-lg);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--text-small);
+  color: var(--c-stone);
+}
+.lead-in__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--c-accent);
+  flex: none;
+}
+
+/* ---- Ledger rows: the site's index-row signature (9rem 1fr, hairlines,
+   no cards). Shared by capabilities and engagements. ---- */
+.row {
+  display: grid;
+  grid-template-columns: 9rem 1fr;
+  gap: var(--space-md) var(--space-lg);
+  padding-block: var(--space-lg);
+  border-top: 1px solid var(--c-hair);
+}
+.row:last-child {
+  border-bottom: 1px solid var(--c-hair);
+}
+.row__meta {
+  padding-top: var(--space-3xs);
+}
+.row__index {
+  font-family: var(--font-display);
+  font-size: var(--text-numeral);
+  color: var(--c-stone);
+  font-variant-numeric: tabular-nums;
+}
+.row__cadence {
+  font-size: var(--text-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-stone);
+}
+.row__title {
+  font-size: var(--text-h2);
+  font-weight: 420;
+}
+.row__summary {
+  margin-top: var(--space-2xs);
+  max-width: 52ch;
+  line-height: 1.6;
+  color: var(--c-ink-soft);
+}
+
+/* ---- Start a conversation (the contact close) ---- */
+.start__lead {
+  margin-top: var(--space-md);
+  font-family: var(--font-display);
+  font-weight: 340;
+  font-size: var(--text-h1);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  max-width: 20ch;
+}
+.start__line {
+  margin-top: var(--space-lg);
+  font-size: var(--text-lede);
+  color: var(--c-ink-soft);
+}
+.start__email {
+  margin-top: var(--space-2xs);
+  font-size: var(--text-lede);
+}
+
+@media (max-width: 38rem) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+  .row__meta {
+    padding-top: 0;
+  }
+}

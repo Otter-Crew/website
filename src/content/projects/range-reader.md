@@ -1,8 +1,8 @@
 ---
-title: 'Range Reader'
-summary: 'Machine learning for reading poker hand ranges.'
+title: "Range Reader"
+summary: "Machine learning for reading poker hand ranges."
 year: 2026
-status: 'coming-soon'
+status: "coming-soon"
 featured: false
 order: 3
 ---

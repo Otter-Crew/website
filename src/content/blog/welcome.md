@@ -1,11 +1,11 @@
 ---
-title: 'Welcome to Otter Crew'
+title: "Welcome to Otter Crew"
 description: "Welcome, lets discuss what Otter Crew is, and what we're about."
 pubDate: 2026-05-08
-tags: ['writing', 'systems']
+tags: ["writing", "systems"]
 ---
 
-Welcome, I'm [Elliott](https://github.com/elliottneilclark) [Clark](https://www.linkedin.com/in/elliottnclark), and I'm hoping to make this little slice of the internet a for the craft of building software, AI systems, and the teams who operate them. 
+Welcome, I'm [Elliott](https://github.com/elliottneilclark) [Clark](https://www.linkedin.com/in/elliottnclark), and I'm hoping to make this little slice of the internet a for the craft of building software, AI systems, and the teams who operate them.
 
 ## Who Am I?
 
@@ -19,7 +19,6 @@ I've been lucky enough to learn fun lessons in stupid and interesting ways over 
 - Facebook HBase + ZippyDB teams
 - Cloudera HBase team
 - ngmoco mobile analytics & big data team
-
 
 ## Writing
 

@@ -1,8 +1,8 @@
 ---
-title: 'What the Duck'
-summary: 'A local newsletter for Nashville.'
+title: "What the Duck"
+summary: "A local newsletter for Nashville."
 year: 2026
-status: 'coming-soon'
+status: "coming-soon"
 featured: false
 order: 5
 ---

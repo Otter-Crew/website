@@ -1,10 +1,10 @@
 ---
-title: 'rs-poker'
-summary: 'The most advanced open-source poker library in Rust: hand evaluation, equity, ICM, and a CFR solver. Version 5 adds multi-threaded CFR, a first in open source.'
+title: "rs-poker"
+summary: "The most advanced open-source poker library in Rust: hand evaluation, equity, ICM, and a CFR solver. Version 5 adds multi-threaded CFR, a first in open source."
 year: 2026
-status: 'active'
-role: 'Author and maintainer'
-link: 'https://github.com/elliottneilclark/rs-poker'
+status: "active"
+role: "Author and maintainer"
+link: "https://github.com/elliottneilclark/rs-poker"
 featured: true
 order: 1
 ---
