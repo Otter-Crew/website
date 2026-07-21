@@ -66,7 +66,7 @@ So the job changes. Find one strategy you can compute and store at a poker scale
 
 The workhorse is Counterfactual Regret Minimization. Break the game into small decisions. At each one, track how much you regret the actions you skipped. Play them in proportion to that regret.
 
-Heads-up, it probably converges. Multiway, the proof is gone, and the strategies win anyway. Pluribus beat elite professionals six-handed this way.
+Heads-up, it provably converges. Multiway, the proof is gone, and the strategies win anyway. Pluribus beat elite professionals six-handed this way.
 
 Two problems remain, and they are the frontier.
 
