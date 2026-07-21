@@ -2,6 +2,7 @@
 title: "The Mind Reader, Part 9: Hole Cards as a Translation Problem"
 description: "Mask the hidden cards, translate the public betting record into a belief over 1326 combos - and re-read the range at every street"
 pubDate: 2026-08-05
+draft: true
 tags: ["poker", "mind-reader", "machine learning", "transformers"]
 ---
 
