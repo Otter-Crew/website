@@ -1,8 +1,7 @@
 ---
 title: "The Range Reader, Part 4: Regret Is All You Need"
 description: "Counterfactual regret minimization from zero - how tracking what you wish you'd done converges to unexploitable poker"
-pubDate: 2026-07-28
-draft: true
+pubDate: 2026-07-22T12:00:00Z
 tags: ["poker", "GTO", "game theory"]
 ---
 

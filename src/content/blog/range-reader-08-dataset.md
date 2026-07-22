@@ -1,8 +1,7 @@
 ---
 title: "The Range Reader, Part 8: The Arena Deals the Data"
 description: "Machine learning starts with a dataset. Ours is a deliberately rough v0.1 - over 600,000 arena hands, a shove-happy cast of agents, and every hole card labeled."
-pubDate: 2026-08-04
-draft: true
+pubDate: 2026-07-22T16:00:00Z
 tags: ["poker", "range-reader", "machine learning", "dataset"]
 ---
 

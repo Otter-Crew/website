@@ -1,8 +1,7 @@
 ---
 title: "The Range Reader, Part 7: An Agent That Solves While It Plays"
 description: "CFRAgent - budget-driven exploration, regret-based pruning, and board enumeration, wired into the arena"
-pubDate: 2026-08-03
-draft: true
+pubDate: 2026-07-22T15:00:00Z
 tags: ["poker", "rust", "GTO"]
 ---
 

@@ -1,8 +1,7 @@
 ---
 title: "The Range Reader, Part 2: Ranking Hands at Ludicrous Speed"
 description: "The perfect-hash hand evaluator - how rs-poker ranks poker hands in less than a nanosecond"
-pubDate: 2026-07-23
-draft: true
+pubDate: 2026-07-22T10:00:00Z
 tags: ["poker", "algorithm", "performance"]
 ---
 

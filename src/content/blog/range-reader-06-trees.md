@@ -1,8 +1,7 @@
 ---
 title: "The Range Reader, Part 6: Trees in Rust Without Tears"
 description: "CFR needs a huge self-referential, multi-threaded game tree - the memory-arena design behind CFRState"
-pubDate: 2026-07-30
-draft: true
+pubDate: 2026-07-22T14:00:00Z
 tags: ["poker", "rust", "performance"]
 ---
 
