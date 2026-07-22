@@ -110,23 +110,23 @@ Come back here. Each part is tagged **[Rust]**, **[Math]**, or **[ML]**.
 
 **Act 1 - Foundations**
 
-1. **[Rust]** Part 1: A Deck of Cards Is a u64
-2. **[Rust]** Part 2: Ranking Hands at Ludicrous Speed
+1. **[Rust]** [Part 1: A Deck of Cards Is a u64](/blog/range-reader-01-cards/)
+2. **[Rust]** [Part 2: Ranking Hands at Ludicrous Speed](/blog/range-reader-02-evaluator/)
 
 **Act 2 - Simulation**
 
-3. **[Rust]** Part 3: The Arena - Full-Rules Poker and the Agents That Play It
+3. **[Rust]** [Part 3: The Arena - Full-Rules Poker and the Agents That Play It](/blog/range-reader-03-arena/)
 
 **Act 3 - Regret**
 
-4. **[Math]** Part 4: Regret Is All You Need
-5. **[Rust][Math]** Part 5: little-sorry - The Regret Math, in Rust
-6. **[Rust]** Part 6: Trees in Rust Without Tears
-7. **[Rust][Math]** Part 7: An Agent That Solves While It Plays
+4. **[Math]** [Part 4: Regret Is All You Need](/blog/range-reader-04-regret/)
+5. **[Rust][Math]** [Part 5: little-sorry - The Regret Math, in Rust](/blog/range-reader-05-little-sorry/)
+6. **[Rust]** [Part 6: Trees in Rust Without Tears](/blog/range-reader-06-trees/)
+7. **[Rust][Math]** [Part 7: An Agent That Solves While It Plays](/blog/range-reader-07-cfr-agent/)
 
 **Act 4 - Reading minds**
 
-8. **[ML]** Part 8: The Arena Deals the Data
+8. **[ML]** [Part 8: The Arena Deals the Data](/blog/range-reader-08-dataset/)
 9. **[ML]** Part 9: Hole Cards as a Translation Problem
 10. **[ML]** Part 10: Embeddings That Mirror Poker
 11. **[ML]** Part 11: Did It Learn to Read Minds?
