@@ -1,8 +1,7 @@
 ---
 title: "The Range Reader, Part 5: little-sorry - The Regret Math, in Rust"
 description: "A small crate for a big idea: regret matching, CFR+, and the discounted and predictive variants - the numeric core every solver shares"
-pubDate: 2026-07-29
-draft: true
+pubDate: 2026-07-22T13:00:00Z
 tags: ["poker", "rust", "GTO"]
 ---
 

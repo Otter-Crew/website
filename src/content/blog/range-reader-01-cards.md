@@ -1,8 +1,7 @@
 ---
 title: "The Range Reader, Part 1: A Deck of Cards Is a u64"
 description: "Ten years of representing cards, hands, and decks in Rust - from Vec<Card> to bitsets, and why representation sets your speed ceiling"
-pubDate: 2026-07-22
-draft: true
+pubDate: 2026-07-22T09:00:00Z
 tags: ["poker", "rust", "performance"]
 ---
 
