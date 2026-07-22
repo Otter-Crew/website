@@ -44,7 +44,7 @@ What the players push at each other is bigger, and no one can tell you by how mu
 
 ## Who's telling this story
 
-I'm [Elliott Clark](https://elliottclark.info). My day job is storage and machine learning at scale. Apache HBase, then seven years building the ad infrastructure at Facebook, then five years founding a company focused on Kubernetes and Postgres vector databases. Poker is the side project.
+I'm [Elliott Clark](https://elliottclark.info). My day job is storage and machine learning at scale. Apache HBase, then seven years building ad ranking infrastructure at Facebook, then five years founding a company focused on Kubernetes and Postgres vector databases. Poker is the side project.
 
 It started at Microsoft. Redmond is a beautiful town and not an exciting one, so I played in the company tournaments: zero rake, sharp programmers, World Series entries in the prize pool. Poker was exciting.
 
@@ -127,8 +127,8 @@ Come back here. Each part is tagged **[Rust]**, **[Math]**, or **[ML]**.
 **Act 4 - Reading minds**
 
 8. **[ML]** [Part 8: The Arena Deals the Data](/blog/range-reader-08-dataset/)
-9. **[ML]** Part 9: Hole Cards as a Translation Problem
-10. **[ML]** Part 10: Embeddings That Mirror Poker
+9. **[ML]** [Part 9: Hole Cards as a Translation Problem](/blog/range-reader-09-translation/)
+10. **[ML]** [Part 10: Embeddings That Mirror Poker](/blog/range-reader-10-embeddings/)
 11. **[ML]** Part 11: Did It Learn to Read Minds?
 
 **Finale**
