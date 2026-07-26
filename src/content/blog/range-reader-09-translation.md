@@ -29,7 +29,7 @@ Poker hands over the same gift. The arena dealt the cards and wrote every one of
 
 So hide those two and train the model to fill them in from the betting.
 
-The framing outlives poker. Any sequential game with a public record and a hidden state fits: mask the state, read the record. Bridge is the twin. The auction is public. Thirteen cards stay hidden. Every hand turns face up at the end. Football fits too. The snaps are on tape, and the next play is its own label. So do the deduction games, Werewolf and Diplomacy. The talk is public, and the roles get named when the game closes. Each one hands you the answer once the round is over. The corpus held BERT's missing word the same way.
+The framing outlives poker. Any sequential game with a public record and a hidden state fits: mask the state, read the record. Bridge is the twin. The auction is public. Thirteen cards stay hidden.
 
 The shape holds even where the answer costs more. A market's tape is public. Every trader's private read is hidden. But the tape never turns over to say who knew what. An auction shows the winner's price. He paid it. It buries what the losers would have paid. A break-in writes itself into the logs, and only forensics, slow and rare, says what the intruder wanted. Same shape. Dearer labels.
 
@@ -59,7 +59,7 @@ Both of those are seat-attached like everything else, so the stream says which c
 
 What is left is what a watcher at the table sees. Hidden information in the game is a masked token in the sequence.
 
-One thing came out of the stream and stayed out. An early vocabulary emitted `win` and `lose` at the end of a hand. It trained beautifully. The outcome lands inside the window we supervise, and a live read never gets to see it, so the model was reading the answer off the back of the card. Those tokens are gone.
+One thing came out of the stream and stayed out. An early vocabulary emitted `win` and `lose` at the end of a hand. It trained beautifully. The outcome lands inside the window we supervise, and a live read never gets to see it.
 
 ## One hand becomes many reads
 
