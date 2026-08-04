@@ -19,7 +19,7 @@ So the work runs backward from the goal: cards, evaluator, arena, agents, datase
 
 Every layer does the same small things. Deal a card. Ask whether a card is taken. Ask what overlaps the board. Copy a game state. Enumerate what is still to come.
 
-Part 7's solver iterates at the root of one decision, and every iteration branches down the tree, trying each legal action. The game state is copied all the way down, the evaluator runs at the bottom, and the whole thing is on a millisecond deadline.
+[Part 7](/blog/range-reader-07-cfr-agent/)'s solver iterates at the root of one decision, and every iteration branches down the tree, trying each legal action. The game state is copied all the way down, the evaluator runs at the bottom, and the whole thing is on a millisecond deadline.
 
 Those five run billions of times, and their cost depends on what a card is and how a pile of cards is stored.
 
@@ -104,7 +104,7 @@ Insert is `|=`. Remove is `&=` `!`. Membership is a shift and a mask. Counting i
 
 The layout from the last section pays off here too. `suit * 13 + value` gives each suit thirteen bits in a row, so a suit is one contiguous field. Shift it down, mask off thirteen bits, count: `((cards >> (13 * suit)) & 0x1FFF).count_ones()`.
 
-That is how many hearts are in the set, and five or more is a flush. Part 2's evaluator counts flushes another way, but it has the same layout underneath.
+That is how many hearts are in the set, and five or more is a flush. [Part 2](/blog/range-reader-02-evaluator/)'s evaluator counts flushes another way, but it has the same layout underneath.
 
 Now the useful part. A player's hand and the deck are both sets of cards, the same fifty-two slots with different ones filled, so they are the same type.
 
@@ -294,4 +294,4 @@ One rule: the hot loop never touches the heap.
 
 ## Next time
 
-Every copy in that loop exists so a hand can be ranked at the bottom. Next is the best five cards out of seven, and how fast we can find them. Part 2 is the evaluator.
+Every copy in that loop exists so a hand can be ranked at the bottom. Next is the best five cards out of seven, and how fast we can find them. [Part 2](/blog/range-reader-02-evaluator/) is the evaluator.

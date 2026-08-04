@@ -9,7 +9,7 @@ _Part 6 of [The Range Reader](/blog/range-reader-00-intro/), a series on teachin
 
 ## The biggest thing we have built
 
-Part 5 left us a regret matcher: a few arrays and one method. A solve needs millions of them arranged in a tree, and it needs them fast, because Part 7 puts the whole thing on a two-second clock.
+[Part 5](/blog/range-reader-05-little-sorry/) left us a regret matcher: a few arrays and one method. A solve needs millions of them arranged in a tree, and it needs them fast, because [Part 7](/blog/range-reader-07-cfr-agent/) puts the whole thing on a two-second clock.
 
 Everything before this fit in a register. A card is a bit in a `u64`, a hand rank a `u16`, a `GameState` a flat block you copy with a memcpy. This is the first structure in the series that does not fit anywhere.
 
@@ -30,7 +30,7 @@ struct Node {
 
 A `Box` per child compiles on the first try and is wrong three ways.
 
-Single ownership kills the parent pointer, because a `Box` has one owner and a child cannot own its parent back. You can pass the parent down the recursion and never store it, and that works right up until Part 3's historian, which does not recurse; it gets one event at a time and has to find its place in the tree from where it stood last.
+Single ownership kills the parent pointer, because a `Box` has one owner and a child cannot own its parent back. You can pass the parent down the recursion and never store it, and that works right up until [Part 3](/blog/range-reader-03-arena/)'s historian, which does not recurse; it gets one event at a time and has to find its place in the tree from where it stood last.
 
 Mutation is exclusive, so writing regret into one node means `&mut` on the root and `&mut` down every level to reach it, one writer holding the whole tree.
 
@@ -133,7 +133,7 @@ let chunk_ptr = self.chunk_ptrs[idx / CHUNK_SIZE].load(Ordering::Acquire);
 unsafe { &*chunk_ptr.add(idx % CHUNK_SIZE) }
 ```
 
-That is the one `unsafe` in the design, and it comes with the argument written above it: reads only happen below `len`, which advances with `Release` after a node is fully written and after that node's chunk pointer has been published, and no chunk moves or is freed while the arena lives. Part 2's evaluator has no `unsafe` at all, so this one has to earn it and show its work.
+That is the one `unsafe` in the design, and it comes with the argument written above it: reads only happen below `len`, which advances with `Release` after a node is fully written and after that node's chunk pointer has been published, and no chunk moves or is freed while the arena lives. [Part 2](/blog/range-reader-02-evaluator/)'s evaluator has no `unsafe` at all, so this one has to earn it and show its work.
 
 Appends serialize on a single mutex. `push` takes the lock, reads the length inside it - reading it outside is two threads claiming one slot - allocates a chunk if the current one is full, writes the node, and stores the new length with `Release`. That store is the publication, and it is all or nothing: a reader sees the whole node or does not see it at all.
 
@@ -168,4 +168,4 @@ Nothing in the API takes `&mut self`. Adding a node, reading a child, updating a
 
 The tree holds still under threads, and now something has to walk it on a clock.
 
-Part 7 seats little-sorry inside this arena: an agent that solves the hand while it plays it, with a budget in milliseconds, pruning the branches its own regret has already written off.
+[Part 7](/blog/range-reader-07-cfr-agent/) seats little-sorry inside this arena: an agent that solves the hand while it plays it, with a budget in milliseconds, pruning the branches its own regret has already written off.

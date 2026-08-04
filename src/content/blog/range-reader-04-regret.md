@@ -9,11 +9,11 @@ _Part 4 of [The Range Reader](/blog/range-reader-00-intro/), a series on teachin
 
 ## The number that plays perfect poker
 
-Part 3 ended at a ceiling. The pot-control agent beat every bot we sat it against, and we had written every one of them. Its rules were ours too: fixed thresholds, fixed sizings, a Monte Carlo equity call against no one in particular.
+[Part 3](/blog/range-reader-03-arena/) ended at a ceiling. The pot-control agent beat every bot we sat it against, and we had written every one of them. Its rules were ours too: fixed thresholds, fixed sizings, a Monte Carlo equity call against no one in particular.
 
 Play it long enough, and you will find patterns like those. Tuning moves a pattern; it never removes one.
 
-So stop writing the strategy and let the agent find one no counter can beat. Part 0 called that equilibrium, and the machine that gets there runs on a single number.
+So stop writing the strategy and let the agent find one no counter can beat. [Part 0](/blog/range-reader-00-intro/) called that equilibrium, and the machine that gets there runs on a single number.
 
 The number is regret, an everyday emotion made arithmetic.
 
@@ -122,7 +122,7 @@ The clean equilibrium result covers two players and zero sum. Six-handed, the pr
 
 Backprop takes one global number, the loss, walks a graph backward, and hands each weight its share of the blame. CFR takes one global number, who won and how much, walks the game tree backward, and hands each decision its regret. Both are credit assignment: forward pass, backward pass, millions of iterations.
 
-The families overlap. Online gradient descent is itself a no-regret algorithm, and the discounting and predictive CFR variants in Part 5 play the part that momentum and optimism play in an optimizer.
+The families overlap. Online gradient descent is itself a no-regret algorithm, and the discounting and predictive CFR variants in [Part 5](/blog/range-reader-05-little-sorry/) play the part that momentum and optimism play in an optimizer.
 
 Two differences make poker the harder job. Regret is not a gradient, so nothing chains through it, and every ledger is updated on its own from values handed back up the tree. The loss surface itself moves: your opponent is running the same algorithm against you, so what you are climbing changes while you climb it.
 
@@ -130,4 +130,4 @@ Two differences make poker the harder job. Regret is not a gradient, so nothing 
 
 The theory is one thing, and lines of Rust are another.
 
-Next time we open little-sorry, watch regret matching converge in a real test, and meet the refinements - CFR+, discounting, prediction - that turn 1/sqrt(T) into something shippable.
+Next time we open [little-sorry](/blog/range-reader-05-little-sorry/), watch regret matching converge in a real test, and meet the refinements - CFR+, discounting, prediction - that turn 1/sqrt(T) into something shippable.

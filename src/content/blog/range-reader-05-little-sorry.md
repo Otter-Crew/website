@@ -9,7 +9,7 @@ _Part 5 of [The Range Reader](/blog/range-reader-00-intro/), a series on teachin
 
 ## A crate named for feeling bad
 
-Part 4 ended with a table you could keep on paper. Poker needs millions of them, one per information set, updated billions of times on a millisecond deadline, and that takes code.
+[Part 4](/blog/range-reader-04-regret/) ended with a table you could keep on paper. Poker needs millions of them, one per information set, updated billions of times on a millisecond deadline, and that takes code.
 
 Regret in one word is sorry, and little because the crate holds one idea and one dependency, `rand`.
 
@@ -105,4 +105,4 @@ All of it comes back in the finale, when a preflop blueprint has to fit in memor
 
 Wiring matchers into a real game means a game tree of millions of nodes, each pointing up at its parent and down at its children, with many threads touching it at once.
 
-Rust is famously grumpy about that shape. Part 6 builds it anyway, with an arena.
+Rust is famously grumpy about that shape. [Part 6](/blog/range-reader-06-trees/) builds it anyway, with an arena.

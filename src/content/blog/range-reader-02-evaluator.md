@@ -68,7 +68,7 @@ Those two words answer different questions.
 
 `key` carries two accumulators that never interfere. The low 32 bits fingerprint the rank histogram, which is how many deuces, how many threes, on up through aces, with suits thrown away. The high 16 bits count how many cards of each suit came in. The first is the entire answer when nothing is suited, and the second decides whether that is the case.
 
-`mask` records which exact cards are present, and it is Part 1's bitset unchanged: bit _n_ set means card _n_ is here. It earns its keep only on a flush, when the counters say five of a suit arrived and that suit's thirteen ranks have to be read back somewhere.
+`mask` records which exact cards are present, and it is [Part 1](/blog/range-reader-01-cards/)'s bitset unchanged: bit _n_ set means card _n_ is here. It earns its keep only on a flush, when the counters say five of a suit arrived and that suit's thirteen ranks have to be read back somewhere.
 
 ```rust
 key = key.wrapping_add(CARDS_KEY[i]);
@@ -187,4 +187,4 @@ The tables cost about 305 KiB of read-only data in the binary: 256 for `LOOKUP`,
 
 ## Next time
 
-We can deal fast and rank fast, so now the game itself: full no-limit hold'em, betting rounds, all-ins, side pots, and agents to play it. Part 3 builds the arena.
+We can deal fast and rank fast, so now the game itself: full no-limit hold'em, betting rounds, all-ins, side pots, and agents to play it. [Part 3](/blog/range-reader-03-arena/) builds the arena.

@@ -137,4 +137,4 @@ Come back here. Each part is tagged **[Rust]**, **[Math]**, or **[ML]**.
 
 ## Next time
 
-Part 1 starts small. A playing card is a number. That choice sets the speed ceiling for every simulation, solver, and training run after it.
+[Part 1](/blog/range-reader-01-cards/) starts small. A playing card is a number. That choice sets the speed ceiling for every simulation, solver, and training run after it.

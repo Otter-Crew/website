@@ -18,7 +18,7 @@ narrow street by street as the chips go in.
 
 The transformer blocks are ordinary; almost nothing around them is. Each
 position is an action _and_ a chip amount, so bet sizes enter as continuous
-values rather than being bucketed into tokens. 
+values rather than being bucketed into tokens.
 
 The current model ranks the true hand around 299th of 1326 on average and
 scores five times the random-guessing floor on mean reciprocal rank, reading

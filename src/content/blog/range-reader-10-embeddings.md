@@ -27,9 +27,9 @@ So the embedding stays out of that space. Every table in it holds a quantity the
 
 ## The factored embedding
 
-Part 9 left the vocabulary at 1,596 ids, and 208 of those are one base action attached to one seat. `raise@seat3` and `raise@seat7` are separate tokens, and a GPT would hand each a row and let the two of them learn what a raise is twice.
+[Part 9](/blog/range-reader-09-translation/) left the vocabulary at 1,596 ids, and 208 of those are one base action attached to one seat. `raise@seat3` and `raise@seat7` are separate tokens, and a GPT would hand each a row and let the two of them learn what a raise is twice.
 
-range-reader builds the vector instead ([`model.py`](https://github.com/Otter-Crew/range-reader/blob/master/range_reader/model.py)). Picture a shelf of small tables, one per fact the game hands you. Look each fact up, add the vectors, and the sum is the token. The code names them with an `E_` prefix.
+range-reader builds the vector instead ([`model.py`](https://github.com/Otter-Crew/range-reader/blob/master/range_reader/model.py)). Picture a shelf of small tables, one per fact the game hands you. Look each fact up, add the vectors, and the sum is the token.
 
 ```python
 E_action      # 75 rows: one per base action, one per non-action token
@@ -45,7 +45,7 @@ W_value       # 13 projections: the bet size, one per action
 
 A raise means the same thing whoever makes it, so raise gets one row and the seat is added on top. Thirteen base actions and seventeen seats - sixteen chairs and a row for the tokens belonging to nobody, like a street marker or a board card - cover all 208 ids with thirty vectors.
 
-Sharing rows changes how often each number gets taught. A row in a flat table learns only from the hands that contain its token, and Part 8's data never seats more than six players, so `raise@seat7` never appears and its row never moves off the noise it started at. The raise row in `E_action` takes a gradient - a nudge from one training example - out of every raise anybody makes at any seat, and `E_seat` keeps its own rows for what is actually about the chair.
+Sharing rows changes how often each number gets taught. A row in a flat table learns only from the hands that contain its token, and [Part 8](/blog/range-reader-08-dataset/)'s data never seats more than six players, so `raise@seat7` never appears and its row never moves off the noise it started at. The raise row in `E_action` takes a gradient - a nudge from one training example - out of every raise anybody makes at any seat, and `E_seat` keeps its own rows for what is actually about the chair.
 
 The parameter count comes down as well, from 1,021,440 numbers to 201,600 at `d=640`. In a fifty-million-parameter model, that matters far less than the sharing does.
 
@@ -97,7 +97,7 @@ Every fact so far has been a category with a row waiting for it. A bet size has 
 
 Part 9 already put the number on the stream. Every position carries a token id and a float, and the float is the chip amount divided by the big blind, so the same bet reads the same at a 1/2 game and a 25/50 one. What is left is how it enters the vector.
 
-The easy answer buckets it. Define a small-bet token, a pot-bet token, an overbet token, look one up, and the amount is gone. Part 7 had to do exactly that, because a solver needs a finite set of actions, and it pays for it every time two live sizes land in one of its fifty-two slots. The reader never has to act. It only has to read so that it can keep the number.
+The easy answer buckets it. Define a small-bet token, a pot-bet token, an overbet token, look one up, and the amount is gone. [Part 7](/blog/range-reader-07-cfr-agent/) had to do exactly that, because a solver needs a finite set of actions, and it pays for it every time two live sizes land in one of its fifty-two slots. The reader never has to act. It only has to read so that it can keep the number.
 
 The other easy answer is to paste the raw float onto the vector, and a network reads a lone scalar badly. Tancik and coauthors traced the reason to how these networks converge, fast on the low-frequency part of a function and impractically slowly on the high-frequency part, which leaves fine distinctions along a single input axis to be learned last ([Tancik et al., 2020](https://arxiv.org/abs/2006.10739)). Their fix is to hand the network the number already spread out. The code does the same, under the name `phi`.
 

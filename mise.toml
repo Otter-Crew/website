@@ -40,7 +40,7 @@ run = 'astro preview'
 # -------------------------------------------------------------------- check
 
 [tasks.check]
-description = 'Run every check (Biome + astro check)'
+description = 'Run every check (Biome, astro check, Prettier, ASCII)'
 # Wildcard: every check:* subtask is part of the gate, so adding one wires it
 # in automatically.
 depends = ['check:*']
@@ -62,7 +62,23 @@ run = 'astro check --minimumFailingSeverity hint'
 
 [tasks."check:ascii"]
 description = 'Fail if any content file contains non-ASCII characters'
-run = "grep -rnP '[^\\x00-\\x7F]' src/content && exit 1 || echo 'check:ascii: content is ASCII-only'"
+# macOS ships BSD grep, which has no -P, so `\x00-\x7F` is unavailable.
+# Under LC_ALL=C grep compares bytes
+# (0x20-0x7E) is a violation.
+run = '''
+pattern=$(printf '[^\t -~]')
+status=0
+# on the exit 1 that means "nothing found".
+LC_ALL=C grep -rn "$pattern" src/content || status=$?
+if [ "$status" -eq 0 ]; then
+  echo 'check:ascii: FAILED - replace the non-ASCII characters listed above' >&2
+  exit 1
+elif [ "$status" -ne 1 ]; then
+  echo "check:ascii: ERROR - grep exited $status" >&2
+  exit "$status"
+fi
+echo 'check:ascii: content is ASCII-only'
+'''
 
 [tasks."check:md"]
 description = 'Format-check content Markdown (frontmatter + body) with Prettier'
