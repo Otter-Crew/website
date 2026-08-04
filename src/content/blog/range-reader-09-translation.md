@@ -25,7 +25,7 @@ Sequence in, belief out. NLP built that machinery a decade ago, and we borrow it
 
 Years back I read BERT ([Devlin et al., 2018](https://arxiv.org/abs/1810.04805)). Hide a word, train a transformer to fill it back in from the words around it. The blank already has a right answer sitting in the corpus, so the labels cost nothing.
 
-Poker hands over the same gift. The arena dealt the cards and wrote every one of them down (Part 8), and the villain - the seat we are reading - held two.
+Poker hands over the same gift. The arena dealt the cards and wrote every one of them down ([Part 8](/blog/range-reader-08-dataset/)), and the villain - the seat we are reading - held two.
 
 So hide those two and train the model to fill them in from the betting.
 
@@ -33,7 +33,7 @@ The framing outlives poker. Any sequential game with a public record and a hidde
 
 The shape holds even where the answer costs more. A market's tape is public. Every trader's private read is hidden. But the tape never turns over to say who knew what. An auction shows the winner's price. He paid it. It buries what the losers would have paid. A break-in writes itself into the logs, and only forensics, slow and rare, says what the intruder wanted. Same shape. Dearer labels.
 
-Poker is the hard case for a different reason - who is talking. A bet is a word chosen by a man who profits from your believing the wrong thing. He tells the truth some of the time and lies the rest, and he mixes the two on purpose, which is all of Part 4. You are learning a language from someone lying to your face.
+Poker is the hard case for a different reason - who is talking. A bet is a word chosen by a man who profits from your believing the wrong thing. He tells the truth some of the time and lies the rest, and he mixes the two on purpose, which is all of [Part 4](/blog/range-reader-04-regret/). You are learning a language from someone lying to your face.
 
 One thing did not carry over. BERT reads the sentence in both directions, left of the blank and right of it. A read at a live table has only the past. So the model is a causal decoder - each position attends to earlier positions and nothing later - and it emits a fresh read at every one of them.
 
@@ -45,9 +45,9 @@ The order is the order of the table. A start marker, one `sit` per seat, the `is
 
 **Actions ride on their seat.** There are thirteen base actions - `sit`, `post_blind`, `fold`, `check`, `call`, `bet`, `raise`, `all_in`, and the rest - and sixteen possible seats, and the vocabulary is their cross product. `raise@seat3` and `raise@seat7` are different tokens, 208 of them, inside a vocabulary of 1,596 - the fixed set of tokens the model can read. The model never works out whose turn it is. The seat is in the token. [`tokens.py`](https://github.com/Otter-Crew/range-reader/blob/master/range_reader/tokens.py) owns that layout.
 
-**Chips ride alongside as a number.** Every position carries a token id and a float, and the float is chips in big blinds - the forced bet that sets the stake. The stack on a `sit`, the amount on a bet, each divided by that blind. A 3bb raise is then the same event at a 1/2 game and a 25/50 one - three big blinds either way, at two different stakes. Part 10 is about getting that number into a network without chopping it into buckets.
+**Chips ride alongside as a number.** Every position carries a token id and a float, and the float is chips in big blinds - the forced bet that sets the stake. The stack on a `sit`, the amount on a bet, each divided by that blind. A 3bb raise is then the same event at a 1/2 game and a 25/50 one - three big blinds either way, at two different stakes. [Part 10](/blog/range-reader-10-embeddings/) is about getting that number into a network without chopping it into buckets.
 
-**Cards get one canonical form.** A card is an integer, rank times four plus suit, so integer-divide by four and you have the rank. Two of them sort low to high and fold into one of the 1,326 combo ids. Part 1 packed a card the other way around, suit times thirteen plus value, because Rust wanted a suit to be a contiguous block of bits. Here the rank is the thing that has to be cheap to reach, and Part 10 says why.
+**Cards get one canonical form.** A card is an integer, rank times four plus suit, so integer-divide by four and you have the rank. Two of them sort low to high and fold into one of the 1,326 combo ids. [Part 1](/blog/range-reader-01-cards/) packed a card the other way around, suit times thirteen plus value, because Rust wanted a suit to be a contiguous block of bits. Here the rank is the thing that has to be cheap to reach, and Part 10 says why.
 
 Then the mask, at the hole slots.
 
@@ -166,4 +166,4 @@ Part 11 measures the climb.
 
 The decoder is stock. The embedding is not.
 
-Part 10 opens it: seat, button-relative position, table size, live count, card identity, and bet size, each a poker concept summed into one vector. Hole cards are composed out of card vectors instead of looked up. Bet sizes enter as real numbers, never chopped into tokens.
+[Part 10](/blog/range-reader-10-embeddings/) opens it: seat, button-relative position, table size, live count, card identity, and bet size, each a poker concept summed into one vector. Hole cards are composed out of card vectors instead of looked up. Bet sizes enter as real numbers, never chopped into tokens.

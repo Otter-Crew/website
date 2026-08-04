@@ -78,11 +78,11 @@ fn clean_hands(&self, game_state: &GameState) -> Vec<Hand> {
 }
 ```
 
-Every seat but its own becomes the board and nothing else. Then it deals those seats a thousand random hands, ranks every showdown with Part 2's evaluator, and counts how often it wins. That is Monte Carlo equity against opponents it knows nothing about, which makes for a weak read but an honest one.
+Every seat but its own becomes the board and nothing else. Then it deals those seats a thousand random hands, ranks every showdown with [Part 2](/blog/range-reader-02-evaluator/)'s evaluator, and counts how often it wins. That is Monte Carlo equity against opponents it knows nothing about, which makes for a weak read but an honest one.
 
 The rest is what you would ask a dealer. Whose turn, the bet to match, what you already put in, the minimum raise, your stack, the pot, the board, the button.
 
-And it copies cheaply. Part 1 made `GameState` a single flat block of bytes, with a `u64` per hand. An agent that wants to play the hand out a thousand times clones the entire table using memcpy. Part 7 lives on that.
+And it copies cheaply. [Part 1](/blog/range-reader-01-cards/) made `GameState` a single flat block of bytes, with a `u64` per hand. An agent that wants to play the hand out a thousand times clones the entire table using memcpy. [Part 7](/blog/range-reader-07-cfr-agent/) lives on that.
 
 ## A seat at the table
 
@@ -299,4 +299,4 @@ A tuned heuristic has patterns, fixed thresholds and predictable sizings, and pa
 
 Breaking that takes a way to learn a strategy nobody can exploit.
 
-That is the equilibrium territory from Part 0, and at the bottom of it is one number. Regret.
+That is the equilibrium territory from [Part 0](/blog/range-reader-00-intro/), and at the bottom of it is one number. Regret.

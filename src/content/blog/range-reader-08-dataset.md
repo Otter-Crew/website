@@ -9,7 +9,7 @@ _Part 8 of [The Range Reader](/blog/range-reader-00-intro/), a series on teachin
 
 ## Machine learning starts with a dataset
 
-Part 7 left the solver half-blind. It plays the hand well, then deals the opponents their cards at random. The range is a guess, and every value built on it inherits the error.
+[Part 7](/blog/range-reader-07-cfr-agent/) left the solver half-blind. It plays the hand well, then deals the opponents their cards at random. The range is a guess, and every value built on it inherits the error.
 
 We want to learn the range instead. A model learns from data, so the data comes first.
 
@@ -31,7 +31,7 @@ The arena is the dealer, and it already writes what it deals ([rs-poker](https:/
 
 Every hand comes out as [Open Hand History](https://hh-specs.handhistory.org/), the standard JSON format for a poker hand. A real hand history shows cards only at showdown. The arena sees every seat, so it writes every hole card - folded, mucked, or shown. The label is free, and it is on all of them.
 
-The field is the one from Part 3. `RandomPotControl` is the recreational player, the fish, betting without a plan. Three CFR agents each wear a different preflop chart - which hands to play from each seat - lifted from online solves: `Pekarstas-6max-RFI`, `GTO-Experiment`, and `6Max-RFI-GTO`. One more, `CFR-Configurable`, runs no chart at all, just a real-time budget. Tables run two to six seats in an even split, so position and player count both move.
+The field is the one from [Part 3](/blog/range-reader-03-arena/). `RandomPotControl` is the recreational player, the fish, betting without a plan. Three CFR agents each wear a different preflop chart - which hands to play from each seat - lifted from online solves: `Pekarstas-6max-RFI`, `GTO-Experiment`, and `6Max-RFI-GTO`. One more, `CFR-Configurable`, runs no chart at all, just a real-time budget. Tables run two to six seats in an even split, so position and player count both move.
 
 The result is public: [`otter-crew/range-reader-v0.1`](https://huggingface.co/datasets/otter-crew/range-reader-v0.1) on Hugging Face. 613,399 hands, 1.42 GB, one JSON hand per line.
 
@@ -49,4 +49,4 @@ That buys a working pipeline. The ranges get better from here.
 
 ## Next time
 
-Part 9 is the model. Predicting hole cards from betting is a translation problem: read one sequence, emit another you can read.
+[Part 9](/blog/range-reader-09-translation/) is the model. Predicting hole cards from betting is a translation problem: read one sequence, emit another you can read.

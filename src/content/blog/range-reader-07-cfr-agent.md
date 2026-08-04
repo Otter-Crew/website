@@ -29,7 +29,7 @@ Not everything ported. We took Stockfish's reverse futility pruning, wired it in
 
 ## Fifty-two slots
 
-Part 6 gave every node fifty-two children. Here is why.
+[Part 6](/blog/range-reader-06-trees/) gave every node fifty-two children. Here is why.
 
 An action becomes an index in `0..52`. Fold is 0, call is 1, all-in is 51. The forty-nine slots between are raise sizes, spaced logarithmically from the minimum raise to the stack. The gap between two and four big blinds matters. The gap between eighty and eighty-two does not.
 
@@ -42,7 +42,7 @@ pub const ACTION_IDX_ALL_IN: usize = 51;
 pub const NUM_ACTION_INDICES: usize = 52;
 ```
 
-Part 0 named the price: a live opponent bets outside the set, and you have to map it to a size you know. These forty-nine slots are that map. Two sizes can land in one slot, so the engine dedups by index before it trains and the picker dedups again before it samples. Skip the second and the collided slot counts twice, doubling its odds without telling anybody.
+[Part 0](/blog/range-reader-00-intro/) named the price: a live opponent bets outside the set, and you have to map it to a size you know. These forty-nine slots are that map. Two sizes can land in one slot, so the engine dedups by index before it trains and the picker dedups again before it samples. Skip the second and the collided slot counts twice, doubling its odds without telling anybody.
 
 A node's matcher holds fifty-two experts, one per slot. Most are illegal on any turn, and those score minus the player's starting stack - the worst the game allows.
 
@@ -50,7 +50,7 @@ A node's matcher holds fifty-two experts, one per slot. Most are illegal on any 
 
 The agent's turn arrives. It finds its node, and if the node has no matcher, it gets one. Then it iterates.
 
-The unit of work is a wave. It tries every live action against the strategy the node holds, averages the samples in each slot, and applies one regret update with the whole vector. That is Part 5's `update_regret`, once per wave. Split it across actions, and the node learns from half a wave.
+The unit of work is a wave. It tries every live action against the strategy the node holds, averages the samples in each slot, and applies one regret update with the whole vector. That is [Part 5](/blog/range-reader-05-little-sorry/)'s `update_regret`, once per wave. Split it across actions, and the node learns from half a wave.
 
 ```rust
 loop {
@@ -67,7 +67,7 @@ loop {
 }
 ```
 
-Trying an action means playing it out. Clone the game state, which Part 1 made a memcpy. Force a copy of the agent to the action under test. Seat fresh CFR sub-agents in the other chairs and hand them the same tree, budget, and stop flag. Run a whole `HoldemSimulation` and read that seat's chips off the end.
+Trying an action means playing it out. Clone the game state, which [Part 1](/blog/range-reader-01-cards/) made a memcpy. Force a copy of the agent to the action under test. Seat fresh CFR sub-agents in the other chairs and hand them the same tree, budget, and stop flag. Run a whole `HoldemSimulation` and read that seat's chips off the end.
 
 Those sub-agents run this same loop. That is where the branching lives, and where the budget earns its keep.
 
@@ -80,7 +80,7 @@ let weights = matcher.best_weight();
 let random_value: f32 = rng.random::<f32>() * total_weight;
 ```
 
-`best_weight` is Part 4's average strategy, normalized. It says raise 70%, call 30%, and the agent rolls at those odds. Take the argmax - the single highest-weighted action - and you raise every time, and the man across the table learns that inside an hour. Frequencies are what make you unreadable.
+`best_weight` is [Part 4](/blog/range-reader-04-regret/)'s average strategy, normalized. It says raise 70%, call 30%, and the agent rolls at those odds. Take the argmax - the single highest-weighted action - and you raise every time, and the man across the table learns that inside an hour. Frequencies are what make you unreadable.
 
 ## Stopping is a flag
 
@@ -164,7 +164,7 @@ Deeper in the tree, recursion stops, and a fast-forward takes over. It applies t
 
 Then it enumerates instead of sampling. No cards to come is one evaluation. One card is all forty-six. Two is all thousand-and-thirty-five. Three would be sixteen thousand, so it samples three flops and enumerates every turn and river under each.
 
-Part 2's accumulator makes that affordable: tally the board once, copy sixteen bytes, add two cards, rank. A thousand runouts land inside a microsecond.
+[Part 2](/blog/range-reader-02-evaluator/)'s accumulator makes that affordable: tally the board once, copy sixteen bytes, add two cards, rank. A thousand runouts land inside a microsecond.
 
 Enumeration earns its arithmetic. A sampled board puts noise in the reward, the noise lands in the regret, and the node needs more waves to say the same thing. A thousand evaluations to stop guessing is cheap when a wave costs a sub-simulation.
 
@@ -182,7 +182,7 @@ Rough is the point. Preflop has to be sane, not perfect. The finale says what th
 
 ## How good is it?
 
-`rsp arena generate` settles it. Same field as Part 3, seats rotated, hands by the hundred thousand.
+`rsp arena generate` settles it. Same field as [Part 3](/blog/range-reader-03-arena/), seats rotated, hands by the hundred thousand.
 
 ```
 Name                            Change                Games
@@ -203,4 +203,4 @@ One weakness is left, the one from three sections ago. Every hand above was play
 
 The solver plays a full hand now, on a clock, out of a tree it grows as it goes. It still deals you two random cards and reasons from there.
 
-Part 8 opens Act 4. Millions of labeled hands, every hole card written down, and a first look at what that data can and cannot teach.
+[Part 8](/blog/range-reader-08-dataset/) opens Act 4. Millions of labeled hands, every hole card written down, and a first look at what that data can and cannot teach.
